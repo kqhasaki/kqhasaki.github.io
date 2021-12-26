@@ -1,7 +1,13 @@
 module.exports = {
   siteMetadata: {
-    siteUrl: "https://www.yourdomain.tld",
-    title: "kuaiq-blog",
+    siteUrl: 'https://www.yourdomain.tld',
+    title: 'Louis K - Software Engineer',
   },
-  plugins: [],
-};
+  plugins: [
+    'gatsby-plugin-mdx',
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: { name: 'articles', path: `${__dirname}/articles` },
+    },
+  ],
+}

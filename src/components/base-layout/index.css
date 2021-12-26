@@ -1,0 +1,70 @@
+:root {
+  --blue: #189fff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+p {
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  margin-bottom: 1.75rem;
+}
+
+body {
+  font-weight: 400;
+  word-wrap: break-word;
+  font-kerning: normal;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+header > .route-link {
+  margin: 0 1rem 0 1rem;
+}
+
+.base-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 48rem;
+  padding: 2.625rem 1.3125rem;
+  min-height: 100%;
+}
+
+.nav-link {
+  transition: 400ms;
+  font-size: 2rem;
+  margin: 0 1rem 0 1rem;
+  cursor: pointer;
+}
+
+.nav-link > img {
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.nav-link:hover {
+  color: var(--blue);
+}
+
+.link-active {
+  color: var(--blue);
+}
+
+.invisible {
+  display: none !important;
+}

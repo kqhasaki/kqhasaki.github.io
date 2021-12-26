@@ -1,0 +1,26 @@
+.personal-links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 1.2rem;
+}
+
+.avatar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 8rem;
+}
+
+.avatar > img {
+  padding: 0.5rem;
+  max-height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  opacity: 1;
+  transition: none 0s ease 0s;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
