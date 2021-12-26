@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import clsx from 'clsx'
 import { CloseOutlined } from '@ant-design/icons'
+import { motion } from 'framer-motion'
 import './index.css'
 
 export default function Modal({
@@ -11,8 +12,9 @@ export default function Modal({
   const contentRef = useRef()
 
   return (
-    <div
+    <motion.div
       className={clsx('modal-wrapper', !visible && 'invisible')}
+      animate={{ opacity: visible ? 1 : 0 }}
       ref={contentRef}
       onClick={e => {
         if (e.target === contentRef.current) {
@@ -20,12 +22,21 @@ export default function Modal({
         }
       }}
     >
-      <div className={clsx('modal-content')}>
-        <div className={clsx('modal-closer')} onClick={onClose}>
+      <motion.div
+        className={clsx('modal-content')}
+        animate={{
+          rotate: visible ? '0deg' : '90deg',
+        }}
+      >
+        <motion.div
+          className={clsx('modal-closer')}
+          onClick={onClose}
+          whileHover={{ scale: 1.2 }}
+        >
           <CloseOutlined />
-        </div>
+        </motion.div>
         {children}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }

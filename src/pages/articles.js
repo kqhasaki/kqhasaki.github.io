@@ -1,6 +1,8 @@
 import React from 'react'
 import BaseLayout from '../components/base-layout'
 import { graphql, useStaticQuery } from 'gatsby'
+import { PostCard } from '../components'
+import { motion } from 'framer-motion'
 
 export default function ArticlesView() {
   const articles = useStaticQuery(graphql`
@@ -13,7 +15,8 @@ export default function ArticlesView() {
           slug
           frontmatter {
             title
-            date
+            date(formatString: "YYYY-MM-DD")
+            cover
           }
           timeToRead
           wordCount {
@@ -26,7 +29,20 @@ export default function ArticlesView() {
     }
   `).allMdx.nodes
 
-  console.log(articles)
-
-  return <BaseLayout></BaseLayout>
+  return (
+    <BaseLayout>
+      {articles.map(article => (
+        <motion.div
+          key={article.slug}
+          initial={{ x: -100, opacity: 0 }}
+          animate={{
+            x: 0,
+            opacity: 1,
+          }}
+        >
+          <PostCard article={article} />
+        </motion.div>
+      ))}
+    </BaseLayout>
+  )
 }

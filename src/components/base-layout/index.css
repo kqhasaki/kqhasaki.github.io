@@ -24,6 +24,8 @@ body {
   font-weight: 400;
   word-wrap: break-word;
   font-kerning: normal;
+  margin: 0;
+  padding: 0;
 }
 
 header {
@@ -31,6 +33,7 @@ header {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  padding-bottom: 2rem;
 }
 
 header > .route-link {
@@ -46,15 +49,16 @@ header > .route-link {
 }
 
 .nav-link {
-  transition: 400ms;
   font-size: 2rem;
   margin: 0 1rem 0 1rem;
   cursor: pointer;
+  min-width: 3rem;
 }
 
 .nav-link > img {
   height: 2rem;
   border-radius: 50%;
+  transform: scale(1.2);
 }
 
 .nav-link:hover {

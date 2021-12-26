@@ -5,6 +5,7 @@ import { Modal } from '../../components'
 import AvatraCard from '../avatar-card'
 import './index.css'
 import avatar from '../../images/avatar.png'
+import { motion } from 'framer-motion'
 
 export default function BaseLayout({ children, pageTitle }) {
   const { title } = useStaticQuery(graphql`
@@ -26,19 +27,24 @@ export default function BaseLayout({ children, pageTitle }) {
       </title>
       <header>
         <Link to="/" className="nav-link" activeClassName="link-active">
-          <HomeOutlined />
+          <motion.div whileHover={{ scale: 1.2 }}>
+            <HomeOutlined />
+          </motion.div>
         </Link>
         <Link to="/articles" className="nav-link" activeClassName="link-active">
-          <ReadOutlined />
+          <motion.div whileHover={{ scale: 1.2 }}>
+            <ReadOutlined />
+          </motion.div>
         </Link>
-        <div
+        <motion.div
           className="nav-link"
+          whileHover={{ scale: 1.2 }}
           onClick={() => {
             setProfileModalVisible(true)
           }}
         >
           <img alt="avatar" src={avatar} />
-        </div>
+        </motion.div>
       </header>
       <Modal
         visible={profileModalVisible}
