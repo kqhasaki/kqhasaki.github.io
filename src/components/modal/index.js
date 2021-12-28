@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { CloseOutlined } from '@ant-design/icons'
 import { motion } from 'framer-motion'
@@ -10,6 +10,10 @@ export default function Modal({
   children,
 }) {
   const contentRef = useRef()
+
+  useEffect(() => {
+    document.body.style.overflow = visible ? 'hidden' : 'initial'
+  }, [visible])
 
   return (
     <motion.div
