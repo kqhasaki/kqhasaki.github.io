@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { navigate } from 'gatsby'
+import { FieldTimeOutlined } from '@ant-design/icons'
 import './index.css'
 
 export default function PostCard({ article }) {
@@ -21,7 +22,14 @@ export default function PostCard({ article }) {
         />
       </div>
       <h2>{article.frontmatter.title}</h2>
-      <p className="post-card-date">{article.frontmatter.date}</p>
+      <p className="post-card-meta">
+        <FieldTimeOutlined />
+        <span> {article.frontmatter.date}</span>
+        <span>
+          {' '}
+          | {article.wordCount.words}words {article.timeToRead}min
+        </span>
+      </p>
       <p>{article.excerpt}</p>
     </motion.div>
   )

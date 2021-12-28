@@ -14,6 +14,7 @@
 .img-line {
   height: 120px;
   position: relative;
+  margin-bottom: 2rem;
 }
 
 .post-card {
@@ -45,8 +46,13 @@
   width: 60px;
 }
 
-.post-card-date {
+.post-card-meta {
   margin: 0;
   font-family: serif;
+  font-size: 0.9rem;
   font-weight: bold;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  background-color: #fafafa;
 }

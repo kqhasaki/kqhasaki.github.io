@@ -9,6 +9,10 @@ a {
 
 * {
   box-sizing: border-box;
+  border: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 p {
@@ -38,6 +42,10 @@ header {
 
 header > .route-link {
   margin: 0 1rem 0 1rem;
+}
+
+header img {
+  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.5);
 }
 
 .base-wrapper {
@@ -71,4 +79,32 @@ header > .route-link {
 
 .invisible {
   display: none !important;
+}
+
+.article-body .article-title {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.article-title:before {
+  background: var(--blue);
+  content: '';
+  display: block;
+  height: 2px;
+  width: 100px;
+  margin: 1rem auto 0rem auto;
+}
+
+.article-meta {
+  text-align: center;
+  margin: 1rem auto 1.5rem auto;
+  font-size: 0.9rem;
+  font-family: serif;
+  font-weight: bold;
+}
+
+.article-meta > span {
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: #fafafa;
 }
