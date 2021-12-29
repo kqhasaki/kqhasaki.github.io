@@ -6,6 +6,8 @@ import AvatraCard from '../avatar-card'
 import './index.css'
 import avatar from '../../images/avatar.png'
 import { motion } from 'framer-motion'
+import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/highlight-code/dist/loader'
+deckDeckGoHighlightElement()
 
 export default function BaseLayout({ children, pageTitle }) {
   const { title } = useStaticQuery(graphql`
