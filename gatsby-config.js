@@ -12,6 +12,10 @@ module.exports = {
         gatsbyRemarkPlugins: [
           {
             resolve: `gatsby-remark-highlight-code`,
+            options: {
+              theme: 'one-light',
+              lineNumbers: true,
+            },
           },
         ],
       },
