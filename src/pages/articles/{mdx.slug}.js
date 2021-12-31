@@ -11,10 +11,15 @@ export default function ArticleView(props) {
     query ($id: String) {
       mdx(id: { eq: $id }) {
         frontmatter {
-          title
+          cover
           date(formatString: "YYYY-MM-DD")
+          title
         }
         body
+        timeToRead
+        wordCount {
+          words
+        }
       }
     }
   `).mdx
@@ -37,6 +42,11 @@ export default function ArticleView(props) {
             {article.timeToRead}min
           </span>
         </p>
+        <img
+          className="article-cover"
+          src={article.frontmatter.cover}
+          alt={article.frontmatter.cover}
+        />
         <MDXRenderer>{article.body}</MDXRenderer>
       </motion.div>
     </BaseLayout>

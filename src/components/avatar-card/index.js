@@ -16,14 +16,18 @@ export default function AvatarCard() {
         </a>
       </div>
       <p>
-        I'm a software engineer and writer who works with JavaScript, Go, AWS
+        {/* I'm a software engineer and writer who works with JavaScript, Go, AWS
         and a pen. Working for early stage startups and corporations like the
-        Financial Times taught me a lot about building software.
+        Financial Times taught me a lot about building software. */}
+        I'm a front-end engineer who works mainly with JavaScript and React. I
+        also enjoy writing and building my own apps. I learnt most of my skills
+        from the Web, and I would like to share everything I know with people
+        who want to learn Web development.
       </p>
       <p>
-        I share what I've learned about software design & architecture through
-        my articles, books and newsletter. I'm also passionate about
-        storytelling, physical training, philosophy
+        I currently work in GIS industry, most of my work is related to map
+        tools. But I am developing some interesting apps at leisure. Welcome to
+        join my project or invite me to your project at any time.
       </p>
     </main>
   )
