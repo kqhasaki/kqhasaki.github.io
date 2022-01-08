@@ -9,6 +9,8 @@ import { motion } from 'framer-motion'
 import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/highlight-code/dist/loader'
 deckDeckGoHighlightElement()
 
+export const languageContext = React.createContext('Chinese')
+
 export default function BaseLayout({ children, pageTitle }) {
   const { title } = useStaticQuery(graphql`
     query {
@@ -20,43 +22,50 @@ export default function BaseLayout({ children, pageTitle }) {
     }
   `).site.siteMetadata
   const [profileModalVisible, setProfileModalVisible] = useState(false)
+  const [language, setLanguage] = useState('Chinese')
 
   return (
-    <div className="base-wrapper">
-      <title>
-        {pageTitle && `${pageTitle} |`}
-        {title}
-      </title>
-      <header>
-        <Link to="/" className="nav-link" activeClassName="link-active">
-          <motion.div whileHover={{ scale: 1.2 }}>
-            <HomeOutlined />
+    <languageContext.Provider value={language}>
+      <div className="base-wrapper">
+        <title>
+          {pageTitle && `${pageTitle} |`}
+          {title}
+        </title>
+        <header>
+          <Link to="/" className="nav-link" activeClassName="link-active">
+            <motion.div whileHover={{ scale: 1.2 }}>
+              <HomeOutlined />
+            </motion.div>
+          </Link>
+          <Link
+            to="/articles"
+            className="nav-link"
+            activeClassName="link-active"
+          >
+            <motion.div whileHover={{ scale: 1.2 }}>
+              <ReadOutlined />
+            </motion.div>
+          </Link>
+          <motion.div
+            className="nav-link"
+            whileHover={{ scale: 1.2 }}
+            onClick={() => {
+              setProfileModalVisible(true)
+            }}
+          >
+            <img alt="avatar" src={avatar} />
           </motion.div>
-        </Link>
-        <Link to="/articles" className="nav-link" activeClassName="link-active">
-          <motion.div whileHover={{ scale: 1.2 }}>
-            <ReadOutlined />
-          </motion.div>
-        </Link>
-        <motion.div
-          className="nav-link"
-          whileHover={{ scale: 1.2 }}
-          onClick={() => {
-            setProfileModalVisible(true)
+        </header>
+        <Modal
+          visible={profileModalVisible}
+          onClose={() => {
+            setProfileModalVisible(false)
           }}
         >
-          <img alt="avatar" src={avatar} />
-        </motion.div>
-      </header>
-      <Modal
-        visible={profileModalVisible}
-        onClose={() => {
-          setProfileModalVisible(false)
-        }}
-      >
-        <AvatraCard />
-      </Modal>
-      <main>{children}</main>
-    </div>
+          <AvatraCard />
+        </Modal>
+        <main>{children}</main>
+      </div>
+    </languageContext.Provider>
   )
 }
