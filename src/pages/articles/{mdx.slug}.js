@@ -6,24 +6,26 @@ import { motion } from 'framer-motion'
 import { FieldTimeOutlined, ReadOutlined } from '@ant-design/icons'
 import '../../components/base-layout/index.css'
 
-export default function ArticleView(props) {
-  const article = useStaticQuery(graphql`
-    query ($id: String) {
-      mdx(id: { eq: $id }) {
-        frontmatter {
-          cover
-          date(formatString: "YYYY-MM-DD")
-          title
-        }
-        body
-        timeToRead
-        wordCount {
-          words
-        }
+export const query = graphql`
+  query ($id: String) {
+    mdx(id: { eq: $id }) {
+      id
+      frontmatter {
+        cover
+        date(formatString: "YYYY-MM-DD")
+        title
+      }
+      body
+      timeToRead
+      wordCount {
+        words
       }
     }
-  `).mdx
+  }
+`
 
+export default function ArticleView({ data }) {
+  const article = data.mdx
   useEffect(() => {
     document.title = article.frontmatter.title
   }, [article])
