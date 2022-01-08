@@ -91,7 +91,7 @@ header img {
 
 .article-body .article-title {
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 1.5rem;
 }
 
@@ -110,8 +110,8 @@ header img {
 }
 
 .article-body h1 {
-  margin-bottom: 2rem;
-  margin-top: 2rem;
+  margin-bottom: 1.8rem;
+  margin-top: 1.8rem;
 }
 
 .article-body h2 {
@@ -131,7 +131,6 @@ header img {
 
 .article-body h1:first-child {
   border-radius: 0.5rem;
-  background-color: #fafafa;
 }
 
 .article-body h1:not(:first-child)::before {
@@ -161,6 +160,16 @@ header img {
   margin-top: 0.1rem;
 }
 
+.article-body code {
+  font-family: Menlo, Monaco, Consolas, monospace;
+  font-size: 15px;
+  border: 1px solid #eee;
+  padding: 0 8px 0 8px;
+  border-radius: 4px;
+  color: #333;
+  background-color: #fafafa;
+}
+
 .article-body blockquote {
   border: 1px solid #efefef;
   padding: 0 1rem 0 1rem;
@@ -169,12 +178,18 @@ header img {
 }
 
 .article-body .article-cover {
-  width: 90%;
+  width: 80%;
+  min-width: 330px;
   object-fit: cover;
   border-radius: 6px;
   display: block;
   margin: 0 auto 0 auto;
   border: 1px solid #eee;
+}
+
+.article-body ul li {
+  list-style-type: disc;
+  margin-left: 2rem;
 }
 
 deckgo-highlight-code {

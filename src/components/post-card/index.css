@@ -7,8 +7,9 @@
   left: 50%;
   transform: translate(-50%) rotate(-8deg);
   transition: 200ms;
-  border-radius: 4px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .img-line {

@@ -5,6 +5,7 @@
   justify-content: center;
   border-left: 3px solid var(--blue);
   margin: 0 auto 0 auto;
+  margin-left: 1rem;
 }
 
 .item-list .item {
@@ -15,7 +16,7 @@
 }
 
 .item::before {
-  transition: 400ms;
+  transition: 200ms;
   background-color: var(--blue);
   height: 0.8rem;
   width: 0.8rem;
@@ -27,7 +28,7 @@
 }
 
 .item:hover::before {
-  transform: scale(1.3);
+  transform: scale(1.2);
 }
 
 .item-list .item-label {

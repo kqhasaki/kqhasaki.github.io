@@ -33,7 +33,7 @@ export default function ArticlesView() {
     <BaseLayout>
       {articles.map(article => (
         <motion.div
-          key={article.slug}
+          key={article.id}
           initial={{ x: -100, opacity: 0 }}
           animate={{
             x: 0,
