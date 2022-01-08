@@ -175,7 +175,6 @@ header img {
   display: block;
   margin: 0 auto 0 auto;
   border: 1px solid #eee;
-  opacity: 0.9;
 }
 
 deckgo-highlight-code {
@@ -184,6 +183,3 @@ deckgo-highlight-code {
   border: 1px solid #efefef;
   border-radius: 6px;
 }
-
-
-
