@@ -1,5 +1,0 @@
-{
-    "componentChunkName": "component---src-pages-articles-mdx-slug-js",
-    "path": "/articles/test-article/",
-    "result": {"pageContext":{"id":"f71f759a-d54c-54fb-b8f0-b4df94953aa3","slug":"test-article","__params":{"slug":"test-article"}}},
-    "staticQueryHashes": ["2757060725","803320904"]}
