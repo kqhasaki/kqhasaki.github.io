@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import BaseLayout from '../../components/base-layout'
-import { graphql, useStaticQuery } from 'gatsby'
+import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { motion } from 'framer-motion'
 import { FieldTimeOutlined, ReadOutlined } from '@ant-design/icons'
