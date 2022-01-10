@@ -188,7 +188,7 @@ header img {
 }
 
 .article-body img {
-  width: 100%;
+  width: 85%;
   min-width: 330px;
   object-fit: cover;
   border-radius: 6px;
