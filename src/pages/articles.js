@@ -3,6 +3,7 @@ import BaseLayout from '../components/base-layout'
 import { graphql, useStaticQuery } from 'gatsby'
 import { PostCard } from '../components'
 import { motion } from 'framer-motion'
+import moment from 'moment'
 
 export default function ArticlesView() {
   const articles = useStaticQuery(graphql`
@@ -27,7 +28,11 @@ export default function ArticlesView() {
         }
       }
     }
-  `).allMdx.nodes
+  `).allMdx.nodes.sort((a, b) => {
+    const date1 = moment(a.frontmatter.date)
+    const date2 = moment(b.frontmatter.date)
+    return date2.unix() - date1.unix()
+  })
 
   return (
     <BaseLayout>

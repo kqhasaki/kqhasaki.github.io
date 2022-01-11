@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { CloseOutlined } from '@ant-design/icons'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import './index.css'
 
 export default function Modal({
@@ -16,31 +16,43 @@ export default function Modal({
   }, [visible])
 
   return (
-    <motion.div
-      className={clsx('modal-wrapper', !visible && 'invisible')}
-      animate={{ opacity: visible ? 1 : 0 }}
-      ref={contentRef}
-      onClick={e => {
-        if (e.target === contentRef.current) {
-          onClose()
-        }
-      }}
-    >
-      <motion.div
-        className={clsx('modal-content')}
-        animate={{
-          rotate: visible ? '0deg' : '90deg',
-        }}
-      >
+    <AnimatePresence>
+      {visible && (
         <motion.div
-          className={clsx('modal-closer')}
-          onClick={onClose}
-          whileHover={{ scale: 1.2 }}
+          className={clsx('modal-wrapper')}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          ref={contentRef}
+          onClick={e => {
+            if (e.target === contentRef.current) {
+              onClose()
+            }
+          }}
         >
-          <CloseOutlined />
+          <motion.div
+            className={clsx('modal-content')}
+            initial={{
+              rotate: '90deg',
+            }}
+            animate={{
+              rotate: '0deg',
+            }}
+            exit={{
+              x: -100,
+            }}
+          >
+            <motion.div
+              className={clsx('modal-closer')}
+              onClick={onClose}
+              whileHover={{ scale: 1.2 }}
+            >
+              <CloseOutlined />
+            </motion.div>
+            {children}
+          </motion.div>
         </motion.div>
-        {children}
-      </motion.div>
-    </motion.div>
+      )}
+    </AnimatePresence>
   )
 }

@@ -16,9 +16,8 @@ export const query = graphql`
         title
       }
       body
-      timeToRead
       wordCount {
-        words
+        sentences
       }
     }
   }
@@ -41,7 +40,8 @@ export default function ArticleView({ data }) {
         <p className="article-meta">
           <span>
             <FieldTimeOutlined /> {article.frontmatter.date} | <ReadOutlined />{' '}
-            {article.timeToRead}min
+            {Math.round((article.wordCount.sentences * 58) / 100) * 100}
+            words {Math.round(article.wordCount.sentences / 7)}min
           </span>
         </p>
         <img

@@ -27,7 +27,8 @@ export default function PostCard({ article }) {
         <span> {article.frontmatter.date}</span>
         <span>
           {' '}
-          | {article.wordCount.words}words {article.timeToRead}min
+          | {Math.round((article.wordCount.sentences * 58) / 100) * 100}
+          words {Math.round(article.wordCount.sentences / 7)}min
         </span>
       </p>
       <p>{article.excerpt}</p>

@@ -85,10 +85,6 @@ header img {
   color: var(--blue);
 }
 
-.invisible {
-  display: none !important;
-}
-
 .article-body .article-title {
   text-align: center;
   font-size: 2rem;
