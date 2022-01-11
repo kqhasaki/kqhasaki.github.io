@@ -19,14 +19,14 @@
 }
 
 .post-card {
-  border: 1px solid #efefef;
+  border: 1px solid var(--card-background-border-color);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: 0.5rem;
-  border: 1px solid #efefef;
+  border: 1px solid var(--card-background-border-color);
   margin-top: 140px;
   transition: 200ms;
   cursor: pointer;
@@ -55,5 +55,5 @@
   padding: 0.5rem 1rem 0.5rem 1rem;
   margin-top: 1rem;
   border-radius: 0.5rem;
-  background-color: #fafafa;
+  background-color: var(--card-background-color);
 }

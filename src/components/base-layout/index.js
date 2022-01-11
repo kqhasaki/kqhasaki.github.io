@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useStaticQuery, graphql } from 'gatsby'
 import { ReadOutlined, HomeOutlined } from '@ant-design/icons'
 import { Modal } from '../../components'
@@ -6,6 +6,10 @@ import AvatraCard from '../avatar-card'
 import './index.css'
 import avatar from '../../images/avatar.png'
 import { motion } from 'framer-motion'
+import clsx from 'clsx'
+import moonSvg from '../../images/moon.svg'
+import sunSvg from '../../images/sun.svg'
+
 import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/highlight-code/dist/loader'
 deckDeckGoHighlightElement()
 
@@ -23,10 +27,37 @@ export default function BaseLayout({ children, pageTitle }) {
   `).site.siteMetadata
   const [profileModalVisible, setProfileModalVisible] = useState(false)
   const [language, setLanguage] = useState('Chinese')
+  const [themeClass, setThemeClass] = useState()
+
+  function changeTheme() {
+    setThemeClass(theme => {
+      if (theme === 'light') return 'dark'
+      else return 'light'
+    })
+  }
+
+  useEffect(() => {
+    if (!themeClass) return
+    const body = document.querySelector('body')
+    localStorage.setItem('theme', themeClass)
+    body.className = themeClass
+  }, [themeClass])
+
+  useEffect(() => {
+    const body = document.querySelector('body')
+    const theme = localStorage.getItem('theme')
+    if (!theme) {
+      localStorage.setItem('theme', 'dark')
+      setThemeClass('dark')
+      return
+    }
+    body.className = theme
+    setThemeClass(theme)
+  }, [])
 
   return (
     <languageContext.Provider value={language}>
-      <div className="base-wrapper">
+      <div className={clsx('base-wrapper')}>
         <title>
           {pageTitle && `${pageTitle} |`}
           {title}
@@ -65,6 +96,13 @@ export default function BaseLayout({ children, pageTitle }) {
           <AvatraCard />
         </Modal>
         <main>{children}</main>
+        <div className="theme-changer" onClick={changeTheme}>
+          {themeClass === 'light' ? (
+            <img src={moonSvg} />
+          ) : (
+            <img src={sunSvg} />
+          )}
+        </div>
       </div>
     </languageContext.Provider>
   )

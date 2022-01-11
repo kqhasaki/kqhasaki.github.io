@@ -1,6 +1,31 @@
 :root {
-  --blue: #189fff;
   --deckgo-highlight-code-font-family: Menlo, Monaco, Consolas;
+}
+
+.light {
+  --blue: #189fff;
+  --background-color: #fff;
+  --font-color: #000;
+  --btn-color: #fff;
+  --card-background-color: #efefef;
+  --card-background-border-color: #efefef;
+  --code-font-color: #333;
+}
+
+.dark {
+  --blue: #189fff;
+  --background-color: #333;
+  --font-color: #fff;
+  --btn-color: #333;
+  --card-background-color: #444;
+  --card-background-border-color: #444;
+  --code-font-color: #fff;
+}
+
+html,
+body {
+  background-color: var(--background-color);
+  color: var(--font-color);
 }
 
 @font-face {
@@ -33,7 +58,6 @@ p {
 body {
   font-weight: 400;
   font-family: chinese;
-  color: #333;
   word-wrap: break-word;
   font-kerning: normal;
   margin: 0;
@@ -102,7 +126,7 @@ header img {
 .article-meta > span {
   padding: 0.5rem 1rem 0.5rem 1rem;
   border-radius: 0.5rem;
-  background-color: #fafafa;
+  background-color: var(--card-background-color);
 }
 
 .article-body h1 {
@@ -159,15 +183,15 @@ header img {
 .article-body code {
   font-family: Menlo, Monaco, Consolas, monospace;
   font-size: 15px;
-  border: 1px solid #eee;
+  border: 1px solid var(--card-background-border-color);
   padding: 0 8px 0 8px;
   border-radius: 4px;
-  color: #333;
-  background-color: #fafafa;
+  color: var(--code-font-color);
+  background-color: var(--card-background-color);
 }
 
 .article-body blockquote {
-  border: 1px solid #efefef;
+  border: 1px solid var(--card-background-border-color);
   padding: 0 1rem 0 1rem;
   border-radius: 0 0.5rem 0.5rem 0;
   border-left: 1px solid var(--blue);
@@ -180,7 +204,7 @@ header img {
   border-radius: 6px;
   display: block;
   margin: 0 auto 0 auto;
-  border: 1px solid #eee;
+  border: 1px solid var(--card-background-border-color);
 }
 
 .article-body img {
@@ -190,7 +214,7 @@ header img {
   border-radius: 6px;
   display: block;
   margin: 0 auto 0 auto;
-  border: 1px solid #eee;
+  border: 1px solid var(--card-background-border-color);
 }
 
 .article-body ul li {
@@ -202,9 +226,26 @@ header img {
   color: #189fff;
 }
 
+.theme-changer {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.theme-changer img {
+  padding: 6px;
+  width: 30px;
+  height: 30px;
+  background-color: var(--btn-color);
+  border: 1px solid #efefef;
+  border-radius: 50%;
+}
+
 deckgo-highlight-code {
   box-shadow: none !important;
   font-size: 14px;
-  border: 1px solid #efefef;
+  border: 1px solid var(--card-background-border-color);
   border-radius: 6px;
 }

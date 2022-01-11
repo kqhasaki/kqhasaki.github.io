@@ -15,10 +15,10 @@
 
 .modal-content {
   position: relative;
-  background: rgb(255, 255, 255);
+  background: var(--card-background-color);
   padding: 2rem;
   border-radius: 1rem;
-  border: 1px solid rgba(50, 50, 50, 0.3);
+  border: 1px solid var(--card-background-border-color);
   width: 40rem;
   min-height: 50vh;
   max-height: 100vh;
