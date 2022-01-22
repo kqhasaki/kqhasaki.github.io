@@ -47,8 +47,8 @@ export default function BaseLayout({ children, pageTitle }) {
     const body = document.querySelector('body')
     const theme = localStorage.getItem('theme')
     if (!theme) {
-      localStorage.setItem('theme', 'dark')
-      setThemeClass('dark')
+      localStorage.setItem('theme', 'light')
+      setThemeClass('light')
       return
     }
     body.className = theme

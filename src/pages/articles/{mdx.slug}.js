@@ -40,7 +40,7 @@ export default function ArticleView({ data }) {
         <p className="article-meta">
           <span>
             <FieldTimeOutlined /> {article.frontmatter.date} | <ReadOutlined />{' '}
-            {Math.round((article.wordCount.sentences * 58) / 100) * 100}
+            {Math.round((article.wordCount.sentences * 40) / 100) * 100}
             words {Math.round(article.wordCount.sentences / 7)}min
           </span>
         </p>

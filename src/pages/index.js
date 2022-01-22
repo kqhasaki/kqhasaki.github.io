@@ -35,7 +35,7 @@ const PROJECTS = {
   Chinese: [
     {
       label: '音乐播放器',
-      content: '基于React Native和网易云音乐api的音乐播放器App',
+      content: '基于React和网易云音乐API的音乐播放器Web App',
     },
     {
       label: '算法动态演示',

@@ -9,7 +9,7 @@ export default function insertSort(arr) {
   for (let i = 0; i < arr.length - 1; i++) {
     const target = arr[i + 1]
     let j = i
-    while (arr[j] > target) {
+    while (j >= 0 && arr[j] > target) {
       arr[j + 1] = arr[j]
       j--
     }

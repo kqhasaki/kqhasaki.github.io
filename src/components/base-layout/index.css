@@ -9,28 +9,27 @@
   --btn-color: #fff;
   --card-background-color: #efefef;
   --card-background-border-color: #efefef;
-  --code-font-color: #333;
+  --code-font-color: #444;
+  --code-background-color: #fff;
+  --code-border-color: #efefef;
 }
 
 .dark {
   --blue: #189fff;
-  --background-color: #333;
-  --font-color: #fff;
+  --background-color: #292929;
+  --font-color: #bdc1c6;
   --btn-color: #333;
   --card-background-color: #444;
   --card-background-border-color: #444;
-  --code-font-color: #fff;
+  --code-font-color: #ccc;
+  --code-background-color: #444;
+  --code-border-color: #444;
 }
 
 html,
 body {
   background-color: var(--background-color);
   color: var(--font-color);
-}
-
-@font-face {
-  font-family: 'Chinese';
-  src: url('../../fonts/NotoSerifSC-Light.otf');
 }
 
 a {
@@ -53,12 +52,12 @@ p {
   margin-block-end: 1em;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1rem;
 }
 
 body {
-  font-weight: 400;
-  font-family: chinese;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: 300;
   word-wrap: break-word;
   font-kerning: normal;
   margin: 0;
@@ -133,21 +132,25 @@ header img {
 .article-body h1 {
   margin-bottom: 1.8rem;
   margin-top: 1.8rem;
+  font-weight: 500;
 }
 
 .article-body h2 {
   margin-bottom: 1.5rem;
   margin-top: 1.5rem;
+  font-weight: 400;
 }
 
 .article-body h3 {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
+  font-weight: 400;
 }
 
 .article-body h4 {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
+  font-weight: 300;
 }
 
 .article-body h1:first-child {
@@ -183,12 +186,13 @@ header img {
 
 .article-body code {
   font-family: Menlo, Monaco, Consolas, monospace;
-  font-size: 15px;
-  border: 1px solid var(--card-background-border-color);
-  padding: 0 8px 0 8px;
+  font-size: 14px;
+  border: 1px solid var(--code-border-color);
+  padding: 0 4px 0 4px;
+  margin: 0 2px 0 2px;
   border-radius: 4px;
   color: var(--code-font-color);
-  background-color: var(--card-background-color);
+  background-color: var(--code-background-color);
 }
 
 .article-body blockquote {
@@ -196,6 +200,7 @@ header img {
   padding: 0 1rem 0 1rem;
   border-radius: 0 0.5rem 0.5rem 0;
   border-left: 1px solid var(--blue);
+  margin-top: 1rem;
 }
 
 .article-body .article-cover {

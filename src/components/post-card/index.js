@@ -27,7 +27,7 @@ export default function PostCard({ article }) {
         <span> {article.frontmatter.date}</span>
         <span>
           {' '}
-          | {Math.round((article.wordCount.sentences * 58) / 100) * 100}
+          | {Math.round((article.wordCount.sentences * 40) / 100) * 100}
           words {Math.round(article.wordCount.sentences / 7)}min
         </span>
       </p>
