@@ -32,6 +32,14 @@
   cursor: pointer;
 }
 
+.post-card:hover {
+  box-shadow: 0 0 1rem var(--card-box-shadow);
+}
+
+.post-card:active {
+  box-shadow: 0 0 1.5rem var(--blue);
+}
+
 .post-card:hover .post-card-img {
   transform: translate(-50%) rotate(0deg);
 }

@@ -3,27 +3,35 @@
 }
 
 .light {
-  --blue: #189fff;
+  --blue: #02bbff;
   --background-color: #fff;
-  --font-color: #000;
+  --font-color: #1a1a1a;
+  --font-color-header: #000;
   --btn-color: #fff;
   --card-background-color: #efefef;
   --card-background-border-color: #efefef;
+  --font-color-dimmed: #666;
+  --card-box-shadow: rgba(0, 0, 0, 0.1);
   --code-font-color: #444;
   --code-background-color: #fff;
   --code-border-color: #efefef;
+  --code-block-background: #fafafa;
 }
 
 .dark {
-  --blue: #189fff;
-  --background-color: #292929;
-  --font-color: #bdc1c6;
+  --blue: #02bbff;
+  --background-color: #181818;
+  --font-color: #e8e8e8;
+  --font-color-header: #fefefe;
+  --font-color-dimmed: #aaa;
   --btn-color: #333;
-  --card-background-color: #444;
-  --card-background-border-color: #444;
-  --code-font-color: #ccc;
-  --code-background-color: #444;
-  --code-border-color: #444;
+  --card-background-color: #222;
+  --card-background-border-color: #2a2a2a;
+  --card-box-shadow: #333;
+  --code-font-color: #ebebeb;
+  --code-background-color: #313131;
+  --code-block-background: #1e1e1e;
+  --code-border-color: #313131;
 }
 
 html,
@@ -131,24 +139,29 @@ header img {
 }
 
 .article-body h1 {
+  color: var(--font-color-header);
   margin-bottom: 1.8rem;
   margin-top: 1.8rem;
   font-weight: 500;
 }
 
 .article-body h2 {
+  color: var(--font-color-header);
   margin-bottom: 1.5rem;
+  margin-bottom: 1.8rem;
   margin-top: 1.5rem;
   font-weight: 400;
 }
 
 .article-body h3 {
+  color: var(--font-color-header);
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   font-weight: 400;
 }
 
 .article-body h4 {
+  color: var(--font-color-header);
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   font-weight: 300;
@@ -189,7 +202,7 @@ header img {
   font-family: Menlo, Monaco, Consolas, monospace;
   font-size: 14px;
   border: 1px solid var(--code-border-color);
-  padding: 0 4px 0 4px;
+  padding: 4px;
   margin: 0 2px 0 2px;
   border-radius: 4px;
   color: var(--code-font-color);
@@ -202,6 +215,11 @@ header img {
   border-radius: 0 0.5rem 0.5rem 0;
   border-left: 1px solid var(--blue);
   margin-top: 1rem;
+  color: var(--font-color-dimmed);
+}
+
+.article-body blockquote code {
+  color: var(--font-color-dimmed);
 }
 
 .article-body .article-cover {
@@ -233,6 +251,13 @@ header img {
   color: #189fff;
 }
 
+.article-body a::after {
+  content: url('../../images/link.svg');
+  padding-left: 2px;
+  position: relative;
+  bottom: -2px;
+}
+
 .theme-changer {
   position: fixed;
   right: 1rem;
@@ -245,8 +270,8 @@ header img {
   padding: 6px;
   width: 30px;
   height: 30px;
-  background-color: var(--btn-color);
-  border: 1px solid #efefef;
+  background-color: var(--background-color);
+  border: 1px solid var(--card-background-border-color);
   border-radius: 50%;
 }
 
@@ -254,5 +279,6 @@ deckgo-highlight-code {
   box-shadow: none !important;
   font-size: 14px;
   border: 1px solid var(--card-background-border-color);
+  background-color: var(--code-block-background);
   border-radius: 6px;
 }

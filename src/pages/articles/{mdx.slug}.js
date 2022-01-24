@@ -25,9 +25,13 @@ export const query = graphql`
 
 export default function ArticleView({ data }) {
   const article = data.mdx
+
   useEffect(() => {
     document.title = article.frontmatter.title
-  }, [article])
+
+    const links = document.querySelectorAll('.article-body a')
+    links?.forEach(link => (link.target = '_blank'))
+  }, [data])
 
   return (
     <BaseLayout>

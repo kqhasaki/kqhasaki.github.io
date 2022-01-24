@@ -64,7 +64,7 @@ export default function BaseLayout({ children, pageTitle }) {
         </title>
         <header>
           <Link to="/" className="nav-link" activeClassName="link-active">
-            <motion.div whileHover={{ scale: 1.2 }}>
+            <motion.div whileHover={{ scale: 1.1 }}>
               <HomeOutlined />
             </motion.div>
           </Link>
@@ -73,13 +73,13 @@ export default function BaseLayout({ children, pageTitle }) {
             className="nav-link"
             activeClassName="link-active"
           >
-            <motion.div whileHover={{ scale: 1.2 }}>
+            <motion.div whileHover={{ scale: 1.1 }}>
               <ReadOutlined />
             </motion.div>
           </Link>
           <motion.div
             className="nav-link"
-            whileHover={{ scale: 1.2 }}
+            whileHover={{ scale: 1.1 }}
             onClick={() => {
               setProfileModalVisible(true)
             }}
