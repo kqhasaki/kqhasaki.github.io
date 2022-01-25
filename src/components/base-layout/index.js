@@ -3,6 +3,7 @@ import { Link, useStaticQuery, graphql } from 'gatsby'
 import { ReadOutlined, HomeOutlined } from '@ant-design/icons'
 import { Modal } from '../../components'
 import AvatraCard from '../avatar-card'
+import Footer from '../footer'
 import './index.css'
 import avatar from '../../images/avatar.png'
 import { motion } from 'framer-motion'
@@ -103,6 +104,7 @@ export default function BaseLayout({ children, pageTitle }) {
             <img src={sunSvg} />
           )}
         </div>
+        <Footer />
       </div>
     </languageContext.Provider>
   )

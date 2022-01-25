@@ -64,6 +64,11 @@ p {
   line-height: 1.7rem;
 }
 
+p::selection {
+  background-color: var(--blue);
+  color: #fff;
+}
+
 body {
   font-family: 'Times New Roman', Times, serif;
   font-weight: 300;
@@ -254,8 +259,6 @@ header img {
 .article-body a::after {
   content: url('../../images/link.svg');
   padding-left: 2px;
-  position: relative;
-  bottom: -2px;
 }
 
 .theme-changer {
