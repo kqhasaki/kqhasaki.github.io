@@ -10,7 +10,7 @@
   --btn-color: #fff;
   --card-background-color: #efefef;
   --card-background-border-color: #efefef;
-  --quote-background-color: #fcfcfc;
+  --quote-background-color: #fafafa;
   --font-color-highlight: #202124;
   --card-box-shadow: rgba(0, 0, 0, 0.1);
   --code-font-color: #444;
@@ -27,7 +27,7 @@
   --font-color-highlight: #eaeaea;
   --btn-color: #333;
   --card-background-color: #222;
-  --quote-background-color: #35363a;
+  --quote-background-color: #1e1e1e;
   --card-background-border-color: #2a2a2a;
   --card-box-shadow: #333;
   --code-font-color: #ebebeb;
@@ -72,7 +72,7 @@ p::selection {
 }
 
 body {
-  font-weight: 400;
+  font-weight: 300;
   word-wrap: break-word;
   font-kerning: normal;
   margin: 0;
@@ -148,7 +148,7 @@ header img {
   color: var(--font-color-header);
   margin-bottom: 1.8rem;
   margin-top: 1.8rem;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .article-body h2 {
@@ -163,7 +163,7 @@ header img {
   color: var(--font-color-header);
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
-  font-weight: 400;
+  font-weight: 300;
 }
 
 .article-body h4 {
@@ -223,7 +223,6 @@ header img {
   margin-top: 1rem;
   background-color: var(--quote-background-color);
   color: var(--font-color-highlight);
-  font-size: 15px;
   font-weight: 300;
 }
 
