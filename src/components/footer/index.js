@@ -31,6 +31,7 @@ export default function Footer() {
       </div>
 
       <div className="wrapper" style={{ alignItems: 'flex-end' }}>
+        <h3>Links</h3>
         <ul>
           {outerLinks.map(({ url, label }, idx) => (
             <li key={idx}>

@@ -5,12 +5,13 @@
 .light {
   --blue: #02bbff;
   --background-color: #fff;
-  --font-color: #1a1a1a;
-  --font-color-header: #000;
+  --font-color: #3c4043;
+  --font-color-header: #3c4043;
   --btn-color: #fff;
   --card-background-color: #efefef;
   --card-background-border-color: #efefef;
-  --font-color-dimmed: #666;
+  --quote-background-color: #fcfcfc;
+  --font-color-highlight: #202124;
   --card-box-shadow: rgba(0, 0, 0, 0.1);
   --code-font-color: #444;
   --code-background-color: #fff;
@@ -20,12 +21,13 @@
 
 .dark {
   --blue: #02bbff;
-  --background-color: #181818;
-  --font-color: #e8e8e8;
-  --font-color-header: #fefefe;
-  --font-color-dimmed: #aaa;
+  --background-color: #202124;
+  --font-color: #bdc1c6;
+  --font-color-header: #e8eaed;
+  --font-color-highlight: #eaeaea;
   --btn-color: #333;
   --card-background-color: #222;
+  --quote-background-color: #35363a;
   --card-background-border-color: #2a2a2a;
   --card-box-shadow: #333;
   --code-font-color: #ebebeb;
@@ -70,8 +72,7 @@ p::selection {
 }
 
 body {
-  font-family: 'Times New Roman', Times, serif;
-  font-weight: 300;
+  font-weight: 400;
   word-wrap: break-word;
   font-kerning: normal;
   margin: 0;
@@ -220,11 +221,14 @@ header img {
   border-radius: 0 0.5rem 0.5rem 0;
   border-left: 1px solid var(--blue);
   margin-top: 1rem;
-  color: var(--font-color-dimmed);
+  background-color: var(--quote-background-color);
+  color: var(--font-color-highlight);
+  font-size: 15px;
+  font-weight: 300;
 }
 
 .article-body blockquote code {
-  color: var(--font-color-dimmed);
+  color: var(--font-color-highlight);
 }
 
 .article-body .article-cover {
