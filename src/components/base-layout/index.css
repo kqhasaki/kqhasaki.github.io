@@ -134,8 +134,7 @@ header img {
   text-align: center;
   margin: 1rem auto 1.5rem auto;
   font-size: 0.9rem;
-  font-family: serif;
-  font-weight: bold;
+  font-weight: 300;
 }
 
 .article-meta > span {
