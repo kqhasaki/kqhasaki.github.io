@@ -127,6 +127,7 @@ header img {
 .article-body .article-title {
   text-align: center;
   font-size: 2rem;
+  font-weight: 500;
   margin-bottom: 1.5rem;
 }
 
@@ -148,6 +149,7 @@ header img {
   margin-bottom: 1.8rem;
   margin-top: 1.8rem;
   font-weight: 400;
+  font-size: 1.7rem;
 }
 
 .article-body h2 {
@@ -162,7 +164,7 @@ header img {
   color: var(--font-color-header);
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .article-body h4 {

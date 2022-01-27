@@ -46,3 +46,11 @@
   margin: 2rem 0 1rem 0;
   font-weight: bold;
 }
+
+.item a {
+  transition: 300ms;
+}
+
+.item a:hover {
+  color: var(--font-color-highlight);
+}

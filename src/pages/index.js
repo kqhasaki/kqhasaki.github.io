@@ -35,7 +35,11 @@ const PROJECTS = {
   Chinese: [
     {
       label: '音乐播放器',
-      content: '基于React和网易云音乐API的音乐播放器Web App',
+      content: (
+        <a href="https://music.louisk.xyz" target="_blank">
+          基于React和网易云音乐API的音乐播放器Web应用
+        </a>
+      ),
     },
     {
       label: '算法动态演示',
