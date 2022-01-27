@@ -28,9 +28,7 @@ export default function BaseLayout({ children, pageTitle }) {
   `).site.siteMetadata
   const [profileModalVisible, setProfileModalVisible] = useState(false)
   const [language, setLanguage] = useState('Chinese')
-  const [themeClass, setThemeClass] = useState(
-    localStorage.getItem('theme') ?? 'light'
-  )
+  const [themeClass, setThemeClass] = useState()
 
   function changeTheme() {
     const body = document.querySelector('body')
