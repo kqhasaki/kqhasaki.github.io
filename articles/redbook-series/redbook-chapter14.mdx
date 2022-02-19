@@ -341,3 +341,305 @@ const div = document.createElement('div')
 `Text`节点中包含的文本可以通过`nodeValue`属性访问，也可以通过`data`属性访问，这两个属性包含相同的值。修改`nodeValue`或者`data`的值，也会在另一个属性反映出来。文本节点包含了以下操作文本的方法：
 
 - `appendData(text)`，向节点末尾添加文本`text`
+- `deleteData(offset, count)`，从位置`offset`开始删除`count`个字符
+- `insertData(offset, text)`，在位置`offset`插入`text`
+- `replaceData(offset, count, text)`，用`text`替换从位置`offset`到`offset + count`的文本
+- `splitText(offset)`，在位置`offset`将当前文本节点拆分为两个文本节点
+- `subStringData(offset, count)`，提取从位置`offset`到`offset + count`的文本
+
+除了这些方法，还可以通过`length`属性获取文本节点中包含的字符数量。这个值等于`nodeValue.length`和`data.length`。
+
+默认情况下，包含文本内容的每个元素最多只能有一个文本节点。例如：
+
+```html
+<div></div> <!-- 没有内容，因此没有文本节点 -->
+
+<div> </div> <!-- 有空格，因此有一个文本节点 -->
+
+<div>Hello World!</div> <!-- 有内容，因此有一个文本节点 -->
+```
+
+示例中的第一个`<div>`元素中不包含内容，因此不会产生文本节点。只要开始标签和结束标签之间有内容，就会创建一个文本节点，因此第二个`<div>`元素会有一个文本节点的子节点，虽然它只包含空格。这个文本节点的`nodeValue`就是一个空格。第三个`<div>`元素也有一个文本节点的子节点，其`nodeValue`的值为`Hello World!`。下列代码可以用来访问这个文本节点：
+
+```javascript
+const textNode = div.firstChild // 或div.childNodes[0]
+div.firstChild.nodeValue = 'some other message'
+```
+
+只要节点在当前的文档树中，这样的修改就会马上反映出来。修改文本节点还有一点需要注意，就是HTML或者XML代码会被转换成实体编码，即小于号、大于号或者引号会被转义：
+
+```javascript
+div.firstChild.nodeValue = 'Some <strong>other</strong> message'
+```
+
+这实际上是将HTML插入DOM文档前进行编码的有效方式。
+
+使用`document.createTextNode()`可以用来创建新文本节点，它接收一个参数，即要插入节点的文本。跟设置已有的文本节点的值一样，这些要插入的文本也会应用HTML或者XML编码。例如：
+
+```javascript
+const textNode = document.createTextNode('<strong>Hello</strong> world!')
+```
+
+创建文本节点后，其`ownerDocument`属性会被设置为`document`。但在把这个节点添加到文档树之前，我们不会在浏览器中看到它。
+
+```javascript
+const element = document.createElement('div')
+element.className = 'message'
+
+const textNode = document.createTextNode('Hello World!')
+element.appendChild(textNode) 
+
+document.body.appendChild(element)
+```
+
+这个例子首先创建了一个`<div>`元素并给它添加了值为`message`的`class`属性，然后创建了一个文本节点并且添加到该元素。最后一步是把这个元素添加到文档的主体上，这样元素及其包含的文本会出现在浏览器中。
+
+一般来说一个元素只包含一个文本子节点。不过也可以染个元素包含多个文本子节点。
+
+```javascript
+const element = document.createElement('div')
+element.className = 'message'
+
+const textNode = document.createTextNode('Hello World')
+element.appendChild(textNode)
+
+const anotherTextNode = document.createTextNode('Yippe!')
+element.appendChild(anotherTextNode)
+
+document.body.appendChild(element)
+```
+
+将一个文本节点作为另一个文本节点的同胞插入之后，两个文本节点之间不会包含空格。
+
+DOM文档中的同胞文本节点可能导致困惑。因为一个文本节点足以表示一个文本字符串。同样，DOM文档中也经常出现两个相邻文本节点。为此有一个方法可以合并相邻的文本节点。这个方法叫做`normalize()`，是在`Node`类型中定义的（因此所有类型的节点上都有这个方法）。在包含两个或者多个相邻文本节点的父节点上调用`normalize()`时，所有同胞文本节点会被合并为一个文本节点，这个文本节点的`nodeValue`就等于之前所有同胞节点`nodeValue`拼接在一起的到的字符串。
+
+```javascript
+const element = document.createElement('div')
+element.className = 'message'
+
+const textNode = document.createTextNode('Hello World!')
+element.appendChild(textNode)
+
+const anotherTextNode = document.createTextNode('Yippee!')
+element.appendChild(anotherTextNode)
+
+document.body.appendChild(element)
+
+alert(element.childNodes.length) // 2
+element.normalize()
+alert(element.childNodes.length) // 1
+alert(element.firstChild.nodeValue) // 'Hello World!Yippee!'
+```
+
+浏览器在解析文档时，永远不会创建同胞文本节点。同胞文本节点只会出现在DOM脚本生成的文档树中。
+
+`Text`类型定义了一个与`normalize()`相反的方法——`splitText()`。这个方法可以在指定的偏移位置拆分`nodeValue`，将一个文本节点拆分成两个文本节点。拆分之后，原来的文本节点包含开头到偏移位置前的文本，新文本节点包含剩下的文本。这个方法返回新的文本节点，具有与原来的文本节点相同的`parentNode`。
+
+```javascript
+const element = document.createElement('div')
+element.className = 'message'
+
+const textNode = document.createTextNode('hello world')
+element.appendChil(textNode)
+
+document.body.appendChild(element)
+
+const newNode = element.firstChild.splitText(5)
+```
+
+这个例子中，包含`hello world`的文本节点被从位置`5`拆分成两个文本节点。位置`5`对应`hello`和`world`之间的空格。拆分文本节点最常用于从文本节点中提取数据的DOM解析技术。
+
+## `Comment`类型
+
+DOM中的注释通过`Comment`类型表示。`Comment`类型节点具有以下特征：
+
+- `nodeType`等于8
+- `nodeName`值为`#comment`
+- `nodeValue`值为注释的内容
+- `parentNode`值为`Document`或者`Element`对象
+- 不支持子节点
+
+`Comment`类型与`Text`类型继承同一个基类（`CharacterDatat`），因此拥有除`splitText()`之外`Text`节点所有的字符串操作方法。和`Text`类型相似，注释的实际内容可以通过`nodeValue`或者`data`属性获得。注释节点可以作为父节点的子节点来访问。例如：
+
+```html
+<div id="myDiv">
+  <!-- A comment -->
+</div>
+```
+
+这里的注释是`<div>`元素的子节点，这意味着可以像下面这样访问它：
+
+```javascript
+const div = document.getElementById('myDiv')
+const comment = div.firstChild
+alert(comment.data) // 'A comment'
+```
+
+可以通过`document.createComment()`方法创建注释节点，参数为注释文本。显然，注释节点很少通过JavaScript创建和访问，因为注释几乎不涉及算法逻辑。此外，浏览器不承认结束的`</html>`之后的注释。如果要访问注释节点，必须确定它们是`<html>`元素的后代。
+
+## `DocumentType`类型
+
+`DocumentType`类型的节点包含文档的文档类型（`doctype`）信息，具有以下特征：
+
+- `nodeType`等于10
+- `nodeName`值为文档类型的名称
+- `nodeValue`值为`null`
+- `parentNode`值为`Document`对象
+- 不支持子节点
+
+`DocumentType`对象在DOM Level1中不支持动态创建，只能在解析文档代码时创建。对于支持这个类型的浏览器，`DocumentType`对象保存在`document.doctype`属性中。DOM Level1规定了`DocumentType`对象的3个属性：`name`、`entities`和`notations`。其中，`name`是文档类型的名称，`entities`是这个文档类型描述的实体的`NamedNodeMap`，而`notations`是这个文档类型描述的表示法的`NamedNodeMap`。因为浏览器中的文档通常是HTML或者XHTML文档类型，所以`entites`和`notations`列表为空。无论如何，只有`name`属性是有用的。这个属性包含文档类型的名称，即紧跟在`<!DOCTYPE`后面的那串文本。
+
+## `DocumentFragment`类型
+
+在所有节点类型中，`DocumentFragment`类型是唯一一个在标记中没有对应表示的类型。DOM将文档片段定义为“轻量级”文档，能够包含和操作节点，却没有完整文档那样额外的消耗。`DocumentFragment`节点具有以下特征：
+
+- `nodeType`等于11
+- `nodeName`值为`#document-fragment`
+- `nodeValue`值为`null`
+- `parentNode`值为`null`
+- 子节点可以是`Element`、`ProcessingInstruction`、`Comment`、`Text`、`CDATASection`或者`EntityReference`
+
+不能直接把文档片段添加到文档。相反，文档片段的作用是充当其他要被添加到文档的节点的仓库。可以使用`document.createDocumentFragement()`方法创建文档片段。
+
+```javascript
+const fragment = document.createDocumentFragment()
+```
+
+文档片段从`Node`类型继承了所有文档类型具备的可以执行DOM操作的方法。如果文档中的一个节点被添加到一个文档片段，则该节点会从文档树中移除，不会再被浏览器渲染。添加到文档片段的新节点同样不属于文档树，不会被浏览器渲染。可以通过`appendChild()`或者`insertBefore()`方法将文档片段的内容添加到文档。在把文档片段作为参数传给这些方法时，这个文档片段的所有子节点会被添加到文档中相应的位置。文档片段本身永远不会被添加到文档树。
+
+```html
+<ul id="myList"></ul>
+```
+
+假设想要给这个`<ul>`元素添加三个列表项。如果分3次给这个元素添加列表项，浏览器就要重新渲染3次页面，以反映新添加的内容。为避免多次渲染，下面的代码示例使用文档片段创建了所有列表项，然后一次性将它们添加到了`<ul>`元素：
+
+```javascript
+const fragment = document.createDocumentFragment()
+const ul = document.getElementById('myList')
+
+for (let i = 0; i < 3; i++) {
+  const li = document.createElement('li')
+  li.appendChild(document.createTextNode(`Item ${i + 1}`))
+  fragment.appendChild(li)
+}
+
+ul.appendChild(fragment)
+```
+
+这个例子先创建了一个文档片段，然后取得了`<ul>`元素的引用。接着通过`for`循环创建了3个列表项，每一项都包含表明自己身份的文本。为此创建`<li>`元素，再创建文本节点并添加到该元素。然后通过`appendChild()`把`<li>`元素添加到文档片段。循转结束后，将文档片段传给`appendChild()`将所有列表添加到了`<ul>`元素。此时文档片段的子节点全部被转移到了`<ul>`元素。
+
+## `Attr`类型
+
+元素数据在DOM中通过`Attr`类型表示。`Attr`类型构造函数和原型在所有浏览器中都可以直接访问。技术上讲，属性是存在于元素`attributes`属性中的节点。虽然属性节点也是节点，但是却不被认为是DOM文档树的一部分。
+
+> `Attr`节点几乎不使用，因为将属性作为节点来访问多数情况下并无必要。推荐使用`getAttribute()`、`removeAttribute()`和`setAttribute()`方法操作属性，而不是直接操作属性节点。
+
+# DOM编程
+
+很多时候，操作DOM是很直观的。通过HTML代码能实现的，也一样可以通过JavaScript实现。但有些时候，DOM也没有看起来那么简单。浏览器能力的参差不齐和各种问题，也会导致DOM的某些方面会复杂一些。
+
+## 动态脚本
+
+`<script>`元素用于向网页中插入JavaScript代码，可以是`src`属性包含的外部文件，也可以是作为该元素内容的源代码。动态脚本就是在页面初始加载时不存在，之后又通过DOM包含的脚本。与对应的HTML元素一样，有两种方式通过`<script>`动态为网页添加脚本：引入外部文件和直接插入源代码。
+
+动态加载外部文件很容易实现，例如下面的`<script>`元素：
+
+```html
+<script src="foo.js"></script>
+```
+
+可以像这样通过DOM编程创建这个节点：
+
+```javascript
+const script = document.createElement('script')
+script.src = 'foo.js'
+document.body = appendChild(script)
+```
+
+注意，在上面最后一样把`<script>`元素添加到页面之前，是不会开始下载外部文件的。当然也可以将其添加到`<head>`元素，同样可以实现动态脚本加载。这个过程可以封装为：
+
+```javascript
+function loadScript(url) {
+  const script = document.createElement('script')
+  script.src = url
+  documend.body.appendChild(script)
+}
+
+// 可以加载外部JavaScript文件
+loadScript('client.js')
+```
+
+加载之后这个脚本就可以对页面执行操作了。这里有个问题：怎么知道脚本什么时候加载完？这个问题并没标准答案。具体情况取决于使用的浏览器。
+
+另一个动态插入JavaScript的方式是嵌入源代码：
+
+```javascript
+const script = document.createElment('script')
+script.appendChild(document.createTextNode('function sayHi() {alert("hi")}'))
+document.body.appendChild(script)
+```
+
+## 动态样式
+
+CSS样式在HTML页面中可以通过两个元素加载。`<link>`元素用于包含CSS外部文件，而`<style>`元素用于添加嵌入样式。和动态脚本类似，动态样式是页面初始加载时并不存在，而是在之后才添加到页面中的。
+
+来看下面这个典型的`<link>`元素：
+
+```html
+<link rel="stylesheet" type="text/css" href="style.css">
+```
+
+这个元素很容易使用DOM编程创建出来：
+
+```javascript
+const link = document.createElement('link')
+link.rel = 'stylesheet'
+link.type = 'text/css'
+link.href = 'styles.css'
+let head = document.getElementByTagName('head')[0]
+head.appendChild(link)
+```
+
+通过外部文件加载样式是一个异步过程。因此样式的加载和正执行的JavaScript代码并没有先后顺序。一般来说，也没有必要知道样式什么时候加载完成。另一种定义样式的方式是使用`<script>`元素包含嵌入的CSS规则，此处不赘述。
+
+## 使用`NodeList`
+
+**理解`NodeList`对象和相关的`NamedNodeMap`、`HTMLCollection`**，是理解DOM编程的关键。这三个集合类型都是“实时的”，因为文档结构的变化会实时地在它们身上反映出来，因此它们的值始终代表最新的状态。实际上，**`NodeList`就是基于DOM文档的实时查询**。例如，下面的代码会陷入死循环：
+
+```javascript
+const divs = document.getElementsByTagName('div')
+
+for (let i = 0; i < divs.length; i++) {
+  const div = document.createElement('div')
+  document.body.appendChild(div)
+}
+```
+
+以上代码中`divs`是包含文档中所有`div`元素的`HTMLCollection`。因为这个集合是“实时的”，所以任何时候向页面中添加一个新的`div`元素，这个查询集合就会多一项，因为浏览器不希望保存每次创建的集合，就会在每次访问时更新集合。这样就会出现以上问题。
+
+使用ES6迭代器也不会解决这个问题，因为迭代的是一个永远增长的实时集合，以下代码仍然会导致死循环：
+
+```javascript
+for (const div of document.getElementsByTagName('div')) {
+  const newDiv = document.createElement('div')
+  document.body.appendChild(newDiv)
+}
+```
+
+任何时候要迭代`NodeList`，最好再初始化一个保存变量保存当时查询时的长度，然后用循环变量与这个变量进行比较，例如：
+
+```javascript
+const divs = document.getElementsByTagName('div')
+
+for (let i = 0, len = divs.length; i < len; i++) {
+  const div = document.createElement('div')
+  document.body.appendChild(div)
+}
+```
+
+在这个例子中，又初始化了一个保存集合长度的变量`len`。因为`len`保存着循环开始时集合的长度，而这个值不会随着集合增大动态增长，所以就可以避免前面例子中出现的无穷循环。
+
+一般来说，最好限制操作`NodeList`的次数，因为每次访问这个对象都会触发一次新的查询，会搜索整个文档。因此最好把查询到的`NodeList`缓存起来。
+
+# `MutationObserver`接口
+

@@ -1,5 +1,11 @@
 import React from 'react'
-import { WechatOutlined, MailOutlined, QqOutlined } from '@ant-design/icons'
+import {
+  WechatOutlined,
+  BookOutlined,
+  MailFilled,
+  QqOutlined,
+} from '@ant-design/icons'
+import resume from '../../static/resume/resume.pdf'
 import './index.css'
 
 const outerLinks = [
@@ -22,8 +28,13 @@ export default function Footer() {
             <QqOutlined />
           </span>
           <span>
+            <a href={resume} download="简历.pdf">
+              <BookOutlined />
+            </a>
+          </span>
+          <span>
             <a href="mailto:k1664032884@gmail.com">
-              <MailOutlined />
+              <MailFilled />
             </a>
           </span>
         </p>
@@ -36,7 +47,7 @@ export default function Footer() {
           {outerLinks.map(({ url, label }, idx) => (
             <li key={idx}>
               <span>
-                <a href={url} target="_blank">
+                <a href={url} target="_blank" rel="noreferrer">
                   {label}
                 </a>
               </span>
