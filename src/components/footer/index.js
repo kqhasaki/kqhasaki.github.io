@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   WechatOutlined,
-  BookOutlined,
+  BookFilled,
   MailFilled,
   QqOutlined,
 } from '@ant-design/icons'
@@ -29,7 +29,7 @@ export default function Footer() {
           </span>
           <span>
             <a href={resume} download="简历.pdf">
-              <BookOutlined />
+              <BookFilled />
             </a>
           </span>
           <span>
