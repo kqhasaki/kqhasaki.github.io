@@ -265,3 +265,110 @@ DOM 操作虽然已经为操纵节点提供了很多 API，但向文档中一次
 ```
 
 实际返回的文本会因浏览器而不同。**不要指望不同浏览器的`innerHTML`会返回一样的值**。
+
+在写入模式下，赋值给`innerHTML`属性的值会被解析为 DOM 子树，并替代元素之前的所有节点。因为所赋的值默认为 HTML，所以其中所有标签都会以浏览器处理 HTML 的方式转换为元素（同样，转换结果也会因为浏览器不同而不同）。如果赋值中不含任何 HTML 标签，则直接生成一个文本节点。
+
+```javascript
+div.innerHTML = 'some text'
+```
+
+> 注意设置`innerHTML`会导致浏览器将 HTML 字符串解析为相应的 DOM 树。这意味着设置`innerHTML`属性后再马上读出来会得到不同的字符串。因为返回的字符串是将原始字符串对应的 DOM 子树序列化之后的结果。
+
+在所有现代浏览器中，通过`innerHTML`插入的`<script>`标签是不会执行的。
+
+读取`outerHTML`属性时，会返回调用它的元素（及所有后代元素）的 HTML 字符串。在写入`outerHTML`属性时，调用它的元素会被传入的 HTML 字符串经解释之后生成的 DOM 子树取代。
+
+使用本节介绍的方法替换子节点可能在浏览器中导致内存问题。例如，如果被移除的子树元素中之前有关联的事件处理程或其他 JavaScript 对象（作为元素的属性），那它们之间的绑定关系会滞留在内存中。如果这种替换操作频繁发生，页面的内存占用就会持续攀升。在使用`innerHTML`、`outerHTML`和`insertAdjacentHTML()`之前，最好要手动删除被替换元素上关联的事件处理程序和 JavaScript 对象。
+
+使用这些属性也有方便的地方，特别是`innerHTML`。一般来说插入大量 HTML 时使用新的 HTML 字符串插入会比多次创建 DOM 节点再插入来得便捷。这是因为 HTML 解析器会解析设置给`innerHTML`（或者`outerHTML`的值）。解析器在浏览器中是底层代码，因此比 JavaScript 快得多。
+
+尽管`innerHTML`不会执行自己创建的`<script>`标签，但仍然向恶意用户暴露了很大的攻击面，因为通过它可以毫不费力地创建元素并执行`onclick`之类的属性。出于安全考虑，尽量减少使用`innerHTML`。
+
+## `scrollIntoView()`
+
+DOM 规范中没有涉及的一个问题是如何滚动页面中的某个区域。为了填充该方面的缺失，不同浏览器实现了不同的控制滚动的方式。在所有这些专有的方法中，HTML5 选择了标准化`scrollIntoView()`。
+
+`scrollIntoView()`方法存在于所有的 HTML 元素上，可以滚动浏览器窗口或者容器元素以便包含元素进入视口。这个方法的参数如下：
+
+- `alignToTop`是一个布尔值。`true`：窗口滚动后元素的顶部与视口顶部对齐。`false`：窗口滚动后元素的底部与视口底部对齐。
+- `scrollIntoViewOptions`是一个选项对象。`behavior`：定义过渡动画，可取的值为`"smooth"`和`"auto"`，默认为`"auto"`；`block`：定义垂直方向的对齐，可取的值为`"start"`，`"center"`，`"end"`，`"nearest"`，默认为`"start"`；`"inline"`：定义水平方向的对齐，可取值同上，默认为`"nearest"`。
+- 不传参数默认为`alignToTop`为`true`。
+
+这个方法可以用来在页面上发生某个事件时引起用户关注。把焦点设置到一个元素上也会导致浏览 器将元素滚动到可见位置。
+
+# 专有扩展
+
+尽管所有浏览器厂商都理解遵循标准的重要性，但它们都有为弥补功能缺失而为 DOM 添加专有扩展的历史。虽然表面上看是一件坏事，但是专有扩展也为开发者提供了很多重要功能，这些功能后来则有可能被标准化，例如进入 HTML5。
+
+除了已经标准化的，各家浏览器还有很多未被标准化的专有扩展。这并不意味着它们将来不会被纳入标准。
+
+## `children`属性
+
+IE9 之前的版本与其他浏览器在处理空白文本节点上的差异导致了`children`属性的出现。`children`属性是一个`HTMLCollection`，只包含元素`Element`类型的子节点。如果元素的子节点类型全部是元素类型，那`children`和`childNodes`中包含的节点应该是一样的。可以像下面这样使用`children`属性：
+
+```javascript
+const childCount = element.children.length
+const firstChild = element.children[0]
+```
+
+## `contains()`方法
+
+DOM 编程中经常需要确定一个元素是不是另一个元素的后代。IE 首先引入了`contains()`方法，让开发者可以在不遍历 DOM 的情况下获取这个信息。`contains()`方法应该在要搜索的祖先元素上调用，参数是待确定的目标点。
+
+如果目标节点是被搜索节点的后代，`contains()`返回`true`，否则返回`false`。
+
+```javascript
+console.log(document.documentElement.contains(document.body)) // true
+```
+
+这个例子测试`<html>`元素中是否包含`<body>`元素，在格式正确的 HTML 中会返回`true`。另外，使用 DOM Level3 的`compareDocumentPosition()`方法也可以确定节点间的关系。这个方法会返回表示两个节点关系的位掩码。
+
+所有现代浏览器都支持`contains()`和`compareDocumentPosition()`方法。
+
+## 插入标记
+
+HTML5 将 IE 发明的`innerHTML`和`outerHTML`纳入了标准，但还有两个属性没有入选。这两个剩下的属性是`innerText`和`outerText`。
+
+`innerText`属性对应元素中包含的所有文本内容，无论文本在子树中哪个层级。在用于读取值时，`innerText`会按照深度优先的顺序将子树中所有文本节点的值拼接起来。在用于写入值时，`innerText`会移除元素的所有后代并插入一个包含该值的文本节点。
+
+```html
+<div id="content">
+  <p>This is a <strong>paragraph</strong> with a list of following it.</p>
+  <ul>
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+  </ul>
+</div>
+```
+
+对这个例子中的`<div>`而言，`innerText`属性会返回以下字符串：
+
+```
+This is a paragraph with a list following it.
+Item 1
+Item 2
+Item 3
+```
+
+注意不同的浏览器对待空格的方式不同，因此格式化之后的字符串可能包含也可能不包含原始 HTML 代码中的缩进。
+
+`outerText`和`innerText`是类似的，只不过作用范围包含调用它的节点。要读取文本值时，`outerText`和`innerText`实际上返回同样的元素。但是在写入文本值时，`outerText`就大不相同了。
+
+> 注意`outerText`是一个非标准的属性，也没有被标准化的前景。因此不推荐依赖这个属性实现重要的操作。
+
+## 滚动
+
+如前所属，滚动是 HTML5 之前的 DOM 标准没有涉及的领域。虽然 HTML5 把`scrollIntoView()`标准化了，但不同浏览器中仍然有其他专有方法。例如`scrollIntoViewIfNeeded()`作为`HTMLElement`类型的扩展可以在所有元素上调用。
+
+不过一般来说，`scrollIntoView()`是关于滚动唯一一个被标准化的方法，所以只用它就可以了。
+
+# 总结
+
+虽然 DOM 规定了与 XML 和 HTML 文档交互的核心 API，但其他几个规范也定义了对 DOM 得扩展。很多扩展都基于之前的已经称为事实标准的专有特性标准化而来。本章主要介绍了以下三个规范：
+
+- **Selectors API**为基于 CSS 选择符获取 DOM 元素定义了几个方法：`querySelector()`、`querySelectorAll()`和`matches()`。
+- **Element Traversal**在 DOM 元素上定义了额外的属性，以方便对 DOM 元素进行遍历。这个需求是因为浏览器处理元素空格的差异而产生的。
+- **HTML5**标准 DOM 提供了大量扩展。其中包括对`innerHTML`属性等事实标准进行了标准化，还有焦点管理、字符集、滚动等特性。
+
+DOM 扩展的数量总体还不大，但随着 Web 技术的发展一定会越来越多。浏览器仍然没有停止对专有扩展的探索，如果出现成功的扩展，那么就有可能成为事实标准，或者最终被整合到未来的标准中。

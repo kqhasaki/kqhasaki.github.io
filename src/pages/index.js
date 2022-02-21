@@ -65,7 +65,7 @@ export default function IndexView() {
     <BaseLayout>
       <motion.div
         style={{ width: '85%', margin: '0 auto 0 auto' }}
-        initial={{ x: -100, opacity: 0 }}
+        initial={{ x: -60, opacity: 0.8 }}
         animate={{ x: 0, opacity: 1 }}
       >
         <p style={{ textIndent: '2rem' }}>{blogDesc[language].content}</p>

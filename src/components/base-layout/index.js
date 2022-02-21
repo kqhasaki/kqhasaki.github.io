@@ -27,7 +27,6 @@ export default function BaseLayout({ children, pageTitle }) {
     }
   `).site.siteMetadata
   const [profileModalVisible, setProfileModalVisible] = useState(false)
-  const [language, setLanguage] = useState('Chinese')
   const [themeClass, setThemeClass] = useState()
 
   function changeTheme() {
@@ -47,6 +46,29 @@ export default function BaseLayout({ children, pageTitle }) {
     }
     body.className = theme
     setThemeClass(theme)
+
+    document.addEventListener('copy', e => {
+      const text = e.target.textContent
+      e.clipboardData.setData(
+        'text/plain',
+        `${text}\n-- 粘帖自LouisK的博客，联系：邮箱k1664032884@gmail.com，微信kuaiqianghasai --`
+      )
+      e.preventDefault()
+    })
+
+    document.addEventListener('dblclick', e => {
+      const { target } = e
+      if (target.matches('deckgo-highlight-code')) {
+        const text = target.textContent.trim()
+        const targetNode = document.createElement('input')
+        targetNode.style.height = 0
+        targetNode.id = 'temp_board'
+        targetNode.textContent = text
+        document.body.appendChild(targetNode)
+        targetNode.select()
+        document.execCommand('copy')
+      }
+    })
   }, [])
 
   return (
@@ -57,18 +79,18 @@ export default function BaseLayout({ children, pageTitle }) {
       </title>
       <header>
         <Link to="/" className="nav-link" activeClassName="link-active">
-          <motion.div whileHover={{ scale: 1.1 }}>
+          <motion.div whileHover={{ scale: 1.05 }}>
             <HomeOutlined />
           </motion.div>
         </Link>
         <Link to="/articles" className="nav-link" activeClassName="link-active">
-          <motion.div whileHover={{ scale: 1.1 }}>
+          <motion.div whileHover={{ scale: 1.05 }}>
             <ReadOutlined />
           </motion.div>
         </Link>
         <motion.div
           className="nav-link"
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.05 }}
           onClick={() => {
             setProfileModalVisible(true)
           }}
@@ -84,6 +106,7 @@ export default function BaseLayout({ children, pageTitle }) {
       >
         <AvatraCard />
       </Modal>
+
       <main>{children}</main>
       <div className="theme-changer" onClick={changeTheme}>
         {themeClass === 'light' ? <img src={moonSvg} /> : <img src={sunSvg} />}

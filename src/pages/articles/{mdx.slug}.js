@@ -37,7 +37,7 @@ export default function ArticleView({ data }) {
     <BaseLayout>
       <motion.div
         className="article-body"
-        initial={{ opacity: 0, x: -100 }}
+        initial={{ opacity: 0.8, x: -60 }}
         animate={{ opacity: 1, x: 0 }}
       >
         <h1 className="article-title">{article.frontmatter.title}</h1>

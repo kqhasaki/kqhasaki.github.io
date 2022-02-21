@@ -10,29 +10,31 @@
   --btn-color: #fff;
   --card-background-color: #efefef;
   --card-background-border-color: #efefef;
-  --quote-background-color: #fafafa;
-  --font-color-highlight: #202124;
+  --quote-background-color: #eaf8ff;
+  --font-color-highlight: #000;
+  --font-color-quote: #4e7182;
   --card-box-shadow: rgba(0, 0, 0, 0.1);
   --code-font-color: #444;
-  --code-background-color: #fff;
+  --code-background-color: rgba(255, 255, 255, 0.5);
   --code-border-color: #efefef;
-  --code-block-background: #fafafa;
+  --code-block-background: #313131;
 }
 
 .dark {
   --blue: #02bbff;
   --background-color: #202124;
   --font-color: #bdc1c6;
-  --font-color-header: #e8eaed;
-  --font-color-highlight: #eaeaea;
+  --font-color-header: #eaeaea;
+  --font-color-highlight: #efefef;
   --btn-color: #333;
   --card-background-color: #222;
   --quote-background-color: #1e1e1e;
+  --font-color-quote: #bdcbdc;
   --card-background-border-color: #2a2a2a;
   --card-box-shadow: #333;
-  --code-font-color: #ebebeb;
+  --code-font-color: var(--blue);
   --code-background-color: #313131;
-  --code-block-background: #1e1e1e;
+  --code-block-background: rgba(0, 0, 0, 0.1);
   --code-border-color: #313131;
 }
 
@@ -40,6 +42,7 @@ html,
 body {
   background-color: var(--background-color);
   color: var(--font-color);
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 a {
@@ -97,7 +100,7 @@ header img {
 .base-wrapper {
   margin-left: auto;
   margin-right: auto;
-  max-width: 44rem;
+  max-width: 54rem;
   padding: 2.625rem 1.3125rem;
   min-height: 100%;
 }
@@ -130,6 +133,10 @@ header img {
   margin-bottom: 1.5rem;
 }
 
+.article-body strong {
+  color: var(--font-color-highlight);
+}
+
 .article-meta {
   text-align: center;
   margin: 1rem auto 1.5rem auto;
@@ -140,6 +147,7 @@ header img {
   padding: 0.5rem 1rem 0.5rem 1rem;
   border-radius: 0.5rem;
   background-color: var(--card-background-color);
+  font-weight: lighter;
 }
 
 .article-body h1 {
@@ -231,13 +239,12 @@ header img {
 }
 
 .article-body blockquote {
-  border: 1px solid var(--card-background-border-color);
-  padding: 0 1rem 0 1rem;
+  padding: 1rem;
   border-radius: 0 0.5rem 0.5rem 0;
-  border-left: 1px solid var(--blue);
+  border-left: 2px solid var(--blue);
   margin-top: 1rem;
   background-color: var(--quote-background-color);
-  color: var(--font-color-highlight);
+  color: var(--font-color-quote);
 }
 
 .article-body blockquote code {
@@ -248,20 +255,19 @@ header img {
   width: 80%;
   min-width: 330px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 16px;
   display: block;
   margin: 0 auto 0 auto;
-  border: 1px solid var(--card-background-border-color);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 .article-body img {
-  width: 85%;
+  width: 100%;
   min-width: 330px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 12px;
   display: block;
   margin: 0 auto 0 auto;
-  border: 1px solid var(--card-background-border-color);
 }
 
 .article-body ul li {
@@ -298,7 +304,26 @@ header img {
 deckgo-highlight-code {
   box-shadow: none !important;
   font-size: 14px;
-  border: 1px solid var(--card-background-border-color);
   background-color: var(--code-block-background);
-  border-radius: 6px;
+  border-radius: 0.5rem;
+  position: relative;
+  user-select: none;
+  cursor: context-menu;
+}
+
+deckgo-highlight-code::after {
+  content: '双击复制';
+  opacity: 0;
+  font-size: 12px;
+  position: absolute;
+  text-align: center;
+  height: 2rem;
+  width: 3rem;
+  right: 1rem;
+  top: 1rem;
+  transition: 400ms;
+}
+
+deckgo-highlight-code:hover::after {
+  opacity: 1;
 }

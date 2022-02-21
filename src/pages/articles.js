@@ -39,7 +39,7 @@ export default function ArticlesView() {
       {articles.map(article => (
         <motion.div
           key={article.id}
-          initial={{ x: -100, opacity: 0 }}
+          initial={{ x: -60, opacity: 0.8 }}
           animate={{
             x: 0,
             opacity: 1,
