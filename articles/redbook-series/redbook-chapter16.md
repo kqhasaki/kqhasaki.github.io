@@ -215,3 +215,63 @@ btn.addEventListener('click', () => {
 
 > 这意味着通过`addEventListener()`添加的匿名函数无法移除。
 
+```javascript
+const btn = document.getElementById('myBtn')
+const handler = function() {
+  console.log(this.id)
+}
+btn.addEventListener('click', handler, false)
+btn.removeEventListener('click', handler, false)
+```
+
+大多数情况下，事件处理程序会被天际到事件流的冒泡阶段，主要是跨浏览器兼容性好。把事件注册到捕获阶段通常用于在事件到达其目标之前拦截事件。如果不需拦截，则不要使用事件捕获。
+
+## 跨浏览器事件处理程序
+
+为了以垮浏览器兼容的方式处理事件，很多开发者会选择使用一个JavaScript库，其中抽象了不同浏览器的差异。
+
+# 事件对象
+
+在DOM中发生事件时，所有相关信息都会被收集并存储在一个名为`event`的对象中。这个对象包含了一些基本信息，例如导致事件的元素、发生的事件类型，以及可能与特定事件相关的任何其他数据。例如，鼠标操作导致的事件会生成鼠标位置信息，而键盘操作导致的事件会生成与被按下的键有关的信息。所有浏览器都支持这个`event`对象，尽管支持方式不同。
+
+## DOM事件对象
+
+**在DOM合规的浏览器中，`event`对象是传给事件处理程序的唯一参数**。不管以哪种方式（DOM0或DOM2）指定事件处理程序，都会传入这个event对象。
+
+```javascript
+const btn = document.getElementById('btn')
+btn.onclick = function(event) {
+  console.log(event.type)
+}
+
+btn.addEventListener('click', (event) => {
+  console.log(event.type)
+}, false)
+```
+
+在通过HTML属性指定的事件处理程序中，一样可以使用`event`引用事件对象。
+
+```html
+<input type="button" value="click me" onclick="console.log(event.type)" />
+```
+
+以这种方式提供`event`对象，可以让HTML属性中的代码实现与JavaScript函数同样的功能。
+
+如前所述，事件对象包含与特定事件相关的属性和方法。不同的事件生成的事件对象也会包含不同的属性和方法。不过，所有事件对象都会包含一些公共成员：
+
+|          属性/方法           |      类型      | 读/写 |                             说明                             |
+| :--------------------------: | :------------: | :---: | :----------------------------------------------------------: |
+|          `bubbles`           |     布尔值     | 只读  |                       表示事件是否冒泡                       |
+|         `cancelable`         |     布尔值     | 只读  |                表示是否可以取消事件的默认行为                |
+|       `currentTarget`        |      元素      | 只读  |                  当前事件处理程序所在的元素                  |
+|      `defaultPrevented`      |     布尔值     | 只读  |    `true`表示已经调用`preventDefault()`方法（DOM3中新增）    |
+|           `detail`           |      整数      | 只读  |                      事件相关的其他信息                      |
+|         `eventPhase`         |      整数      | 只读  | 表示调用事件处理程序的阶段：1代表捕获，2代表到达目标，3代表冒泡阶段 |
+|      `preventDefault()`      |      函数      | 只读  | 用于取消事件的默认行为。只有`cancelable`为`true`才可以调用这个方法 |
+| `stopImmediatePropagation()` |      函数      | 只读  | 用于取消所有后续事件捕获或事件冒泡，并组织调用任何后续事件处理程序（DOM3中新增） |
+|     `stopPropagation()`      |      函数      | 只读  | 用于取消所有后续事件捕获或事件冒泡。只有`bubbles`为`true`才可以调用此方法 |
+|           `target`           |      元素      | 只读  |                           事件目标                           |
+|          `trusted`           |     布尔值     | 只读  | `true`表示事件是由浏览器生成的。`false`表示事件是开发者通过JavaScript创建的（DOM3新增） |
+|            `type`            |     字符串     | 只读  |                       被触发的事件类型                       |
+|            `type`            | `AbstractView` | 只读  |      与事件相关的抽象视图。等于事件所发生的`window`对象      |
+

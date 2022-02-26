@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useStaticQuery, graphql } from 'gatsby'
 import { ReadOutlined, HomeOutlined } from '@ant-design/icons'
-import { Modal } from '../../components'
+import { Modal, message } from '../../components'
 import AvatraCard from '../avatar-card'
 import Footer from '../footer'
 import './index.css'
@@ -53,6 +53,7 @@ export default function BaseLayout({ children, pageTitle }) {
         'text/plain',
         `${text}\n-- 粘帖自LouisK的博客，联系：邮箱k1664032884@gmail.com，微信kuaiqianghasai --`
       )
+      message.success('复制成功')
       e.preventDefault()
     })
 
@@ -67,6 +68,7 @@ export default function BaseLayout({ children, pageTitle }) {
         document.body.appendChild(targetNode)
         targetNode.select()
         document.execCommand('copy')
+        targetNode.remove()
       }
     })
   }, [])

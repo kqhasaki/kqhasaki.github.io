@@ -1,0 +1,19 @@
+.messager {
+  transition: 200ms;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  position: fixed;
+  transform: scale(0.2);
+  top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  max-width: 200px;
+
+  z-index: 999;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+}

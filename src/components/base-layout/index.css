@@ -28,7 +28,7 @@
   --font-color-highlight: #efefef;
   --btn-color: #333;
   --card-background-color: #222;
-  --quote-background-color: #1e1e1e;
+  --quote-background-color: #363b40;
   --font-color-quote: #bdcbdc;
   --card-background-border-color: #2a2a2a;
   --card-box-shadow: #333;
@@ -59,6 +59,11 @@ a {
   transition: background 300ms;
 }
 
+ol li {
+  list-style-type: decimal;
+  margin: 0.5rem 0 0.5rem 2rem;
+}
+
 p {
   display: block;
   margin-block-start: 1em;
@@ -75,7 +80,6 @@ p::selection {
 }
 
 body {
-  word-wrap: break-word;
   font-kerning: normal;
   margin: 0;
   padding: 0;
@@ -155,7 +159,7 @@ header img {
   margin-bottom: 1.8rem;
   margin-top: 1.8rem;
   font-weight: 400;
-  font-size: 1.7rem;
+  font-size: 2rem;
 }
 
 .article-body h1 code {
@@ -165,7 +169,7 @@ header img {
 .article-body h2 {
   color: var(--font-color-header);
   margin-bottom: 1.5rem;
-  margin-bottom: 1.8rem;
+  margin-bottom: 1.6rem;
   margin-top: 1.5rem;
   font-weight: 400;
 }
@@ -284,6 +288,30 @@ header img {
   padding-left: 2px;
 }
 
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+th {
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+td {
+  background-color: rgba(255, 255, 255, 0.01);
+  font-weight: 300;
+}
+
+table,
+th,
+td {
+  padding: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+
 .theme-changer {
   position: fixed;
   right: 1rem;
@@ -309,6 +337,7 @@ deckgo-highlight-code {
   position: relative;
   user-select: none;
   cursor: context-menu;
+  margin-top: 1rem;
 }
 
 deckgo-highlight-code::after {
