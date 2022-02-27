@@ -273,5 +273,223 @@ btn.addEventListener('click', (event) => {
 |           `target`           |      元素      | 只读  |                           事件目标                           |
 |          `trusted`           |     布尔值     | 只读  | `true`表示事件是由浏览器生成的。`false`表示事件是开发者通过JavaScript创建的（DOM3新增） |
 |            `type`            |     字符串     | 只读  |                       被触发的事件类型                       |
-|            `type`            | `AbstractView` | 只读  |      与事件相关的抽象视图。等于事件所发生的`window`对象      |
+|            `view`            | `AbstractView` | 只读  |      与事件相关的抽象视图。等于事件所发生的`window`对象      |
 
+在事件处理程序内部，`this`对象始终等于`currentTarget`的值，而`target`只包含事件的实际目标。如果事件处理程序直接添加在了意图的目标，则`this`、`currentTarget`和`target`的值是一样的。
+
+```javascript
+const btn = document.getElementById('myBtn')
+btn.onclick = function (event) {
+  console.log(event.currentTarget === this) // true
+  console.log(event.target === this) // true
+}
+```
+
+上面的代码检测了`currentTarget`和`target`的值是否等于`this`。因为`click`事件的目标是按钮，所以这三个值就是相等的。如果这个事件处理程序是添加到按钮的父节点（例如`document.body`）上，那么它们的值就不一样了。
+
+```javascript
+document.body.onclick = function (event) {
+  console.log(event.currentTarget === document.body)  // true
+  console.log(this === document.body) // true
+  console.log(event.target === document.getElementById('myBtn')) // true 
+}
+```
+
+这种情况下点击按钮，`this`和`currentTarget`都等于`document.body`，因为它是注册事件处理程序的元素。而`target`属性等于按钮本身，这是因为那才是`click`事件真正的目标。由于按钮本身没有注册事件处理程序，因此`click`事件冒泡到`document.body`，从而触发了它上面注册的处理程序。
+
+`type`属性在一个处理程序处理多个事件时很有用。例如：
+
+```javascript
+const btn = document.getElementById('myBtn')
+const handler = function (event) {
+  switch(event.type) {
+    case 'click':
+      console.log('clicked')
+      break
+    case 'mouseover':
+      event.target.style.backgroundColor = 'red'
+      break
+    case 'mouseout':
+      event.target.style.backgroundColor = ''
+      break
+    default:
+      break
+  }
+}
+
+btn.onclick = handler
+btn.onmouseover = handler
+btn.onmouseout = handler
+```
+
+在这个例子中，函数`handler`被用于处理3种不同的事件：`click`、`mouseover`和`mouseout`。这个函数使用`event.type`属性确定了事件类型，从而可以做出不同的响应。
+
+`preventDefault()`方法用于组织特定事件的默认动作。例如链接元素的默认行为就是在被单击时导航到`href`属性指定的URL。如果想阻止这个导航行为，可以在`onclick`事件处理程序中取消，如下：
+
+```javascript
+const link = document.getElementById('myLink')
+link.onclick = function (event) {
+  event.preventDefault()
+}
+```
+
+任何可以通过`preventDefault()`取消默认行为的事件，其事件对象的`cancelable`属性都会设置为`true`。
+
+`stopPropagation()`方法用于立即组织事件流在DOM结构中传播，取消后续的事件捕获或冒泡。例如，直接添加到按钮的事件处理程序中调用`stopPropagation()`，可以阻止`document.body`上注册的事件处理程序执行。例如：
+
+```javascript
+const btn = document.getElementById('myBtn') 
+btn.onclick = function (event) {
+  console.log('clicked')
+  event.stopPropagation()
+}
+document.body.onclick = function (event) {
+  console.log('body clicked')
+}
+```
+
+如果这个例子中不调用`stopPropagation()`，那么点击按钮就会打印两条消息，但是由于`click`事件不会传播到`document.body`，因此`'onclick`事件处理程序永远不会执行。
+
+`eventPhase`属性可以用于确定事件流当前所处的阶段。如果事件处理程序在捕获阶段被调用，则`eventPhase`等于1；如果事件处理程序在目标上被调用，则`eventPhase`等于2；如果事件处理程序在冒泡阶段被调用，则`eventPhase`等于3。不过要注意的是，虽然“到达目标”是在冒泡阶段发生的，但其`eventPhase`仍然等于2。
+
+```javascript
+const btn = document.getElementById('myBtn')
+btn.onclick = function (event) {
+  console.log(event.eventPhase) // 2
+}
+document.body.addEventListener('click', event => {
+  console.log(event.eventPhase) // 1
+}, true)
+document.body.onclick = event => {
+  console.log(event.eventPhase) // 3
+}
+```
+
+这个例子中，点击按钮首先会触发注册在捕获阶段的`document.body`上的事件处理程序，显示`eventPhase`为1。接着，会触发按钮本身的事件处理程序（尽管是注册在冒泡阶段），此时显示`eventPhase`等于2。最后触发的是注册在冒泡阶段的`document.body`上的事件处理程序，显示为`eventPhase`为3。而当`eventPhase`等于2时，`this`、`target`和`currentTarget`三者相等。
+
+> `event`对象只会在事件处理程序执行期间存在，一旦执行完毕，就会被销毁。
+
+# 事件类型
+
+Web浏览器中可以发生很多种事件。如前所述，所发生事件的类型决定了事件对象中会保存什么信息。DOM3 Events定义了如下的事件类型：
+
+- **用户界面事件**（`UIEvent`）：涉及与BOM交互的通用浏览器事件。
+- **焦点事件**（`FocusEvent`）：在元素获得和失去焦点时触发。
+- **鼠标事件**（`MouseEvent`）：使用鼠标在页面上执行某些操作时触发。
+- **滚轮事件**（`WheelEvent`）：使用鼠标滚轮（或类似设备）时触发。
+- **输入事件**（`InputEvent`）：向文档中输入文本时触发。
+- **键盘事件**（`KeyboardEvent`）：使用键盘在页面上执行某些操作时触发。
+- **合成事件**（`CompositionEvent`）：在使用某种IME（输入法编辑器）输入字符时触发。
+
+除了这些事件类型之外，HTML5还定义另外一组事件，而浏览器通常在DOM和BOM上实现专有事件。这些专有事件基本上都是根据开发者需求而不是按照规范增加的，因此不同浏览器的实现可能不同。
+
+DOM3 Events在DOM2 Events基础上重新定义了事件，并且添加了新的事件类型。所有主流浏览器都支持DOM2 Events和DOM3 Events。
+
+## 用户界面事件
+
+用户界面事件或UI事件不一定跟用户操作有关。这类事件在DOM规范出现之前就已经以某种形式存在了，保留它们是为了向后兼容。UI事件主要有以下几种：
+
+- `DOMActivate`：元素被用户通过鼠标或键盘操作激活时触发（比`click`或`keydown`更通用）。这个事件在DOM3 Events中已经废弃。
+- `load`：在`window`上当页面加载完成后触发，在窗套(`<frameset>`)上当所有窗格（`<frame>`）都加载完成后触发，在`<img>`元素上当图片加载完成后触发，在`<object>`元素上当相应对象加载完成后触发。
+- `unload`：在`window`上当页面完全卸载后触发，在窗套上当所有窗格都卸载完成后触发，在`<object>`元素上当相应对象卸载完成后触发。
+- `abort`：在`<object>`元素上当相应对象加载完成前被用户提前终止下载时触发。
+- `error`：在`window`上当JavaScript加载报错时触发，在`<img>`元素上当无法加载指定图片时触发，在`<object>`元素上当无法加载相应对象时触发，在窗套上当一个或多个窗格无法完成加载时触发。
+- `select`：在文本框（`<input>`或者`<textarea>`）上当用户选择了一个或多个字符时触发。
+- `resize`：在`window`或窗格上当窗口或窗格被缩放时触发。
+- `scroll`：当用户滚动包含滚动条的元素时在元素上触发。`<body>`元素包含已加载页面的滚动条。
+
+大多数HTML事件与`window`对象和表单控件有关。
+
+除了`DOMActivate`这些事件在DOM2 Events中都归类为HTML Events。
+
+### `load`事件
+
+`load`事件可能是JavaScript中最常用的事件。在`window`对象上，`load`事件会在整个页面（包括所有外部资源如图片、JavaScript文件和CSS文件）加载完成后触发。可以通过两种方式指定`load`事件处理程序。第一种是JavaScript方式：
+
+```javascript
+window.addEventListener('load', event => {
+  console.log('loaded!')
+})
+```
+
+这是使用`addEventListener()`方法来指定事件处理程序。和其他事件一样，事件处理程序会接收到一个`event`对象。这个`event`对象并没有提供有关这种类型事件的额外信息，虽然在DOM合规的浏览器中，`event.target`会被设置为`document`。
+
+第二种指定`load`事件处理程序的方式是向`<body>`元素添加`onload`属性。实际开发中最好使用JavaScript方式。
+
+> 根据DOM2 Events，`load`事件应该在`document`而非`window`上触发。但是为了向后兼容，所有浏览器都在`window`上实现了`load`事件。
+
+图片上也会触发`load`事件，包括DOM中的图片和非DOM中的图片。可以在HTML直接给`<img>`元素的`onload`属性指定事件处理程序。
+
+```html
+<img src="smile.gif" onload="console.log('image loaded.')" />
+```
+
+```javascript
+const image = document.getElementById('my Image')
+image.addEventListener('load', event => {
+  console.log(event.target.src)
+})
+```
+
+这里使用JavaScript为图片制定了load事件处理程序。处理程序会接收到`event`对象，虽然这个对象上没有多少有用的信息。这个事件的目标是`<img>`元素，因此可以直接从`event.target.src`属性中取得图片地址并打印出来。
+
+在通过JavaScript创建新`<img>`元素时，也可以给这个元素指定一个在加载完成后执行的事件处理程序。这里，关键是要在赋值`src`属性前指定事件处理程序：
+
+```javascript
+window.addEventListener('load', () => {
+  const image = document.createElement('img')
+  image.addEventListener('load', event => {
+    console.log(event.target.src)
+  })
+  document.body.appendChild(image)
+  image.src = 'smile.gif'
+})
+```
+
+这个了例子首先为`window`制定了一个`load`事件处理程序。因为示例涉及向DOM中添加新元素，所以必须确保页面已经加载完成。如果在页面加载完成之前操作`document.body`，则会导致错误。然后，代码创建了一个新的`<img>`元素，并为这个元素设置了`load`事件处理程序。最后才把元素添加到文档中并指定了其`src`属性。**注意，下载图片并不一定要把`<img>`元素添加到文档，只要给他设置了`src`属性它就会立即开始下载**。
+
+同样的技术也适用于DOM0的`Image`对象。在DOM出现之前，客户端都使用`Image`对象预先加载图片。可以像使用前面（通过`createElement()`方法创建）的`<img>`元素一样使用`Image`对象。只是不能把后者添加到DOM树。
+
+```javascript
+window.addEventListener('load', () => {
+  const image = new Image() 
+  image.addEventListener('load', event => {
+    console.log('Image loaded!')
+  })
+  image.src = 'smile.gif'
+})
+```
+
+这里调用`Image`构造函数创建了一个新图片，并给它设置了事件处理程序。有些浏览器会把`Image`对象实现为`<img>`元素，但并非所有浏览器都如此。所以最好把它看成两个东西。
+
+### `unload`事件
+
+和`load`事件相对的是`unload`事件，`unload`事件会在文档卸载完成之后触发。`unload`事件一般是在从一个页面导航到另一个页面时触发，最常用于清理引用，避免内存泄漏。与`load`事件类似，`unload`事件也有两种指定方式。
+
+一般来说很少会在JavaScript代码中使用`unload`事件。
+
+### `resize`事件
+
+当浏览器窗口被缩放到新高度或宽度时，会触发`resize`事件。这个事件在`window`上触发，因此可以通过JavaScript在`window`上或者为`<body>`元素添加`onresize`属性来指定事件处理程序。优先使用JavaScript方式：
+
+```javascript
+window.addEventListener('resize', event => {
+  console.log('Resized')
+})
+```
+
+类似于其他在`window`上发生的事件，此时会生成`event`对象，且这个对象的`target`属性在DOM合规的浏览器中是`document`。
+
+不同浏览器在决定何时触发`resize`事件上存在着重要差异。有的浏览器会在缩放超过1像素时触发`resize`事件，然后随着用户缩放浏览器窗口不断触发。有的仅仅在用户停止缩放浏览器窗口时触发。无论如何都应该避免在这个事件处理程序中做过多计算，否则可能由于执行过于频繁而导致浏览器响应变慢。事实上除非特殊用途否则不要使用这个事件处理程序。
+
+> 部分浏览器窗口在最大化和最小化时也会触发`resize`事件。
+
+### `scroll`事件
+
+虽然`scroll`事件发生在`window`上，但是实际上反映的是页面中相应元素的变化。在混杂模式下，可以通过`<body>`元素检测`scrollLeft`和`scrollTop`属性的变化。而在标准模式下，这些变化在除早期版本的Safari之外的所有浏览器中都发生在`<html>`元素上（早期Safari在`<body>`上跟踪滚动位置）。
+
+类似于`resize`，`scroll`事件也会随着文档滚动而重复触发，因此最好保持事件处理程序的代码尽可能简单。
+
+## 焦点事件
+
+焦点事件在页面元素获取或失去焦点时触发。

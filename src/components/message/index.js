@@ -21,7 +21,6 @@ function createMsgDOM(msg) {
 function success(msg) {
   const successMsg = createMsgDOM(msg)
   successMsg.style.color = 'green'
-  console.log(successMsg)
 }
 
 function error(msg) {

@@ -4,6 +4,7 @@ import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { motion } from 'framer-motion'
 import { FieldTimeOutlined, ReadOutlined } from '@ant-design/icons'
+import ScrollProgresser from '../../components/scroll-progresser'
 import '../../components/base-layout/index.css'
 
 export const query = graphql`
@@ -35,6 +36,7 @@ export default function ArticleView({ data }) {
 
   return (
     <BaseLayout>
+      <ScrollProgresser />
       <motion.div
         className="article-body"
         initial={{ opacity: 0.8, x: -60 }}

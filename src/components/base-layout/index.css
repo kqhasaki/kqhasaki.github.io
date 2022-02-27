@@ -32,7 +32,7 @@
   --font-color-quote: #bdcbdc;
   --card-background-border-color: #2a2a2a;
   --card-box-shadow: #333;
-  --code-font-color: var(--blue);
+  --code-font-color: #cdcdcd;
   --code-background-color: #313131;
   --code-block-background: rgba(0, 0, 0, 0.1);
   --code-border-color: #313131;
@@ -183,6 +183,7 @@ header img {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   font-weight: 400;
+  line-height: 1.8;
 }
 
 .article-body h3 code {
@@ -227,7 +228,7 @@ header img {
   content: '';
   display: block;
   height: 2px;
-  width: 70px;
+  width: 60px;
   margin-top: 0.1rem;
 }
 
