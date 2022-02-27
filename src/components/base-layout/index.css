@@ -57,6 +57,7 @@ a {
   padding: 0;
   list-style-type: none;
   transition: background 300ms;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 ol li {
@@ -83,6 +84,7 @@ body {
   font-kerning: normal;
   margin: 0;
   padding: 0;
+  word-wrap: break-word;
 }
 
 header {
@@ -293,6 +295,7 @@ header img {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
+  word-wrap: normal;
 }
 
 th {
