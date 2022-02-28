@@ -32,7 +32,7 @@
   --font-color-quote: #bdcbdc;
   --card-background-border-color: #2a2a2a;
   --card-box-shadow: #333;
-  --code-font-color: #cdcdcd;
+  --code-font-color: #ddd;
   --code-background-color: #313131;
   --code-block-background: rgba(0, 0, 0, 0.1);
   --code-border-color: #313131;
@@ -60,9 +60,13 @@ a {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+ol {
+  margin: 0.7rem 0 0.7rem 0;
+}
+
 ol li {
   list-style-type: decimal;
-  margin: 0.5rem 0 0.5rem 2rem;
+  margin: 0.4rem 0 0.4rem 2rem;
 }
 
 p {
@@ -71,8 +75,9 @@ p {
   margin-block-end: 1em;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
-  margin-bottom: 1rem;
+  margin-bottom: 0.7rem;
   line-height: 1.7rem;
+  margin-top: 0.7rem;
 }
 
 p::selection {
@@ -183,7 +188,7 @@ header img {
 .article-body h3 {
   color: var(--font-color-header);
   margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   font-weight: 400;
   line-height: 1.8;
 }
@@ -195,7 +200,7 @@ header img {
 .article-body h4 {
   color: var(--font-color-header);
   margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-weight: 300;
 }
 
@@ -229,8 +234,8 @@ header img {
   background: var(--blue);
   content: '';
   display: block;
-  height: 2px;
-  width: 60px;
+  height: 1.5px;
+  width: 54px;
   margin-top: 0.1rem;
 }
 
@@ -277,9 +282,13 @@ header img {
   margin: 0 auto 0 auto;
 }
 
+.article-body ul {
+  margin: 0.7rem 0 0.7rem 0;
+}
+
 .article-body ul li {
   list-style-type: disc;
-  margin: 4px 0 4px 2rem;
+  margin: 0.4rem 0 0.4rem 2rem;
 }
 
 .article-body a {
@@ -340,23 +349,25 @@ deckgo-highlight-code {
   border-radius: 0.5rem;
   position: relative;
   user-select: none;
-  cursor: context-menu;
   margin-top: 1rem;
+  cursor: pointer;
 }
 
-deckgo-highlight-code::after {
-  content: '双击复制';
-  opacity: 0;
-  font-size: 12px;
-  position: absolute;
-  text-align: center;
-  height: 2rem;
-  width: 3rem;
-  right: 1rem;
-  top: 1rem;
-  transition: 400ms;
-}
+@media (min-width: 500px) {
+  deckgo-highlight-code::after {
+    content: '双击复制';
+    opacity: 0;
+    font-size: 12px;
+    position: absolute;
+    text-align: center;
+    height: 2rem;
+    width: 3rem;
+    right: 1rem;
+    top: 1rem;
+    transition: 400ms;
+  }
 
-deckgo-highlight-code:hover::after {
-  opacity: 1;
+  deckgo-highlight-code:hover::after {
+    opacity: 1;
+  }
 }

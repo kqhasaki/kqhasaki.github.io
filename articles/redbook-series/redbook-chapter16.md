@@ -492,4 +492,177 @@ window.addEventListener('resize', event => {
 
 ## 焦点事件
 
-焦点事件在页面元素获取或失去焦点时触发。
+焦点事件在页面元素获取或失去焦点时触发。这些事件可以与`document.hasFocus()`和`document.activeElement`一起为开发者提供用户在页面中导航的信息。焦点事件有以下6种：
+
+- `blur`：当元素失去焦点时触发。**这个事件不冒泡**，所有浏览器都支持。
+- `DOMFocusIn`：当元素获得焦点时触发。这个事件是`focus`的冒泡版，DOM3废弃了这个事件，推荐使用`focusin`。
+- `DOMFocusOut`：当元素失去焦点时触发。这个事件是`blur`的通用版，DOM3废弃了这个事件，推荐使用`focusout`。
+- `focus`：当元素获得焦点时触发。**这个事件不冒泡**，所有浏览器都支持。
+- `focusin`：当元素获得焦点时触发。这个事件是`focus`的冒泡版。
+- `focusout`：当元素失去焦点时触发。这个事件时`blur`的通用版。
+
+焦点事件中的两个主要事件是`focus`和`blur`，这两个事件在JavaScript早期就得到了浏览器支持。它们最大的问题是不支持冒泡。这导致后来IE增加了`focusin`和`focusout`，Opera又增加了`DOMFocusIn`和`DOMFocusOut`。IE新增的这两个事件已经被DOM3 Events标准化。
+
+当焦点从页面中的一个元素移到另一个元素时，会依次发生如下事件：
+
+1. `focusout`在失去焦点的元素上触发。
+2. `focusin`在获得焦点的元素上触发。
+3. `blur`在失去焦点的元素上触发。
+4. `focus`在获得焦点的元素上触发。
+
+其中，`blur`和`focusout`的事件目标是失去焦点的元素，而`focus`和`focusin`的事件目标是获得焦点的元素。
+
+## 鼠标和滚轮事件
+
+**鼠标事件**是Web开发中最常用的一组事件，只是因为鼠标是用户最主要的定位设备。DOM3 Events定义了9种鼠标事件：
+
+- `click`：在用户单击鼠标主键（通常是左键）或者按回车键时触发。这主要是基于无障碍的考虑，让键盘和鼠标都可以触发`onclick`事件处理程序。
+- `dblclick`：在用户双击鼠标主键（通常是左键）时触发。这个事件不是在DOM2 Events中定义的，但是得到了很好的支持，DOM3 Events将其进行了标准化。
+- `mousedown`：**用户按下任意鼠标按键时触发**。这个事件不能通过键盘触发。
+- `mouseenter`：在用户把光标从元素外部移动到元素内部时触发。**这个事件不冒泡，也不会在光标经过后代元素时触发**。`mouseenter`事件不是在DOM2 Events中定义的，而是DOM3 Events中新增的事件。
+- `mouseleave`：在用户把光标从元素内部移动到元素外部时触发。**这个事件不冒泡，也不会在光标经过后代元素时触发**。`mouseleave`事件不是在DOM2 Events中定义的，而是DOM3 Events中新增的事件。
+- `mousemove`：在鼠标光标在元素上移动时**反复触发**。这个事件不能通过键盘触发。
+- `mouseout`：在用户把光标从一个元素移动到另一个元素上时触发。移动到的元素可以是原始元素的外部元素，也可以是原始元素的子元素。这个事件不能通过键盘触发。
+- `mouseover`：在用户把光标从元素外部移动到元素内部时触发。这个事件不能通过键盘触发。
+- `mouseup`：在用户释放鼠标键时触发。这个事件不能通过键盘触发。
+
+页面中的所有元素都支持鼠标事件。除了`mouseenter`和`mouseleave`，所有鼠标事件都会冒泡，都可以被取消，而这会影响浏览器的默认行为。
+
+由于事件之间存在关系，因此取消鼠标事件的默认行为也会影响其他事件。
+
+例如，`click`事件触发的前提是`mousedown`事件触发后，紧接着又在同一个元素上触发了`mouseup`事件。如果`mousedown`或者`mouseup`事件任意一个被取消，那么`click`事件就不会触发。类似地，两次连续的`click`事件会导致`dblclick`事件触发。只要有任何逻辑阻止了这两个`click`事件发生，那么`dblclick`事件就不会被触发。这四个事件永远会按照下列顺序触发：
+
+1. `mousedown`
+2. `mouseup`
+3. `click`
+4. `mousedown`
+5. `mouseup`
+6. `click`
+7. `dblclick`
+
+`mousedown和`mouseup`则不会受其他事件影响。
+
+鼠标事件还有一个名为**滚轮事件**的子类别。滚轮事件只有一个——`mousewheel`，反映的是鼠标滚轮或带滚轮的类似设备上滚轮的交互。
+
+### 客户端坐标
+
+鼠标事件都是在浏览器视口的某个位置上发生的。这些信息被保存在`event`对象的`clientX`和`clientY`属性中。这两个属性表示事件发生时鼠标光标在视口中的坐标，所有浏览器都支持。
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1gztklgrvbaj21fl0u079b.jpg)
+
+可以通过下面的方式获取鼠标事件的客户端坐标：
+
+```javascript
+const div = document.getElementById("myDiv")
+div.addEventListener('click', event => {
+  console.log(`Client coordinates: ${event.clientX}, ${event.clientY}`)
+})
+```
+
+注意客户端坐标不考虑页面滚动，因此这两个值不代表鼠标在页面上的位置。
+
+### 页面坐标
+
+客户端坐标是事件发生时鼠标光标在客户端视口中的坐标，**而页面坐标是事件发生时鼠标光标在页面上的坐标**，通过`event`对象的`pageX`和`pageY`属性可以获取。这两个属性表示鼠标光标在页面上的位置，因此反映的是光标到页面而非视口左边和上边的距离。
+
+在页面没有滚动时，`pageX`和`pageY`与`clientX`和`clientY`的值相同。
+
+### 屏幕坐标
+
+鼠标事件不仅是在浏览器窗口中发生的，也是在整个屏幕上发生的。可以通过`event`对象的`screenX`和`screenY`属性来获取鼠标光标在屏幕上的坐标。
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1gztkuui03nj21fv0u00wk.jpg)
+
+### 修饰键
+
+虽然鼠标事件主要是通过鼠标触发的，但有时候要确定用户想要实现的操作，还要考虑键盘按键的状态。键盘上的**修饰键**Shift、Ctrl、Alt和Meta经常用于修改鼠标事件的行为。DOM规定了4个属性来表示这四个修饰键的状态：`shiftKey`、`ctrlKey`、`altKey`和`metaKey`。这几个属性会在各自对应的修饰键被按下时包含布尔值`true`，没有被按下时包含`false`。在鼠标事件发生的，可以通过这几个属性来检测修饰键是否被按下。
+
+```javascript
+const div = document.getElementById('myDiv')
+div.addEventListener('click', event => {
+  const keys = new Array() 
+  
+  if (event.shiftKey) {
+    keys.push('shift')
+  }
+  
+  if (event.ctrlKey) {
+    keys.push('ctrl')
+  }
+  
+  if (event.altKey) {
+    keys.push('alt')
+  }
+  
+  if (event.metaKey) {
+    keys.push('meta')
+  }
+  
+  console.log(`Keys: ${keys.join(',')}`)
+})
+```
+
+> 所有现代浏览器都支持这4个修饰键。
+
+### 相关元素
+
+对`mouseover`和`mouseout`事件而言，还存在与事件相关的其他元素。这两个事件都涉及从一个元素的边界之内把光标移动到另一个元素的边界之内。对`mouseover`元素来说，事件的主要目标是获得光标的元素，相关元素是失去光标的元素。类似地对于`mouseout`事件来说，事件的主要目标是失去光标的元素，而相关元素是获得光标的元素。
+
+DOM通过`event`对象的`relatedTarget`属性提供了相关元素的信息。这个属性只有在`mouseover`和`mouseout`事件发生时才包含值，其他所有事件的这个属性值都是`null`。
+
+### 鼠标按键
+
+只有在元素上单击鼠标主键（或按下键盘回车键）时`click`事件才会触发，因此按键信息并不是必须的。对`mousedown`和`mouseup`事件来说，`event`对象上会有一个`button`属性，表示按下或释放的是哪个按键。DOM位这个`button`属性定义了三个值：`0`表示鼠标主键，`1`表示鼠标中键（通常也是滚轮键），`2`表示鼠标附键。按照惯例，鼠标主键通常是左边的按键，附键通常是右边的按键。
+
+### 额外事件信息
+
+DOM2 Events规范在`event`对象上提供了`detail`属性，以给出更多关于事件的信息。对鼠标事件来说，`detail`包含一个数值，表示在给定位置上发生了多少次单击。单击相当于在同一个像素上发生一次`mousedown`紧跟一次`mouseup`。`detail`的值从1开始，每次单击会加1。如果鼠标在`mousedown`和`mouseup`之间移动了，则`detail`会重置为0。
+
+### `mousewheel`事件
+
+`mousewheel`事件在HTML5标准中添加，会在用户使用鼠标滚轮时触发，包括在垂直方向上任意滚动。这个事件会在任何元素上触发，并且冒泡到`document`和`window`。`mousewheel`事件的`event`对象包含鼠标事件的所有标准信息，此外还有一个名为`wheelDelta`的新属性。当鼠标滚轮向前滚动时，`wheelDelta`每次都是+120；而当鼠标滚轮向后滚动时，`wheelDelta`每次都是-120。
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1gztlp25q8bj213e0faaab.jpg)
+
+可以为页面上的任何元素或文档添加`onmousewheel`事件处理程序，以处理所有鼠标滚轮交互。
+
+```javascript
+document.addEventListener('mousewheel', event => {
+  console.log(event.wheelDelta)
+})
+```
+
+### 触摸屏设备
+
+iOS和Andriod等触摸屏设备的实现大相径庭，因为触摸屏通常不支持鼠标操作。在为触摸屏设备开发时，需要记住：
+
+- **不支持`dblclick`事件**。双击浏览器窗口可以放大，但是没有办法覆盖这个默认行为。
+- 单指点触屏幕上的可点击元素会触发`mousemove`事件。如果操作会导致内容发生变化，则不会再触发其他事件。如果屏幕上没有变化，则会相继触发`mousedown`、`mouseup`和`click`事件。点触不可点击的元素不会触发事件。可点击元素是指点击时有默认动作的元素（如链接）或指定了`onclick`事件处理程序的元素。
+- `mousemove`事件也会触发`mouseover`和`mouseout`事件。
+- 双指点触屏幕并滑动导致页面滚动时会触发`mousewheel`和`scroll`事件。
+
+### 无障碍
+
+如果Web应用需要考虑到残障人士通过屏幕阅读器使用，那么必须小心使用鼠标事件。如前所述，回车键可以触发`click`事件，但是其他鼠标事件不能通过键盘触发。因此建议不要使用除了`click`事件之外的其他鼠标事件像用户提示功能或者触发代码执行。因为其他鼠标事件会严格妨碍盲人或视觉障碍用户使用。下面是一些使用鼠标事件的无障碍建议：
+
+- 使用`click`事件执行代码。
+- 不要使用`mouseover`向用户显示新选项。同样是屏幕阅读器无法触发`mousedown`事件。
+- 不要使用`dblclick`执行重要的操作，因为键盘不能触发这个事件。
+
+遵循这些简单的建议可以极大提升Web应用对于残章人士的无障碍性。
+
+## 键盘与输入事件
+
+**键盘事件**是用户操作键盘时触发的。DOM2 Events最初定义了键盘事件，但该规范在最终发布前删除了相应内容。因此键盘事件很大程度上是基于原始的DOM0实现的。
+
+DOM3 Events为键盘事件提供了一个首先在IE9中完全实现的规范。其他浏览器也开始实现该规范，但仍然存在很多遗留的实现。
+
+键盘事件包含3个事件：
+
+- `keydown`，用户按下键盘上某个键时触发，而且持续按住会重复触发。
+- `keypress`，用户按下键盘上某个键并产生字符时触发，而且持续按住会重复触发。Esc键也会触发这个事件。DOM3 Events废弃了`keypress`事件，而推荐`textInput`事件。
+- `keyup`，用户释放键盘上某个键时触发。
+
+虽然所有元素都支持这些事件，但当用户在文本框输入内容时最容易看到。
+
+输入事件只有一个，即`textInput`。这个事件是对`keypress`事件的扩展，用户在文本显示给用户之前更方便地截获文本输入。`textInput`会在文本被插入到文本框之前触发。
