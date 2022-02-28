@@ -666,3 +666,67 @@ DOM3 Events为键盘事件提供了一个首先在IE9中完全实现的规范。
 虽然所有元素都支持这些事件，但当用户在文本框输入内容时最容易看到。
 
 输入事件只有一个，即`textInput`。这个事件是对`keypress`事件的扩展，用户在文本显示给用户之前更方便地截获文本输入。`textInput`会在文本被插入到文本框之前触发。
+
+当用户按下键盘上的某个字符键时，首先会触发`keydown`事件，然后触发`keypress`事件，最后触发`keyup`事件。注意这里的`keydown`和`keypress`事件会在文本框出现变化之前触发，而`keyup`事件会在文本框出现变化之后触发。如果一个字符键被按住不放，`keydown`和`keypress`就会重复触发，直到这个键被释放。
+
+对于非字符键，在键盘上按一下这个键，会先触发`keydown`事件，然后触发`keyup`事件。如果按住某个非字符键不放，则会重复触发`keydown`事件直到这个键被释放，此时会触发`keyup`事件。
+
+> 键盘事件与鼠标事件支持相同的修饰键。`shiftKey`、`ctrlKey`、`altKey`和`metaKey`属性在键盘事件中都是可以用的。
+
+### 键码
+
+对于`keydown`和`keyup`事件，`event`对象的`keyCode`属性中会保存一个键码，对应键盘上特定的一个键。对于字母和数字键，`keyCode`的值与小写字母和数字的ASCII编码一致。例如数字键7键的`keyCode`为55，而字母A键的`keyCode`为65，而且跟是否按了Shift键无关。DOM和IE的`event`对象都支持`keyCode`属性。
+
+```javascript
+const textbox = document.getElementById('myText')
+textbox.addEventListener('keyup', event => {
+  console.log(event.keyCode)
+})
+```
+
+### 字符编码
+
+在`keypress`事件发生时，意味着按键会影响屏幕上的文本。对插入或移除字符的键，所有浏览器都会触发`keypress`事件，其他键则取决于浏览器。因为DOM3 Events规范才刚刚开始实现，所以不同浏览器之间的实现存在显著差异。
+
+浏览器在`event`对象上支持`charCode`属性，只有发生在`keypress`事件时这个属性才会被设置值，
+
+### `textInput`事件
+
+DOM3 Events规范添加了一个名为`textInput`的事件，其在字符被输入到可编辑区域时触发。作为对`keypress`的替代，`textInput`事件的行为有些不一样。一个区别是`keypress`会在任何可以获得焦点的元素上触发，而`textInput`只在可编辑区域上触发。另一个区别是`textInput`只在有新字符被插入时才会触发，而`keypress`对任何可能影响文本的键都会触发（包括退格键）。
+
+因为`textInput`事件主要关注字符，所以在`event`对象上提供了一个`data`属性，包含要插入的字符（不是字符编码）。`data`的值始终是要被插入的字符，因此如果在按S键时没有按Shift键，`data`的值就是`"s"`，但在S键时同时按Shift键，`data`的值则是`"S"`。
+
+```javascript
+const textbox = document.getElementById('myText')
+textbox.addEventListener('textInput', event => console.log(event.data))
+```
+
+这个例子会实时把输入文本框的文本通过日志打印出来。
+
+`event`对象上还有一个名为`inputMethod`的属性，该属性表示向控件中输入文本的手段。
+
+## HTML5事件
+
+DOM规范并为涵盖浏览器都支持的所有事件。很多浏览器根据特定的用户需求或使用场景实现了自定义事件。HTML5详尽地列出了浏览器支持的所有事件。这里讨论HTML5中得到浏览器较好支持的一些事件。注意这些并不是浏览器支持的所有事件。
+
+### `contextmenu`事件
+
+Windows95通过单击鼠标右键为PC用户增加了上下文菜单的概念。不久，这个概念也在Web上得以实现。开发者面临的问题是如何确定何时该显示上下文菜单（在Windows上是右键鼠标，Mac上可以是Ctrl + 单击），以及如何避免默认的上下文菜单起作用。结果就出现了`contextmenu`事件，以专门用于表示何时该显示上下文菜单，从而允许开发者取消默认的上下文菜单并提供自定义菜单。
+
+`contextmenu`事件冒泡，因此只要给`document`指定一个事件处理程序就可以处理页面上的所有同类事件。事件目标是触发操作的元素。这个事件在所有浏览器中都可以取消，在DOM合规的浏览器中使用`event.preventDefault()`，在IE8及更早的版本中将`event.returnValue`设置为`false`。`contextmenu`事件应该算是一种鼠标事件，因此`event`对象上的很多属性都与光标位置有关。通常，自定义的上下文菜单都是通过`oncontextmenu`事件处理程序触发显示，并通过`onclick`事件处理程序触发隐藏的。
+
+### `beforeunload`事件
+
+`beforeunload`事件会在`window`上触发，用意是给开发者提供阻止页面被卸载的机会。这个事件会在页面即将从浏览器中卸载时触发，如果页面需要继续使用，则可以不被卸载。这个事件不能取消，负责就意味着可以把用户永久拦阻拦在一个页面上。相反，这个事件会向用户显示一个确认框，其中的消息表明浏览器即将卸载页面，并请求用户确认。
+
+```javascript
+window.addEventListener('beforeunload', event => {
+  const message = 'some text'
+  event.returnValue = message
+  return message
+})
+```
+
+### `DOMContentLoaded`事件
+
+`window`的`load`事件会在页面完全加载后触发，因为要等待很多外部资源加载完成，所以会花费较长时间。而`DOMContentLoaded`事件会在DOM树构建完成后立即触发，而不用等待图片、JavaScrip文件、CSS文件或其他资源加载完成。相对于`load`事件，`DOMContentLoaded`可以让开发者在外部资源下载的同时就能指定事件处理程序，从而让用户能更快地与页面交互。

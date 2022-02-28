@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import BaseLayout from '../../components/base-layout'
 import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
-import { motion } from 'framer-motion'
 import { FieldTimeOutlined, ReadOutlined } from '@ant-design/icons'
 import ScrollProgresser from '../../components/scroll-progresser'
 import '../../components/base-layout/index.css'
@@ -37,11 +36,7 @@ export default function ArticleView({ data }) {
   return (
     <BaseLayout>
       <ScrollProgresser />
-      <motion.div
-        className="article-body"
-        initial={{ opacity: 0.8, x: -60 }}
-        animate={{ opacity: 1, x: 0 }}
-      >
+      <div className="article-body">
         <h1 className="article-title">{article.frontmatter.title}</h1>
         <p className="article-meta">
           <span>
@@ -56,7 +51,7 @@ export default function ArticleView({ data }) {
           alt={article.frontmatter.cover}
         />
         <MDXRenderer>{article.body}</MDXRenderer>
-      </motion.div>
+      </div>
     </BaseLayout>
   )
 }

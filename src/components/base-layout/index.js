@@ -47,7 +47,7 @@ export default function BaseLayout({ children, pageTitle }) {
     body.className = theme
     setThemeClass(theme)
 
-    document.addEventListener('copy', e => {
+    const copyHandler = e => {
       const text = e.target.textContent
       e.clipboardData.setData(
         'text/plain',
@@ -55,9 +55,10 @@ export default function BaseLayout({ children, pageTitle }) {
       )
       message.success('复制成功')
       e.preventDefault()
-    })
+    }
+    document.addEventListener('copy', copyHandler)
 
-    document.addEventListener('dblclick', e => {
+    const dblclickHandler = e => {
       const { target } = e
       if (target.matches('deckgo-highlight-code')) {
         const text = target.textContent.trim()
@@ -70,7 +71,13 @@ export default function BaseLayout({ children, pageTitle }) {
         document.execCommand('copy')
         targetNode.remove()
       }
-    })
+    }
+    document.addEventListener('dblclick', dblclickHandler)
+
+    return () => {
+      document.removeEventListener('copy', copyHandler)
+      document.removeEventListener('dblclick', dblclickHandler)
+    }
   }, [])
 
   return (

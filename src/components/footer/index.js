@@ -47,7 +47,7 @@ export default function Footer() {
           {outerLinks.map(({ url, label }, idx) => (
             <li key={idx}>
               <span>
-                <a href={url} target="_blank" rel="noreferrer">
+                <a href={url} rel="noreferrer">
                   {label}
                 </a>
               </span>
