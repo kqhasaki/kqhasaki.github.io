@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import BaseLayout from '../../components/base-layout'
 import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { FieldTimeOutlined, ReadOutlined } from '@ant-design/icons'
 import ScrollProgresser from '../../components/scroll-progresser'
+import TableOfContent from '../../components/table-of-content'
 import '../../components/base-layout/index.css'
 
 export const query = graphql`
@@ -25,12 +26,42 @@ export const query = graphql`
 
 export default function ArticleView({ data }) {
   const article = data.mdx
+  const [headers, setHeaders] = useState([])
 
   useEffect(() => {
     document.title = article.frontmatter.title
 
     const links = document.querySelectorAll('.article-body a')
     links?.forEach(link => (link.target = '_blank'))
+
+    const allHeaders = document.querySelectorAll(
+      '.article-body h1, .article-body h2, .article-body h3'
+    )
+    const _headers = Array.from(allHeaders).map((header, idx) => {
+      header.setAttribute('name', idx)
+      const { localName, textContent } = header
+      return {
+        level: localName,
+        name: `header-${idx}`,
+        label: textContent,
+        target: header,
+      }
+    })
+    setHeaders(_headers)
+
+    const headNavigate = event => {
+      const { target } = event
+      if (target.matches('h1, h2, h3')) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+        })
+      }
+    }
+    document.addEventListener('click', headNavigate)
+
+    return () => {
+      document.removeEventListener('click', headNavigate)
+    }
   }, [data])
 
   return (
@@ -52,6 +83,7 @@ export default function ArticleView({ data }) {
         />
         <MDXRenderer>{article.body}</MDXRenderer>
       </div>
+      <TableOfContent headers={headers} />
     </BaseLayout>
   )
 }

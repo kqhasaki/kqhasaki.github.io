@@ -730,3 +730,87 @@ window.addEventListener('beforeunload', event => {
 ### `DOMContentLoaded`事件
 
 `window`的`load`事件会在页面完全加载后触发，因为要等待很多外部资源加载完成，所以会花费较长时间。而`DOMContentLoaded`事件会在DOM树构建完成后立即触发，而不用等待图片、JavaScrip文件、CSS文件或其他资源加载完成。相对于`load`事件，`DOMContentLoaded`可以让开发者在外部资源下载的同时就能指定事件处理程序，从而让用户能更快地与页面交互。
+
+要处理`DOMContentLoaded`事件，需要给`document`或者`window`添加事件处理程序（实际的事件目标是`document`，但是会冒泡到`window`）。下面是一个例子：
+
+```javascript
+document.addEventListener('DOMContentLoaded', event => {
+  console.log('Content loaded')
+})
+```
+
+`DOMContentLoaded`事件的`event`对象中不包含任何额外信息（除了`target`等于`document`）。
+
+`DOMContentLoaded`事件通常常用于添加事件处理程序或执行其他DOM操作，这个事件始终在`load`事件之前触发。
+
+对于不支持`DOMContentLoaded`事件的浏览器，可以使用超时为0的`setTimeout()`函数，通过其回调来设置事件处理程序。
+
+### `pageshow`和`pagehide`事件
+
+FireFox和Opera开发了一个名为**往返缓存**的功能，此功能旨在使用浏览器“前进”和“后退”按钮加快页面之间的切换。这个缓存不仅存储页面数据，也存储DOM和JavaScript状态，实际上是把整个页面都保存在内存里。如果页面在缓存中，那么导航到这个页面时就不会触发`load`事件。通常这不会导致什么问题，因为整个页面状态都被保存起来了。不过Firefox决定提供一些事件，把往返缓存的行为暴露出来。
+
+第一个事件是`pageshow`，其会在页面显示时触发，无论是否来自往返缓存。在新加载的页面上，`pageshow`会在`load`事件之后触发；在来自往返缓存的页面上，`pageshow`会在页面状态完全恢复后触发。注意，虽然这个事件的目标是`document`，但事件处理程序必须添加到`window`上。
+
+```javascript
+(function () {
+  let showCount = 0
+  
+  window.addEventListener('load', () => {
+    console.log('Load fired')
+  })
+  
+  window.addEventListener('pageshow', () => {
+  	showCount++
+    console.log(`show has been fired ${showCount} times.`)
+  })
+})()
+```
+
+这个例子使用了私有作用域保证了`showCount`不会进入全局作用域。在页面首次加载时`showCount`为0。之后每次触发`pageshow`事件，`showCount`都会加1并输出消息。如果从包含以上代码的页面跳走，然后又点击“后退”按钮以恢复它，就能够每次都看到`showCount`的值。这是因为变量的状态连通整个页面状态都保存在了内存中，导航回来后可以恢复。如果是点击了浏览器的“刷新“按钮，则`showCount`的值会重置为0，因为页面会重新加载。
+
+除了常用属性，`pageshow`的`event`对象还包含了一个名为`persisted`的属性。这个属性是一个布尔值，如果页面存储在了往返缓存中就是`true`，否则就是`false`。可以像下面这样在事件处理程序中检测这个属性：
+
+```javascript
+(function (){
+  let showCount = 0
+  
+  window.addEventListener('load', () => {
+    console.log('Load fired')
+  })
+  
+  window.addEventListener('pageshow', () => {
+    showCount++
+    console.log(`Show has been fired ${showCount} times. Persisted? ${event.persisted}`)
+  })
+})()
+```
+
+通过检测`persisted`属性可以根据页面是否取自往返缓存而决定是否采取不同操作。
+
+和`pageshow`对应的事件是`pagehide`，这个事件会在页面从浏览器中卸载后，在`unload`事件之前触发。
+
+> 注册了`onunload`事件处理程序的页面会自动排除在往返缓存之外。这是因为`onunload`事件典型的使用场景是撤销`onload`事件发生所做的事情，如果使用往返缓存，则下一次页面显示时就不会触发`onload`事件，而这可能导致页面无法使用。
+
+### `hashchange`事件
+
+HTML5增加了`hashChange`事件，用于在URL散列值发生变化时通知开发者。这是因为开发者经常在Ajax应用程序中使用URL散列值存储状态信息或路由导航信息。
+
+`onhashchange`事件处理程序必须添加给`window`，每次URL散列值发生变化时会调用它。`event`对象有两个新属性：`oldURL`和`newURL`。这两个属性分别保存变化前后的URL，而且是包含散列值的完整URL。下面的例子展示了如何获取变化前后的URL：
+
+```javascript
+window.addEventListener('hashchange', event => {
+  console.log(`Old URL: ${event.oldURL}, New URL: ${event.newURL}`)
+})
+```
+
+如果想要确定散列值，最好使用`location`对象。
+
+```javascript
+window.addEventListener('hashchange', event => {
+  console.log(`Current hash: ${location.hash}`)
+})
+```
+
+## 设备事件
+
+随着智能手机和平板计算机的出现，用户和浏览器交互的新方式应运而生。为此，一批新事件被发明了出来。**设备事件**可以用于确定用户使用设备的方式。W3C在2011年就开始起草一份新规范，用户定义新设备及设备相关的事件。
