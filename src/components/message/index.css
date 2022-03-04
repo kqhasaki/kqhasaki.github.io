@@ -1,8 +1,11 @@
+@import '../base-layout/index.css';
+
 .messager {
   transition: 200ms;
   padding: 0.5rem 1rem 0.5rem 1rem;
   border-radius: 0.5rem;
-  box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0.8rem var(--card-box-shadow);
+  border: 1px solid var(--card-background-border-color);
   position: fixed;
   transform: scale(0.2);
   top: 1rem;
@@ -14,5 +17,5 @@
   z-index: 999;
   left: 0;
   right: 0;
-  background-color: #fff;
+  background-color: var(--background-color);
 }

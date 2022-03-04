@@ -83,7 +83,7 @@ export default function ArticleView({ data }) {
         />
         <MDXRenderer>{article.body}</MDXRenderer>
       </div>
-      <TableOfContent headers={headers} />
+      {headers.length && <TableOfContent headers={headers} />}
     </BaseLayout>
   )
 }
