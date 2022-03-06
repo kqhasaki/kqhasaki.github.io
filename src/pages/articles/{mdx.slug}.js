@@ -5,6 +5,7 @@ import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { FieldTimeOutlined, ReadOutlined } from '@ant-design/icons'
 import ScrollProgresser from '../../components/scroll-progresser'
 import TableOfContent from '../../components/table-of-content'
+import ArticleNavigator from '../../components/article-navigator'
 import '../../components/base-layout/index.css'
 
 export const query = graphql`
@@ -17,6 +18,7 @@ export const query = graphql`
         title
       }
       body
+      slug
       wordCount {
         sentences
       }
@@ -83,6 +85,7 @@ export default function ArticleView({ data }) {
         />
         <MDXRenderer>{article.body}</MDXRenderer>
       </div>
+      <ArticleNavigator currArticle={article} />
       {headers.length && <TableOfContent headers={headers} />}
     </BaseLayout>
   )

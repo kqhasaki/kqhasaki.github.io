@@ -1,11 +1,12 @@
 .table-of-content {
   transition: 300ms;
-  width: 300px;
+  width: 280px;
   height: 95%;
   position: fixed;
+  user-select: none;
   left: 50%;
   top: 50%;
-  transform: translateX(24rem) translateY(-50%);
+  transform: translateX(25rem) translateY(-50%);
   border-left: 1px solid var(--card-background-border-color);
   background-color: var(--background-color);
   overflow-y: auto;
@@ -13,7 +14,7 @@
   font-size: 15px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 810px) {
   .table-of-content {
     display: none;
   }
@@ -30,7 +31,6 @@
   margin: 0;
   overflow-x: hidden;
   cursor: pointer;
-  transform: 300ms;
 }
 
 .table-of-content .topHeader {

@@ -5,6 +5,7 @@
 .light {
   --blue: #02bbff;
   --background-color: #fff;
+  --background-color-transparent: rgba(255, 255, 255, 0.8);
   --font-color: #3c4043;
   --font-color-header: #3c4043;
   --btn-color: #fff;
@@ -23,6 +24,7 @@
 .dark {
   --blue: #02bbff;
   --background-color: #202124;
+  --background-color-transparent: rgba(0, 0, 0, 0.8);
   --font-color: #bdc1c6;
   --font-color-header: #eaeaea;
   --font-color-highlight: #efefef;
