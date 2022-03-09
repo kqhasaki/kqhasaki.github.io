@@ -22,6 +22,7 @@ export default function TableOfContent({ headers }) {
         if (top > 0) break
         idx++
       }
+      idx = Math.min(headers.length - 1, idx)
       setTopHeaderKey(idx)
       const topHeader = document.getElementById(`header-number-${idx}`)
       if (!topHeader) return

@@ -9,7 +9,7 @@ export default function PostCard({ article }) {
     <motion.div
       className="post-card"
       onClick={() => {
-        navigate(article.slug)
+        navigate('/articles/' + article.slug)
       }}
     >
       <div className="img-line">

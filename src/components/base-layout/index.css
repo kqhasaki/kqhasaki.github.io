@@ -16,8 +16,8 @@
   --font-color-quote: #4e7182;
   --card-box-shadow: rgba(0, 0, 0, 0.1);
   --code-font-color: #444;
-  --code-background-color: rgba(255, 255, 255, 0.5);
-  --code-border-color: #efefef;
+  --code-background-color: rgba(255, 229, 100, 0.2);
+  --code-border-color: rgba(255, 229, 100, 0.2);
   --code-block-background: #313131;
 }
 
@@ -34,10 +34,10 @@
   --font-color-quote: #bdcbdc;
   --card-background-border-color: #2a2a2a;
   --card-box-shadow: #333;
-  --code-font-color: #ddd;
-  --code-background-color: #313131;
+  --code-font-color: #dedede;
+  --code-background-color: rgba(229, 100, 255, 0.15);
+  --code-border-color: rgba(229, 100, 255, 0.15);
   --code-block-background: rgba(0, 0, 0, 0.1);
-  --code-border-color: #313131;
 }
 
 html,
@@ -301,6 +301,10 @@ h3 {
 
 .article-body a {
   color: #189fff;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .article-body a::after {

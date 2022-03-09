@@ -60,10 +60,12 @@ export default function ArticleNavigator({ currArticle }) {
         </div>
         {articleGroups.map((articleGroup, idx) => {
           const groupTitle = GROUP_TITLES[articleGroup.fieldValue]
-          const articles = articleGroup.nodes.map(({ childMdx }) => ({
-            slug: childMdx.slug,
-            title: childMdx.frontmatter.title,
-          }))
+          const articles = articleGroup.nodes
+            .map(({ childMdx }) => ({
+              slug: childMdx.slug,
+              title: childMdx.frontmatter.title,
+            }))
+            .sort((a, b) => a.slug.localeCompare(b.slug))
           return (
             <React.Fragment key={idx}>
               <h4>{groupTitle}</h4>

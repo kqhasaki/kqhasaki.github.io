@@ -87,12 +87,12 @@ export default function BaseLayout({ children, pageTitle }) {
         {title}
       </title>
       <header>
-        <Link to="/" className="nav-link" activeClassName="link-active">
+        <Link to="/about" className="nav-link" activeClassName="link-active">
           <motion.div whileHover={{ scale: 1.05 }}>
             <HomeOutlined />
           </motion.div>
         </Link>
-        <Link to="/articles" className="nav-link" activeClassName="link-active">
+        <Link to="/" className="nav-link" activeClassName="link-active">
           <motion.div whileHover={{ scale: 1.05 }}>
             <ReadOutlined />
           </motion.div>

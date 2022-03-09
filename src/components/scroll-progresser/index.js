@@ -17,7 +17,9 @@ export default function ScrollProgresser() {
         document.body.scrollHeight - document.documentElement.clientHeight
       const currScroll = document.documentElement.scrollTop
 
-      setProgress(Math.max(0, Math.floor(100 * (currScroll / totalScroll))))
+      const _progress = Math.floor(100 * (currScroll / totalScroll))
+
+      setProgress(Math.min(100, Math.max(0, _progress)))
     })
 
     return () => {
