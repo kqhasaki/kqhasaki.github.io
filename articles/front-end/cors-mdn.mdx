@@ -30,11 +30,9 @@ Fetch API 的一个[标准](https://fetch.spec.whatwg.org/#http-cors-protocol)�
 
 CORS 请求失败会产生错误，但是为了安全从 JavaScript 代码层面无法获知到底具体是哪里出了问题。只能通过查看浏览器控制台查看。
 
-# 若干访问控制场景
+# 访问控制场景
 
 这里，使用三个场景来解释跨源资源共享机制的工作原理。都适用`XMLHttpRequest`对象。
-
-## 简单请求
 
 某些请求不会触发[CORS 预检请求](https://developer.mozilla.org/zh-CN/docs/Glossary/Preflight_request)。这种请求也可以称为“简单请求”，注意该术语不属于 CORS 规范。如果**满足如下所有条件**，这个 HTTP 请求可以视为“简单请求”：
 
