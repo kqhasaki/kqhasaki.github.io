@@ -3,6 +3,7 @@ import { useStaticQuery, graphql } from 'gatsby'
 import { navigate } from 'gatsby'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faList } from '@fortawesome/free-solid-svg-icons'
+import { debounce } from 'lodash'
 
 import './index.css'
 
@@ -32,6 +33,27 @@ export default function ArticleNavigator({ currArticle }) {
       }
     }
   `).allFile.group
+
+  useEffect(() => {
+    document.body.style.overflow =
+      visible && document.body.clientWidth < 810 ? 'hidden' : 'initial'
+
+    const resizeHandler = debounce(() => {
+      if (window.innerWidth >= 810) {
+        document.body.style.overflow = 'initial'
+        setVisible(true)
+      } else {
+        if (visible) {
+          document.body.style.overflow = 'hidden'
+        }
+      }
+    }, 150)
+
+    window.onresize = resizeHandler
+    return () => {
+      window.onresize = null
+    }
+  }, [visible])
 
   useEffect(() => {
     if (document.body.clientWidth < 810) {

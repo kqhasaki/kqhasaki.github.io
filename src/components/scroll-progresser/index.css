@@ -1,4 +1,5 @@
 .progresser {
+  user-select: none;
   position: fixed;
   right: 1rem;
   top: 1rem;

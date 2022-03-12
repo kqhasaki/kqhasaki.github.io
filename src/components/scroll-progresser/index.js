@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { throttle } from 'lodash'
 import './index.css'
 
 export default function ScrollProgresser() {
@@ -12,7 +13,7 @@ export default function ScrollProgresser() {
   }
 
   useEffect(() => {
-    const handler = window.addEventListener('scroll', () => {
+    const handler = throttle(() => {
       const totalScroll =
         document.body.scrollHeight - document.documentElement.clientHeight
       const currScroll = document.documentElement.scrollTop
@@ -20,7 +21,9 @@ export default function ScrollProgresser() {
       const _progress = Math.floor(100 * (currScroll / totalScroll))
 
       setProgress(Math.min(100, Math.max(0, _progress)))
-    })
+    }, 200)
+
+    window.addEventListener('scroll', handler)
 
     return () => {
       window.removeEventListener('scroll', handler)

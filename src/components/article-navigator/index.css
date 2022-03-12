@@ -1,5 +1,6 @@
 .article-navigator {
   user-select: none;
+  z-index: 999;
   width: 280px;
   height: 95%;
   position: fixed;
@@ -9,7 +10,7 @@
   border-right: 1px solid var(--card-background-border-color);
   background-color: var(--background-color);
   overflow-y: auto;
-  padding: 0.5rem 1.5rem 3.5rem 1.5rem;
+  padding: 1.5rem 1.5rem 3.5rem 1.5rem;
   font-size: 15px;
 }
 
@@ -33,12 +34,33 @@
   .article-navigator {
     left: 0;
     height: 100%;
-    width: 300px;
+    width: 100vw;
     transform: translateX(0) translateY(-50%);
     background-color: var(--background-color-transparent);
     backdrop-filter: blur(10px);
     border: none;
     display: none;
+    padding: 0;
+  }
+
+  .article-navigator h4 {
+    margin-top: 1rem !important;
+    font-size: 1.2rem !important;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .article-navigator p {
+    transition: background 300ms;
+    font-size: 1rem !important;
+    line-height: 2.8rem !important;
+    border-bottom: 1px solid var(--navigator-border-color);
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+
+  .article-navigator p:hover {
+    background: var(--navigator-hover-color);
   }
 
   .navigator-switch {
