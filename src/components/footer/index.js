@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   WechatOutlined,
   BookFilled,
@@ -6,6 +6,8 @@ import {
   QqOutlined,
 } from '@ant-design/icons'
 import resume from '../../static/resume/resume.pdf'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
 import './index.css'
 
 const outerLinks = [
@@ -16,7 +18,26 @@ const outerLinks = [
   { url: 'https://webpack.docschina.org/concepts/', label: 'webpack' },
 ]
 
+let globalTheme = null
+
 export default function Footer() {
+  const [theme, setTheme] = useState(globalTheme)
+
+  function changeTheme(newTheme) {
+    document.querySelector('body').className = `${newTheme}`
+    setTheme(newTheme)
+    globalTheme = newTheme
+  }
+
+  useEffect(() => {
+    if (!globalTheme) {
+      const themeMedia = window.matchMedia('(prefers-color-scheme: light)')
+      const initTheme = themeMedia.matches ? 'light' : 'dark'
+      setTheme(initTheme)
+      globalTheme = initTheme
+    }
+  }, [])
+
   return (
     <footer className="footer">
       <div className="wrapper">
@@ -36,6 +57,19 @@ export default function Footer() {
             <a href="mailto:k1664032884@gmail.com">
               <MailFilled />
             </a>
+          </span>
+          <span>
+            {theme === 'dark' ? (
+              <FontAwesomeIcon
+                icon={faMoon}
+                onClick={() => changeTheme('light')}
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faSun}
+                onClick={() => changeTheme('dark')}
+              />
+            )}
           </span>
         </p>
         <p>CopyRight &copy; 2022 Louis K</p>

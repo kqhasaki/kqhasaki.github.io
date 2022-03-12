@@ -8,9 +8,6 @@ import './index.css'
 import avatar from '../../images/avatar.png'
 import { motion } from 'framer-motion'
 import clsx from 'clsx'
-import moonSvg from '../../images/moon.svg'
-import sunSvg from '../../images/sun.svg'
-
 import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/highlight-code/dist/loader'
 deckDeckGoHighlightElement()
 
@@ -27,26 +24,8 @@ export default function BaseLayout({ children, pageTitle }) {
     }
   `).site.siteMetadata
   const [profileModalVisible, setProfileModalVisible] = useState(false)
-  const [themeClass, setThemeClass] = useState()
-
-  function changeTheme() {
-    const body = document.querySelector('body')
-    const newtheme = themeClass === 'light' ? 'dark' : 'light'
-    setThemeClass(newtheme)
-    body.className = newtheme
-    localStorage.setItem('theme', newtheme)
-  }
 
   useEffect(() => {
-    const body = document.querySelector('body')
-    let theme = localStorage.getItem('theme')
-    if (!theme) {
-      const themeMedia = window.matchMedia('(prefers-color-scheme: light)')
-      theme = themeMedia.matches ? 'light' : 'dark'
-    }
-    body.className = theme
-    setThemeClass(theme)
-
     const copyHandler = e => {
       const text = e.target.textContent
       e.clipboardData.setData(
@@ -117,9 +96,7 @@ export default function BaseLayout({ children, pageTitle }) {
       </Modal>
 
       <main>{children}</main>
-      <div className="theme-changer" onClick={changeTheme}>
-        {themeClass === 'light' ? <img src={moonSvg} /> : <img src={sunSvg} />}
-      </div>
+
       <Footer />
     </div>
   )

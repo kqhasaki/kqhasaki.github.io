@@ -1,12 +1,14 @@
 .footer {
+  user-select: none;
   color: var(--font-color);
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   font-size: 13px;
-  margin-top: 6rem;
+  margin-top: 10rem;
   border-top: 1px solid var(--card-background-border-color);
-  padding: 2rem 0 2rem 0;
+  padding: 2rem 0 8rem 0;
 }
 
 .footer .wrapper {
@@ -37,8 +39,8 @@ h3 {
 
 .footer span {
   margin-right: 12px;
+  color: var(--font-color);
   cursor: pointer;
-  transition: 200ms;
 }
 
 .wrapper li {

@@ -1,6 +1,5 @@
 .article-navigator {
   user-select: none;
-  transition: 300ms;
   width: 280px;
   height: 95%;
   position: fixed;

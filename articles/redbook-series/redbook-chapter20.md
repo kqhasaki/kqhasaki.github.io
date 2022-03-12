@@ -440,3 +440,4 @@ for await (const decodedChunk of decodedStream) {
 
 # File API与Blob API
 
+Web应用程序的一个主要痛点是无法操作用户计算机上的文件。2000年之前，处理文件的唯一方式是把`<input type="file">`放到一个表单里，仅此而已。
