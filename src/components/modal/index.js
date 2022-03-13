@@ -38,18 +38,15 @@ export default function Modal({
             animate={{
               rotate: '0deg',
             }}
-            exit={{
-              x: -100,
-            }}
           >
             <motion.div
               className={clsx('modal-closer')}
               onClick={onClose}
-              whileHover={{ scale: 1.2 }}
+              whileHover={{ scale: 1.1 }}
             >
               <CloseOutlined />
             </motion.div>
-            {children}
+            <div className="modal-content-wrapper">{children}</div>
           </motion.div>
         </motion.div>
       )}

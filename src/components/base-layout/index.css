@@ -148,7 +148,7 @@ header {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  padding-bottom: 2rem;
+  padding-bottom: 0;
 }
 
 header > .route-link {
@@ -172,6 +172,10 @@ header img {
   margin: 0 1rem 0 1rem;
   cursor: pointer;
   min-width: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .nav-link > img {
@@ -182,6 +186,22 @@ header img {
 
 .nav-link:hover {
   color: var(--blue);
+  text-decoration: none;
+}
+
+.nav-link:hover .link-label {
+  transform: scaleY(1);
+}
+
+.nav-link .link-label {
+  transition: 200ms;
+  padding-top: 6px;
+  text-align: center;
+  bottom: -24px;
+  font-size: 0.9rem;
+  display: block;
+  width: 8rem;
+  transform: scaleY(0);
 }
 
 .link-active {

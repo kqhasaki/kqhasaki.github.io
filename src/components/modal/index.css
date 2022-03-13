@@ -13,15 +13,24 @@
   backdrop-filter: blur(10px);
 }
 
+.modal-content-wrapper::-webkit-scrollbar {
+  width: 0;
+}
+
 .modal-content {
   position: relative;
   background: var(--card-background-color);
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 1rem;
   border: 1px solid var(--card-background-border-color);
   width: 40rem;
+}
+
+.modal-content-wrapper {
+  width: 100%;
+  overflow-y: auto;
   min-height: 50vh;
-  max-height: 100vh;
+  max-height: 70vh;
 }
 
 .modal-closer {

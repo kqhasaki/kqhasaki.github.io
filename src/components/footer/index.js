@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import {
-  WechatOutlined,
-  BookFilled,
-  MailFilled,
-  QqOutlined,
-} from '@ant-design/icons'
 import resume from '../../static/resume/resume.pdf'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
+import { faWeixin, faQq, faGithub } from '@fortawesome/free-brands-svg-icons'
+import {
+  faMoon,
+  faSun,
+  faFile,
+  faEnvelope,
+} from '@fortawesome/free-solid-svg-icons'
 import './index.css'
 
 const outerLinks = [
@@ -43,19 +43,28 @@ export default function Footer() {
       <div className="wrapper">
         <p style={{ fontSize: '1.3rem' }}>
           <span>
-            <WechatOutlined />
+            <FontAwesomeIcon icon={faWeixin} />
           </span>
           <span>
-            <QqOutlined />
-          </span>
-          <span>
-            <a href={resume} download="简历.pdf">
-              <BookFilled />
-            </a>
+            <FontAwesomeIcon icon={faQq} />
           </span>
           <span>
             <a href="mailto:k1664032884@gmail.com">
-              <MailFilled />
+              <FontAwesomeIcon icon={faEnvelope} />
+            </a>
+          </span>
+          <span>
+            <a
+              href="https://github.com/kqhasaki"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <FontAwesomeIcon icon={faGithub} />
+            </a>
+          </span>
+          <span>
+            <a href={resume} download="resume.pdf" title="简历下载">
+              <FontAwesomeIcon icon={faFile} />
             </a>
           </span>
           <span>
@@ -81,7 +90,7 @@ export default function Footer() {
           {outerLinks.map(({ url, label }, idx) => (
             <li key={idx}>
               <span>
-                <a href={url} rel="noreferrer">
+                <a href={url} rel="noreferrer" target="_blank">
                   {label}
                 </a>
               </span>

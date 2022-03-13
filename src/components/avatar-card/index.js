@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import avatar from '../../images/avatar.png'
-import { GithubOutlined } from '@ant-design/icons'
 import { languageContext } from '../base-layout'
+import ItemList from '../item-list'
 import './index.css'
 
 const SELF_INTROS = {
@@ -12,15 +12,51 @@ const SELF_INTROS = {
     `工作之余我也会间断地编写一些我感兴趣的项目、阅读、旅行和绘画，这里也将会更新更多我的项目和作品。
     如果力所能及，我也很愿意加入任何有趣的开源项目。`,
   ],
-  English: [
-    `I'm a front-end engineer who works mainly with JavaScript and React. I
-    also enjoy writing and building my own apps. I learnt most of my skills
-    from the Web, and I would like to share everything I know with people
-    who want to learn Web development. `,
-    `I currently work in GIS industry, most of my work is related to map
-    tools. But I am developing some interesting apps at leisure. Welcome to
-    join my project or invite me to your project at any time.`,
+}
+
+const CAREER = {
+  Chinese: [
+    {
+      label: '本科',
+      content: '东南大学 - 机械工程学院 - 工学学士',
+    },
+    {
+      label: '硕士',
+      content: '南京审计大学 - 统计与数据科学学院 - 经济学硕士',
+    },
+    {
+      label: '2021.7 ~ 2021.10',
+      content: '海沃机械（中国）- 软件工程师 - base 扬州',
+    },
+    {
+      label: '2021.10 至今',
+      content: '小鹏汽车 - 自动驾驶中心 - 前端开发工程师 - base 扬州/上海',
+    },
   ],
+  English: [
+    {
+      label: '2021.10 ~ Now',
+      content: 'XP motor - front-end engineer',
+    },
+  ],
+}
+
+const PROJECTS = {
+  Chinese: [
+    {
+      label: '音乐播放器',
+      content: (
+        <a href="https://music.louisk.xyz" target="_blank">
+          基于React和网易云音乐API的音乐播放器Web应用
+        </a>
+      ),
+    },
+    {
+      label: '算法动态演示',
+      content: '基于React的常用算法和数据结构的交互演示Web应用',
+    },
+  ],
+  English: [],
 }
 
 export default function AvatarCard() {
@@ -35,11 +71,10 @@ export default function AvatarCard() {
       {SELF_INTROS[language].map((content, idx) => (
         <p key={idx}>{content}</p>
       ))}
-      <div className="personal-links">
-        <a href="https://github.com/kqhasaki" target="_blank" rel="noreferrer">
-          <GithubOutlined />
-        </a>
-      </div>
+      <h2 className="homepage-title">个人项目</h2>
+      <ItemList items={PROJECTS[language]} />
+      <h2 className="homepage-title">工作生涯</h2>
+      <ItemList items={CAREER[language]} />
     </main>
   )
 }

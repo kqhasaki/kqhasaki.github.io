@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useStaticQuery, graphql } from 'gatsby'
-import { ReadOutlined, HomeOutlined } from '@ant-design/icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLaptopCode, faBook } from '@fortawesome/free-solid-svg-icons'
 import { Modal, message } from '../../components'
 import AvatraCard from '../avatar-card'
 import Footer from '../footer'
-import './index.css'
 import avatar from '../../images/avatar.png'
 import { motion } from 'framer-motion'
 import clsx from 'clsx'
 import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/highlight-code/dist/loader'
+import './index.css'
 deckDeckGoHighlightElement()
 
 export const languageContext = React.createContext('Chinese')
@@ -67,24 +68,22 @@ export default function BaseLayout({ children, pageTitle }) {
       </title>
       <header>
         <Link to="/about" className="nav-link" activeClassName="link-active">
-          <motion.div whileHover={{ scale: 1.05 }}>
-            <HomeOutlined />
-          </motion.div>
+          <FontAwesomeIcon icon={faBook} />
+          <span className="link-label">杂谈文章</span>
         </Link>
         <Link to="/" className="nav-link" activeClassName="link-active">
-          <motion.div whileHover={{ scale: 1.05 }}>
-            <ReadOutlined />
-          </motion.div>
+          <FontAwesomeIcon icon={faLaptopCode} />
+          <span className="link-label">技术文章</span>
         </Link>
-        <motion.div
+        <div
           className="nav-link"
-          whileHover={{ scale: 1.05 }}
           onClick={() => {
             setProfileModalVisible(true)
           }}
         >
           <img alt="avatar" src={avatar} />
-        </motion.div>
+          <span className="link-label">关于作者</span>
+        </div>
       </header>
       <Modal
         visible={profileModalVisible}

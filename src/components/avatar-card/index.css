@@ -1,11 +1,3 @@
-.personal-links {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-  font-size: 1.2rem;
-}
-
 .avatar {
   display: flex;
   flex-direction: row;
