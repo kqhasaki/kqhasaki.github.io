@@ -29,7 +29,7 @@ export default function ArticlesView() {
       }
     }
   `)
-    .allMdx.nodes.filter(({ slug }) => !slug.startsWith('non-tech'))
+    .allMdx.nodes.filter(({ slug }) => slug.startsWith('non-tech'))
     .sort((a, b) => {
       const date1 = moment(a.frontmatter.date)
       const date2 = moment(b.frontmatter.date)

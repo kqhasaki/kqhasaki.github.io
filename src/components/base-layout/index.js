@@ -67,7 +67,7 @@ export default function BaseLayout({ children, pageTitle }) {
         {title}
       </title>
       <header>
-        <Link to="/about" className="nav-link" activeClassName="link-active">
+        <Link to="/nonTech" className="nav-link" activeClassName="link-active">
           <FontAwesomeIcon icon={faBook} />
           <span className="link-label">杂谈文章</span>
         </Link>

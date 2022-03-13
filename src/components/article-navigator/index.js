@@ -11,6 +11,7 @@ const GROUP_TITLES = {
   'front-end': '前端杂谈',
   'introduction-to-algorithms': '抄书系列——《算法导论》',
   'redbook-series': '抄书系列——“红宝书”',
+  'non-tech': '日常杂谈',
 }
 
 export default function ArticleNavigator({ currArticle }) {
@@ -32,7 +33,13 @@ export default function ArticleNavigator({ currArticle }) {
         }
       }
     }
-  `).allFile.group
+  `).allFile.group.filter(({ fieldValue }) => {
+    if (currArticle.slug.startsWith('non-tech')) {
+      return fieldValue === 'non-tech'
+    } else {
+      return fieldValue !== 'non-tech'
+    }
+  })
 
   useEffect(() => {
     document.body.style.overflow =

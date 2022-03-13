@@ -169,6 +169,7 @@ header img {
 
 .nav-link {
   font-size: 2rem;
+  color: var(--font-color);
   margin: 0 1rem 0 1rem;
   cursor: pointer;
   min-width: 3rem;
