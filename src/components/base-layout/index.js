@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useStaticQuery, graphql } from 'gatsby'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLaptopCode, faBook } from '@fortawesome/free-solid-svg-icons'
+import { ReadOutlined, DesktopOutlined } from '@ant-design/icons'
 import { Modal, message } from '../../components'
 import AvatraCard from '../avatar-card'
 import Footer from '../footer'
 import avatar from '../../images/avatar.png'
-import { motion } from 'framer-motion'
 import clsx from 'clsx'
 import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/highlight-code/dist/loader'
 import './index.css'
@@ -29,10 +27,7 @@ export default function BaseLayout({ children, pageTitle }) {
   useEffect(() => {
     const copyHandler = e => {
       const text = e.target.textContent
-      e.clipboardData.setData(
-        'text/plain',
-        `${text}\n-- 粘帖自LouisK的博客，联系：邮箱k1664032884@gmail.com，微信kuaiqianghasai --`
-      )
+      e.clipboardData.setData('text/plain', text)
       message.success('复制成功')
       e.preventDefault()
     }
@@ -68,11 +63,11 @@ export default function BaseLayout({ children, pageTitle }) {
       </title>
       <header>
         <Link to="/nonTech" className="nav-link" activeClassName="link-active">
-          <FontAwesomeIcon icon={faBook} />
+          <ReadOutlined />
           <span className="link-label">杂谈文章</span>
         </Link>
         <Link to="/" className="nav-link" activeClassName="link-active">
-          <FontAwesomeIcon icon={faLaptopCode} />
+          <DesktopOutlined />
           <span className="link-label">技术文章</span>
         </Link>
         <div
