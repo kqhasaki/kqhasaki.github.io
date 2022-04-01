@@ -1645,9 +1645,463 @@ console.log(foo.shadowRoot) // #shadow-root (open)
 console.log(bar.shadowRoot) // null
 ```
 
-一般来说，需要创建保密（closed）影子DOM的场景很少。虽然这可以限制通过影子宿主访问影子DOM，但恶意代码有很多方法绕过这个限制，恢复对影子DOM的访问。简言之，**不能**为了安全而创建保密影子DOM。
+一般来说，需要创建保密（closed）影子 DOM 的场景很少。虽然这可以限制通过影子宿主访问影子 DOM，但恶意代码有很多方法绕过这个限制，恢复对影子 DOM 的访问。简言之，**不能**为了安全而创建保密影子 DOM。
 
-> 如果想保护独立的DOM树不受未信任代码影响，影子DOM并不适合这个需求。对`<iframe>`施加的跨源限制更可靠。
+> 如果想保护独立的 DOM 树不受未信任代码影响，影子 DOM 并不适合这个需求。对`<iframe>`施加的跨源限制更可靠。
 
-### 使用影子DOM
+### 使用影子 DOM
 
+将影子 DOM 添加到元素后，可以像使用常规 DOM 一样使用影子 DOM。来看下面的例子：
+
+```javascript
+for (const color of ['red', 'green', 'blue']) {
+  const div = document.createElement('div')
+  const shadowDOM = div.attachShadow({ mode: 'open' })
+
+  document.body.appendChild(div)
+  shadowDOM.innerHTML = `
+    <p>Make me ${color}</p>
+    
+    <style>
+    p {
+      color: ${color}
+    }
+    </style>
+  `
+}
+```
+
+虽然这里使用相同的选择符应用了 3 种不同的颜色，但每个选择符只会把样式应用到它们所在的影子 DOM 上。为此，3 个`<p>`元素会出现 3 种不同的颜色。
+
+可以这样验证这些元素分别位于其自己的影子 DOM 中：
+
+```javascript
+for (const color of ['red', 'green', 'blue']) {
+  const div = document.createElement('div')
+  const shadowDOM = div.attachShadow({ mode: 'open' })
+
+  document.body.appendChild(div)
+
+  shadowDOM.innerHTML = `
+    <p>Make me ${color}</p>
+    
+    <style>
+    p {
+      color: ${color};
+    }
+    </style>
+  `
+}
+
+function countP(node) {
+  console.log(node.querySelectorAll('p').length)
+}
+
+countP(document)
+
+for (let element of document.querySelectorAll('div')) {
+  countP(element.shadowRoot)
+}
+```
+
+在浏览器开发者工具可以更清楚地看到影子 DOM。例如前面的例子在检查浏览器窗口时会显示成如下：
+
+```jsx
+<body>
+  <div>
+    #shadow-root (open)
+    <p>Make me red!</p>
+    <style>
+      p {
+        color: 'red';
+      }
+    </style>
+  </div>
+
+  <div>
+    #shadow-root (open)
+    <p>Make me green!</p>
+    <style>
+      p {
+        color: green;
+      }
+    </style>
+  </div>
+
+  <div>
+    #shadow-root(open)
+    <p>Make me blue!</p>
+
+    <style>
+      p {
+        color: blue;
+      }
+    </style>
+  </div>
+</body>
+```
+
+影子 DOM 并非铁板一块。HTML 元素可以在 DOM 树间无限制移动：
+
+```jsx
+document.body.innerHTML = `<div></div><p id="foo">Move me</p>`
+
+const divElement = document.querySelector('div')
+const pElement = document.querySelector('p')
+
+const shadowDOM = divElement.attachShadow({ mode: 'open' })
+
+// 从父DOM中移除元素
+divElement.parentElement.removeChild(pElement)
+
+// 将元素添加到影子DOM
+shadowDOM.appendChild(pElement)
+
+// 检查元素是否移动到了影子DOM中
+console.log(shadowDOM.innerHTML) // <p id="foo">Move me</p>
+```
+
+### 合成与影子 DOM 槽位
+
+影子 DOM 是为自定义 Web 组件设计的，为此需要支持嵌套 DOM 片段。从概念上讲，可以这么说：位于影子宿主中的 HTML 需要一种机制以渲染到影子 DOM 中去，但这些 HTML 又不必属于影子 DOM 树。默认情况下，嵌套内容会隐藏。来看下面的例子，其中的文本在 100ms 后会被隐藏：
+
+```jsx
+document.body.innerHTML = `
+  <div>
+    <p>Foo</p>
+  </div>
+`
+
+setTimeout(
+  () => document.querySelector('div').attachShadow({ mode: 'open' }),
+  1000
+)
+```
+
+影子 DOM 一旦添加到元素中，浏览器就会赋予它最高优先级，优先渲染它的内容而不是原来的文本。在这里例子中由于影子 DOM 是空的，因此`<div>`在 1000ms 后会变成空的。
+
+为了显示文本内容，需要使用`<slot>`标签来指示浏览器在哪里放置原来的 HTML。下面的代码修改了前面的例子，让影子宿主中的文本出现在了影子 DOM 中：
+
+```jsx
+document.body.innerHTML = `
+  <div id="foo">
+    <p>Foo</p>
+  </div>
+`
+
+document
+  .querySelector('div')
+  .attachShadow({ mode: 'open' }).innerHTML = `<div id="bar">
+    <slot></slot>
+  </div>`
+```
+
+现在投射进去的内容就会像自己存在于影子 DOM 中一样。检查页面会发现原来的内容实际上替代了`<slot>`：
+
+```jsx
+<body>
+  <div id="foo">
+    #shadow-root (open)
+    <div id="bar">
+      <p>Foo</p>
+    </div>
+  </div>
+</body>
+```
+
+注意，虽然在页面检查窗口中看到内容在影子 DOM 中，但这实际上只是 DOM 内容的**投射**（projection)。实际的元素仍然处于外部 DOM 中。另外除了默认槽位，还可以使用**命名槽位**来实现多个投射。这是通过匹配的`slot/name`属性对实现的。
+
+### 事件重定向
+
+如果影子 DOM 中发生了浏览器事件（例如`click`），那么浏览器需要一种方式以让父 DOM 处理事件。不过实现也需要考虑到影子 DOM 的边界。为此事件会逃出影子 DOM 并经过**事件重定向**在外部被处理。逃出后，事件就好像是由影子宿主本身而非真正的包装元素触发的一样。下面的代码演示了这个过程：
+
+```jsx
+// 创建一个元素作为影子宿主
+document.body.innerHTML = `
+  <div onclick="console.log('handled outside:', event.target)"></div>
+`
+
+// 添加影子DOM并向其中插入HTML
+document.querySelector('div').attachShadow({ mode: 'open' }).innerHTML = `
+  <button onclick="console.log('handled inside:', event.target)">Foo</button>
+`
+```
+
+注意事件重定向只会发生在影子 DOM 中实际存在的元素上。使用`<slot>`标签从外部投射进来的元素不会发生事件重定向，因为从技术上讲，这些元素仍然处于影子 DOM 外部。
+
+## 自定义元素
+
+如果你使用 JavaScript 框架，那么很可能熟悉自定义元素的概念。这是因为所有主流框架都以某种形式提供了这个特性。自定义元素为 HTML 元素引入了面向对象编程的风格。基于这种风格，可以创建自定义的、复杂的和可重用的元素，而且只要使用简单的 HTML 标签就可以创建相应的实例。
+
+### 创建自定义元素
+
+浏览器会尝试无法识别的元素所谓通用元素整合进 DOM。当然，这些元素默认也不会做任何通过 HTML 元素不能做的事。来看下面的例子，其中胡乱编的 HTML 标签会变成一个`HTMLElment`实例：
+
+```jsx
+document.body.innerHTML = `
+  <x-foo>I'm inside a nonsense element.</x-foo>
+`
+
+console.log(document.querySelector('x-foo') instanceof HTMLElement) // true
+```
+
+自定义元素在此基础上更进一步。利用自定义元素，可以在`<x-foo>`标签出现时为它定义复杂的行为，同样也可以在 DOM 中将其纳入元素生命周期管理。自定义元素要使用全局属性`customElements`，这个属性会返回`CustomElementRegistry`对象。
+
+调用`customElements.define()`方法可以创建自定义元素。下面的代码创建了一个简单的自定义元素，这个元素继承`HTMLElement`：
+
+```jsx
+class FooElement extends HTMLElement {}
+customElements.define('x-foo', FooElement)
+
+document.body.innerHTML = `
+  <x-foo>I'm inside a nonsense element.</x-foo>
+`
+
+console.log(document.querySelector('x-foo') instanceof FooElement) // true
+```
+
+> 注意自定义元素名必须至少包含一个不在名称开头和末尾的连字符，而且元素标签不能自关闭。
+
+自定义元素的威力源自类定义。例如可以通过调用自定义元素的构造函数来控制这个类在 DOM 中每个实例的行为：
+
+```jsx
+class FooElement extends HTMLElement {
+  constructor() {
+    super()
+    console.log('x-foo')
+  }
+}
+customElements.define('x-foo', FooElement)
+
+document.body.innerHTML = `
+  <x-foo></x-foo>
+  <x-foo></x-foo>
+`
+
+// x-foo
+// x-foo
+```
+
+> 注意在自定义元素的构造函数中必须始终调用`super()`。如果元素继承了`HTMLElement`或相似类型而不会覆盖构造函数，则没有必要调用`super()`，因为原型构造函数默认会做这件事。很少有创建自定义元素而不继承`HTMLElement`的。
+
+如果自定义元素继承了一个元素类，那么可以使用`is`属性和`extends`选项将标签指定为该自定义元素的实例：
+
+```jsx
+class FooElement extends HTMLDivElement {
+  constructor() {
+    super()
+    console.log('x-foo')
+  }
+}
+customElements.define('x-foo', FooElement, { extends: 'div' })
+
+document.body.innerHTML = `
+  <div is="x-foo"></div>
+  <div is="x-foo"></div>
+`
+
+// x-foo
+// x-foo
+```
+
+### 添加 Web 组件内容
+
+因为每次将自定义元素添加到 DOM 中都会调用其类构造函数，所以很容易自动给自定义元素添加子 DOM 内容。虽然不能在构造函数添加子 DOM（会抛出`DOMException`），但可以为自定义元素添加影子 DOM 并将内容添加到这个影子 DOM 中：
+
+```jsx
+class FooElement extends HTMLElement {
+  constructor() {
+    super()
+
+    this.attachShadow({ mode: 'open' })
+
+    this.shadowRoot.innerHTML = `
+      <p>I'm inside a custom element!</p>
+    `
+  }
+}
+
+customElements.define('x-foo', FooElement)
+
+document.body.innerHTML += `<x-foo></x-foo>`
+
+// <body>
+// <x-foo>
+//   #shadow-root (open)
+//     <p>I'm inside a custom elemnt!</p>
+// </x-foo>
+// </body>
+```
+
+为避免字符串模版和`innerHTML`不干净，可以使用 HTML 模板和`document.createElement()`重构这个例子：
+
+```jsx
+// 初始的HTML
+// <template id="x-foo-tpl">
+//   <p>I'm inside a custom element template!</p>
+// </template>
+
+const template = document.querySelector('#x-foo-tpl')
+
+class FooElement extends HTMLElement {
+  constructor() {
+    super()
+    this.attachShadow({ mode: 'open' })
+    this.shadowRoot.appendChild(template.content.cloneNode(true))
+  }
+}
+
+customElements.define('x-foo', FooElement)
+document.body.innerHTML += `<x-foo></x-foo>`
+```
+
+这样可以在自定义元素中实现高度的 HTML 和代码重用，以及 DOM 封装。使用这种模式能够自由创建可重用的组件而不必担心外部 CSS 污染组件的样式。
+
+### 使用自定义元素生命周期方法
+
+可以在自定义元素的不同生命周期执行代码。带有相应名称的自定义元素的实例方法会在不同生命周期阶段被调用。自定义元素有以下 5 个生命周期方法。
+
+- `constructor()`：在创建元素实例或将已有 DOM 元素升级为自定义元素时调用。
+- `connectedCallback()`：在每次将这个自定义元素实例添加到 DOM 中时调用。
+- `disconnectedCallback()`：在每次将这个自定义元素实例从 DOM 中移除时调用。
+- `attributeChangedCallback()`：在每次**可观察属性**的值发生变化时调用。在元素实例初始化时，初始值的定义也算一次变化。
+- `adoptedCallback()`：在通过`document.adoptNode()`将这个自定义元素实例移动到新文档对象时调用。
+
+下面的例子演示了这些构建、连接和断开连接的回调：
+
+```jsx
+class FooElement extends HTMLElement {
+  constructor() {
+    super()
+    console.log('ctor')
+  }
+
+  connectedCallback() {
+    console.log('connected')
+  }
+
+  disconnectedCallback() {
+    console.log('disconnected')
+  }
+}
+
+customElements.define('x-foo', FooElement)
+
+const fooElement = document.createElement('x-foo')
+// ctor
+
+document.body.appendChild(fooElement)
+// connected
+
+document.body.removeChild(fooElement)
+// disconnected
+```
+
+### 反射自定义元素属性
+
+自定义元素既是 DOM 实体又是 JavaScript 对象，因此两者之间应该同步变化。换句话说对 DOM 的修改应该反映到 JavaScript 对象，反之亦然。要从 JavaScript 对象反射到 DOM，常见的方式是使用获取函数和设置函数。下面的例子演示了在 JavaScript 对象和 DOM 之间反射`bar`属性的过程：
+
+```jsx
+document.body.innerHTML = `<x-foo></x-foo>`
+
+class FooElement extends HTMLElement {
+  constructor() {
+    super()
+    this.bar = true
+  }
+
+  get bar() {
+    return this.getAttribute('bar')
+  }
+
+  set bar(value) {
+    this.setAttribute('bar', value)
+  }
+}
+customFields.define('x-foo', FooElement)
+
+console.log(document.body.innerHTML)
+// <x-foo bar="true"></x-foo>
+```
+
+另一个方向的反射（从 DOM 到 JavaScript 对象）需要给相应的属性添加监听器。为此可以使用`observedAttributes()`获取函数让自定义元素的属性值每次改变时都调用`attributeChangedCallback()`：
+
+```jsx
+class FooElement extends HTMLElement {
+  static get observedAttributes() {
+    return ['bar']
+  }
+
+  get bar() {
+    return this.getAttribute('bar')
+  }
+
+  set bar(value) {
+    this.setAttribute('bar', value)
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue !== newValue) {
+      console.log(`${oldValue} -> ${newValue}`)
+      this[name] = newValue
+    }
+  }
+}
+
+customElements.define('x-foo', FooElement)
+
+document.body.innerHTML = `<x-foo bar="false"></x-foo>`
+// null -> false
+
+document.querySelector('x-foo')
+// false -> true
+```
+
+### 升级自定义元素
+
+并非始终可以先定义自定义元素，然后再在 DOM 中使用相应的元素标签。为解决这个先后次序问题，Web 组件在`CustomElementRegistry`上额外暴露了一些方法。这些方法可以用来检测自定义元素是否定义完成，然后可以用它来升级已有元素。
+
+如果自定义元素已经有定义，那么`CustomElementRegistry.get()`方法会返回相应自定义元素的类。类似地，`CustomElementRegistry.whenDefined()`方法会返回一个期约，当相应自定义元素有定义之后解决：
+
+```jsx
+customElements.whenDefined('x-foo').then(() => console.log('defined!'))
+
+console.log(customElements.get('x-foo'))
+// undefined
+
+customElements.define('x-foo', class {})
+// defined!
+
+console.log(customElements.get('x-foo'))
+// class FooElement {}
+```
+
+连接到 DOM 的元素在自定义元素有定义时会**自动升级**。如果想要在元素连接到 DOM 之前强制升级，可以使用`CustomElementRegistry.upgrade()`方法：
+
+```jsx
+const fooElement = document.createElement('x-foo')
+
+class FooElement extends HTMLElement {}
+customElements.define('x-foo', FooElement)
+
+console.log(fooElement instanceof FooElement) // false
+
+customElements.upgrate(fooElement) // 强制升级
+
+console.log(fooElement instanceof FooElement) // true
+```
+
+# 小结
+
+除了定义新标签，HTML5还定义了一些JavaScript API。这些API可以为开发者提供更便捷的Web接口，暴露堪比桌面应用的能力。
+
+- Atomics API用于保护代码在多线程内存访问模式下不发生资源争用。
+- `postMessage()`API支持从不同源跨文档发送消息，同时保证安全和遵循同源策略。
+- Encoding API用于实现字符串与缓冲区之间的无缝转换。
+- File API提供了发送、接收和读取大型二进制对象的可靠工具。
+- 媒体元素`<audio>`和`<video>`拥有自己的API，用于操作音频和视频。并不是每个浏览器都会支持所有媒体格式，使用`canPlayType()`方法可以检测浏览器支持情况。
+- 拖放API支持方便地将元素标识为可拖动，并在操作系统完成放置时给出回应。可以利用它创建自定义可拖动元素和放置目标
+- Notifications API提供了一种浏览器中立的方式，以此向用户展示消息通知弹层。
+- Streams API支持以全新方式读取、写入和处理数据。
+- Timing API支持以全新方式读取、写入和处理数据。
+- Web Components API为元素重用和封装技术向前迈进提供了有力支撑。
