@@ -12,6 +12,7 @@ const GROUP_TITLES = {
   'introduction-to-algorithms': '抄书系列——《算法导论》',
   'redbook-series': '抄书系列——“红宝书”',
   'non-tech': '日常杂谈',
+  'electron-docs': 'electron文档翻译系列',
 }
 
 export default function ArticleNavigator({ currArticle }) {
