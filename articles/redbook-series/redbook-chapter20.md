@@ -1,7 +1,7 @@
 ---
 title: 红宝书系列（二十）JavaScript API
 date: 2022-03-10
-cover: https://tva1.sinaimg.cn/large/008i3skNgy1gy6bw9bv2hj30jg0oo40x.jpg
+cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xwpwnc30j20e80e8glq.jpg
 ---
 
 随着 Web 浏览器能力的增加，其复杂性也在迅速增加。从很多方面来看，现代 Web 浏览器已经成为构建于诸多规范之上、集不同 API 于一身的“瑞士军刀”。浏览器规范的生态在某种程度上是混乱而无序的。一些规范如 HTML5，定义了一批增强已有标准的 API 和浏览器特性。而另一些规范如 Web Cryptography API 和 Notifications API，只为一个特性定义了一个 API。不同浏览器实现这些新 API 的情况也不同，有的会实现其中一部分，有的则干脆尚未实现。
@@ -2093,15 +2093,15 @@ console.log(fooElement instanceof FooElement) // true
 
 # 小结
 
-除了定义新标签，HTML5还定义了一些JavaScript API。这些API可以为开发者提供更便捷的Web接口，暴露堪比桌面应用的能力。
+除了定义新标签，HTML5 还定义了一些 JavaScript API。这些 API 可以为开发者提供更便捷的 Web 接口，暴露堪比桌面应用的能力。
 
-- Atomics API用于保护代码在多线程内存访问模式下不发生资源争用。
-- `postMessage()`API支持从不同源跨文档发送消息，同时保证安全和遵循同源策略。
-- Encoding API用于实现字符串与缓冲区之间的无缝转换。
-- File API提供了发送、接收和读取大型二进制对象的可靠工具。
-- 媒体元素`<audio>`和`<video>`拥有自己的API，用于操作音频和视频。并不是每个浏览器都会支持所有媒体格式，使用`canPlayType()`方法可以检测浏览器支持情况。
-- 拖放API支持方便地将元素标识为可拖动，并在操作系统完成放置时给出回应。可以利用它创建自定义可拖动元素和放置目标
-- Notifications API提供了一种浏览器中立的方式，以此向用户展示消息通知弹层。
-- Streams API支持以全新方式读取、写入和处理数据。
-- Timing API支持以全新方式读取、写入和处理数据。
-- Web Components API为元素重用和封装技术向前迈进提供了有力支撑。
+- Atomics API 用于保护代码在多线程内存访问模式下不发生资源争用。
+- `postMessage()`API 支持从不同源跨文档发送消息，同时保证安全和遵循同源策略。
+- Encoding API 用于实现字符串与缓冲区之间的无缝转换。
+- File API 提供了发送、接收和读取大型二进制对象的可靠工具。
+- 媒体元素`<audio>`和`<video>`拥有自己的 API，用于操作音频和视频。并不是每个浏览器都会支持所有媒体格式，使用`canPlayType()`方法可以检测浏览器支持情况。
+- 拖放 API 支持方便地将元素标识为可拖动，并在操作系统完成放置时给出回应。可以利用它创建自定义可拖动元素和放置目标
+- Notifications API 提供了一种浏览器中立的方式，以此向用户展示消息通知弹层。
+- Streams API 支持以全新方式读取、写入和处理数据。
+- Timing API 支持以全新方式读取、写入和处理数据。
+- Web Components API 为元素重用和封装技术向前迈进提供了有力支撑。

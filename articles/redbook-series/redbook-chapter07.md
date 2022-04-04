@@ -1,10 +1,10 @@
 ---
 title: 红宝书系列（七）迭代器与生成器
 date: 2022-02-07
-cover: https://tva1.sinaimg.cn/large/008i3skNgy1gy6bw9bv2hj30jg0oo40x.jpg
+cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xw5gatecj20xc0ildgg.jpg
 ---
 
-迭代是指按照既定顺序反复多次执行一段程序，通常会有明确的终止条件。ES6规范新增了两个高级特性：迭代器和生成器。它们的引入使得ECMAScript可以更加清晰、方便、高效地实现迭代。
+迭代是指按照既定顺序反复多次执行一段程序，通常会有明确的终止条件。ES6 规范新增了两个高级特性：迭代器和生成器。它们的引入使得 ECMAScript 可以更加清晰、方便、高效地实现迭代。
 
 # 为什么要有迭代器
 
@@ -21,7 +21,7 @@ for (let i = 1; i <= 10; i++) {
 - **在迭代之前就需要知道如何使用数据结构**，这种做法不够通用。
 - **遍历顺序并不是数据结构固有的**，通过递增索引来访问数组可以，但并非所有数据结构都适用。
 
-ES5新增了`Array.prototype.forEach()`方法，是向通用迭代需求的一次迈进（但不完美）。
+ES5 新增了`Array.prototype.forEach()`方法，是向通用迭代需求的一次迈进（但不完美）。
 
 ```javascript
 const collection = ['a', 'b', 'c']
@@ -30,7 +30,7 @@ collection.forEach(item => console.log(item))
 
 使用`forEach`可以解决单独记录数组索引取值的问题。不过，没有办法标识迭代何时终止。因此这个方法仅适用于数组，并且使用回调结构略显笨拙。
 
-在ECMAScript早期版本中，执行迭代必须使用循环或者其他辅助结构。代码量增加时会变得混乱。很多语言都通过原生语言结构解决了本问题，**开发者无须知道如何迭代就能够实现迭代操作**。这个解决方案就是**迭代器**模式。
+在 ECMAScript 早期版本中，执行迭代必须使用循环或者其他辅助结构。代码量增加时会变得混乱。很多语言都通过原生语言结构解决了本问题，**开发者无须知道如何迭代就能够实现迭代操作**。这个解决方案就是**迭代器**模式。
 
 # 迭代器模式
 
@@ -40,18 +40,18 @@ collection.forEach(item => console.log(item))
 
 > 可迭代对象不一定是集合对象，也可以仅仅是具有类似数组行为的其他数据结构，例如一个计数循环。该循环生成的值是暂时性的，但是循环本身是在执行迭代。计数循环也具有可迭代对象的行为。（临时性可迭代对象可以实现为生成器。）
 
-任何实现`Iterable`接口的数据结构都可以被实现`Iterator`接口的结构“消费”。**迭代器**是按需创建的一次性对象。每个迭代器都会关连一个**可迭代对象**，而迭代器会暴露迭代其关联可迭代对象的API。迭代器无须了解其关联的可迭代对象的结构，只需要知道如何取得连续的值。这种概念上的分离正是迭代器模式的强大之处。
+任何实现`Iterable`接口的数据结构都可以被实现`Iterator`接口的结构“消费”。**迭代器**是按需创建的一次性对象。每个迭代器都会关连一个**可迭代对象**，而迭代器会暴露迭代其关联可迭代对象的 API。迭代器无须了解其关联的可迭代对象的结构，只需要知道如何取得连续的值。这种概念上的分离正是迭代器模式的强大之处。
 
 ## 可迭代协议
 
-实现`Iterable`接口（可迭代协议）需要同时具备支持迭代的自我识别能力和创建实现`Iterator`接口的对象的能力。在ECMAScript中，这意味着该对象必须暴露一个属性作为“默认迭代器”，而且这个属性必须使用特殊的`Symbol.iterator`作为键。这个默认迭代器属性必须引用一个迭代器工厂函数，调用这个工厂函数必须返回一个新迭代器。ES6中很多内置类型都实现了`Iterable`接口：
+实现`Iterable`接口（可迭代协议）需要同时具备支持迭代的自我识别能力和创建实现`Iterator`接口的对象的能力。在 ECMAScript 中，这意味着该对象必须暴露一个属性作为“默认迭代器”，而且这个属性必须使用特殊的`Symbol.iterator`作为键。这个默认迭代器属性必须引用一个迭代器工厂函数，调用这个工厂函数必须返回一个新迭代器。ES6 中很多内置类型都实现了`Iterable`接口：
 
 - 数组
 - 字符串
 - 映射`Map`
 - 集合`Set`
 - `arguments`对象
-- `NodeList`等DOM集合类型
+- `NodeList`等 DOM 集合类型
 
 检查是否存在默认迭代器属性可以暴露这个工厂函数：
 
@@ -78,12 +78,12 @@ console.log(num[Symbol.iterator]) // undefined
 
 ## 迭代器协议
 
-前面已经提及，迭代器是一种一次性使用的对象，用于迭代与其关联的可迭代对象。迭代器API使用`next()`方法在可迭代对象中遍历数据。每次成功调用`next()`都会返回一个`IteratorResult`对象，其中包含迭代器返回的下一个值。若不调用`next()`，则无法知道迭代器的当前位置。
+前面已经提及，迭代器是一种一次性使用的对象，用于迭代与其关联的可迭代对象。迭代器 API 使用`next()`方法在可迭代对象中遍历数据。每次成功调用`next()`都会返回一个`IteratorResult`对象，其中包含迭代器返回的下一个值。若不调用`next()`，则无法知道迭代器的当前位置。
 
 `next()`方法返回的`IteratorResult`包含两个属性：`done`和`value`。`done`是一个布尔值，表示是否还可以再次调用`next()`获取下一个值；`value`包含可迭代对象的下一个值（`done`为`false`），或者`undefined`（`done`为`true`）。`done: true`状态称为“耗尽”。
 
 ```javascript
-const arr = [1, 3, 2, 3 ]
+const arr = [1, 3, 2, 3]
 const iter = arr[Symbol.iterator]()
 iter.next() // { value: 1, done: false }
 iter.next() // { value: 3, done: false }
@@ -97,10 +97,10 @@ iter.next() // { value: undefined, done: true }
 迭代器并不与可迭代对象某个时刻的快照绑定，而仅仅是使用游标来记录遍历可迭代对象的历程。如果可迭代对象在迭代期间被修改了，那么迭代器也会反映相应的变化：
 
 ```javascript
-const arr = [1, 2, 3, 4] 
-const iter = arr[Symbol.iterator]() 
+const arr = [1, 2, 3, 4]
+const iter = arr[Symbol.iterator]()
 iter.next() // { value: 1, done: false }
-iter.next() // { value: 2, done: false } 
+iter.next() // { value: 2, done: false }
 arr.splice(2, 1, 44)
 iter.next() // { value: 44, done: false }
 iter.next() // { value: 4, done: false }
@@ -120,7 +120,7 @@ class Counter {
   constructor(limit) {
     this.limit = limit
   }
-  
+
   [Symbol.iterator]() {
     let count = 1
     const limit = this.limit
@@ -131,7 +131,7 @@ class Counter {
         } else {
           return { done: true, value: undefined }
         }
-      }
+      },
     }
   }
 }
@@ -153,7 +153,7 @@ class Counter {
   constructor(limit) {
     this.limit = limit
   }
-  
+
   [Symbol.iterator]() {
     let count = 1
     const limit = this.limit
@@ -183,27 +183,27 @@ class Counter {
 
 # 生成器
 
-生成器是ES6新增的一个非常灵活的结构，拥有在一个函数块内部暂停和恢复代码执行的能力。这种能力具有很深的影响，例如使用生成器可以自定义迭代器和实现协程。
+生成器是 ES6 新增的一个非常灵活的结构，拥有在一个函数块内部暂停和恢复代码执行的能力。这种能力具有很深的影响，例如使用生成器可以自定义迭代器和实现协程。
 
 ## 生成器语法
 
 生成器的形式是一个函数，函数名称前面加上`*`表明这是一个生成器。只要是可以定义函数的地方都可以定义生成器。
 
 ```javascript
-function* generatorFn() { }
+function* generatorFn() {}
 
-const generatorFn = function* () { }
+const generatorFn = function* () {}
 
 let foo = {
-  * generatoreFn() { }
+  *generatoreFn() {},
 }
 
 class Foo {
-  * generatorFn() { }
+  *generatorFn() {}
 }
 
 class Bar {
-  static * generatorFn() { }
+  static *generatorFn() {}
 }
 ```
 
@@ -212,8 +212,8 @@ class Bar {
 调用生成器函数会产生一个**生成器对象**。生成器对象一开始处于暂停状态（suspended)。与迭代器类似，生成器对象实现了`Iterator`接口，具有`next()`方法。调用这个方法会让生成器开始或恢复执行。
 
 ```javascript
-function * generatorFn() { }
-const g = generatorFn() 
+function* generatorFn() {}
+const g = generatorFn()
 console.log(g) // Ojbect [Generator] {}
 console.log(g.next) // { value: undefined, done: true }
 ```
@@ -253,20 +253,19 @@ function* gen() {
 
 const g = gen()
 
-console.log(g.next()) 
+console.log(g.next())
 // next value
 // { value: undefined, done: true }
 
 console.log(g[Symbol.iterator]() === g)
 // true
-
 ```
 
 `value`属性是生成器函数的返回值，默认值为`undefined`。
 
 ## 通过`yield`中断执行
 
-`yield`关键字可以让生成器停止和开始执行，这也是生成器有用的地方。生成器函数在遇到yield关键字之前会正常执行。遇到之后，执行会停止，函数的作用域状态会保留。停止执行的生成器函数只有通过在生成器对象上调用`next()`方法来恢复执行。
+`yield`关键字可以让生成器停止和开始执行，这也是生成器有用的地方。生成器函数在遇到 yield 关键字之前会正常执行。遇到之后，执行会停止，函数的作用域状态会保留。停止执行的生成器函数只有通过在生成器对象上调用`next()`方法来恢复执行。
 
 > `yield`关键字有点类似于函数的中间返回语句，它生成的值会出现在`next()`的返回对象中。通过`yield`关键字退出的生成器函数会处在`done: false`状态；通过`return`关键字退出的生成器函数会处于`done: true`状态。
 
@@ -304,8 +303,8 @@ function* nTimes(n) {
   }
 }
 
-const g = nTimes(10) 
-console.log([...g]) 
+const g = nTimes(10)
+console.log([...g])
 /* 
 [
   10, 9, 8, 7, 6,
@@ -425,7 +424,7 @@ console.log(g.next())
 
 # 总结
 
-迭代是一种所有编程语言中常见的模式。ES6正式支持迭代模式，并且引入了两个新的语言特性：**迭代器**和**生成器**。
+迭代是一种所有编程语言中常见的模式。ES6 正式支持迭代模式，并且引入了两个新的语言特性：**迭代器**和**生成器**。
 
 迭代器是一个可以由任意对象实现的接口，支持连续获取对象产出的每一个值。任何实现`Iterable`接口的对象都有一个`Symbol.iterator`属性，这个属性引用默认迭代器。默认迭代器就像一个迭代器工厂，也就是一个函数，调用之后会产生一个实现`Iterator`接口的对象。
 

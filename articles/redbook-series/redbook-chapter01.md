@@ -1,7 +1,7 @@
 ---
 title: 红宝书系列（一）什么是JavaScript？
 date: 2022-01-08
-cover: https://tva1.sinaimg.cn/large/008i3skNgy1gy6bw9bv2hj30jg0oo40x.jpg
+cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xvyadkw4j20jz0iqdhq.jpg
 ---
 
 《JavaScript 高级程序设计》，也就是前端 er 们常说的红宝书，已经出到了第四版了。相比第三版，内容充实了非常多，把 ES6 和更新的 JS 改动都介绍得很好，是前端工程师打基础的必读书籍。接下来，我将按照每个章节一篇的进度完成本书阅读的系列分享，概述每个章节的内容，并且讲讲我自己读书的收获和体会。

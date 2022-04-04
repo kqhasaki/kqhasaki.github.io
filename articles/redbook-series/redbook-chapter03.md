@@ -1,7 +1,7 @@
 ---
 title: 红宝书系列（三）JavaScript语言基础
 date: 2022-01-09
-cover: https://tva1.sinaimg.cn/large/008i3skNgy1gy6bw9bv2hj30jg0oo40x.jpg
+cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xw24rfidj20zk0k0jtg.jpg
 ---
 
 JavaScript 的核心是 ECMAScript 标准所定义的一组语言基础，描述了它如何在最基本的层面上工作。ECMAScript 定义了所有涉及语法、操作符、数据类型和标准全局 API，在此基础上才可以构建复杂的解决方案。

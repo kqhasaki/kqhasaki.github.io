@@ -8,7 +8,7 @@
   transform: translate(-50%) rotate(-8deg);
   transition: 200ms;
   border-radius: 12px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
 }
 
 .img-line {

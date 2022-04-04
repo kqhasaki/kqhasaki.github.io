@@ -1,7 +1,7 @@
 ---
 title: 红宝书系列（二）HTML中的JavaScript
 date: 2022-01-09
-cover: https://tva1.sinaimg.cn/large/008i3skNgy1gy6bw9bv2hj30jg0oo40x.jpg
+cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xw0fsbufj20jg0bo0td.jpg
 ---
 
 在 JavaScript 出现之前，万维网已经在大量使用 HTML 了。为了将 JavaScript 引入网页，

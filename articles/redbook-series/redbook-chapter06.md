@@ -1,7 +1,7 @@
 ---
 title: 红宝书系列（六）集合引用类型
 date: 2022-01-17
-cover: https://tva1.sinaimg.cn/large/008i3skNgy1gy6bw9bv2hj30jg0oo40x.jpg
+cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xw3y4j70j20sg0e8wf0.jpg
 ---
 
 # Object

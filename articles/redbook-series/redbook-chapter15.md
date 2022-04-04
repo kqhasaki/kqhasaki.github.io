@@ -1,7 +1,7 @@
 ---
 title: 红宝书系列（十五）DOM扩展
 date: 2022-02-19
-cover: https://tva1.sinaimg.cn/large/008i3skNgy1gy6bw9bv2hj30jg0oo40x.jpg
+cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xwli81noj218g0p0jrx.jpg
 ---
 
 尽管 DOM API 已经相当不错，但仍然不断有标准或者专有的扩展出现，以支持更多的功能。2008 年以前，大部分浏览器对 DOM 的扩展是专有的。以后 W3C 开始着手将这些已经成为事实标准的专有扩展编制成正式规范。

@@ -1,7 +1,7 @@
 ---
 title: 红宝书系列（十七）事件
 date: 2022-02-22
-cover: https://tva1.sinaimg.cn/large/008i3skNgy1gy6bw9bv2hj30jg0oo40x.jpg
+cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xwn569lnj20lz0gqabr.jpg
 ---
 
 JavaScript 与 HTML 的交互是通过事件实现的，**事件代表文档或浏览器窗口某个有意义的时刻**。可以使用仅在事件发生时执行的**监听器**（也叫处理程序）订阅事件。在传统软件工程领域，这个模型叫“观察者模式”，其能够做到页面行为（在 JavaScript 中定义）与页面展示（在 HTML 和 CSS 中定义）的分离。

@@ -1,7 +1,7 @@
 ---
 title: 红宝书系列（十四）DOM
 date: 2022-02-12
-cover: https://tva1.sinaimg.cn/large/008i3skNgy1gy6bw9bv2hj30jg0oo40x.jpg
+cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xwa4k5h0j20rs0jg759.jpg
 ---
 
 文档对象模型（DOM, Document Object Model）是 HTML 和 XML 文档的编程接口。DOM 表示由多节点构成的文档，通过它开发者可以添加、删除和修改页面的各个部分。脱胎于网景和微软早期的动态 HTML（DHTML），**DOM 现在是真正的跨平台、语言无关的表示和操作网页的方式**。

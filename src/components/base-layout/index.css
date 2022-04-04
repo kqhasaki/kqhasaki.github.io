@@ -16,9 +16,9 @@
     --font-color-quote: #bdcbdc;
     --card-background-border-color: #2a2a2a;
     --card-box-shadow: #333;
-    --code-font-color: #e0e0e0;
-    --code-background-color: rgba(100, 100, 100, 0.2);
-    --code-border-color: rgba(100, 100, 100, 0.2);
+    --code-font-color: #c678dd;
+    --code-background-color: rgba(0, 0, 0, 0.1);
+    --code-border-color: rgba(0, 0, 0, 0.02);
     --code-block-background: rgba(0, 0, 0, 0.1);
     --navigator-hover-color: rgba(255, 255, 255, 0.1);
     --navigator-border-color: #222;
@@ -61,9 +61,9 @@
   --font-color-quote: #bdcbdc;
   --card-background-border-color: #2a2a2a;
   --card-box-shadow: #333;
-  --code-font-color: #e0e0e0;
-  --code-background-color: rgba(100, 100, 100, 0.2);
-  --code-border-color: rgba(100, 100, 100, 0.2);
+  --code-font-color: #c678dd;
+  --code-background-color: rgba(0, 0, 0, 0.1);
+  --code-border-color: rgba(0, 0, 0, 0.02);
   --code-block-background: rgba(0, 0, 0, 0.1);
   --navigator-hover-color: rgba(255, 255, 255, 0.1);
   --navigator-border-color: #222;
@@ -243,7 +243,7 @@ h3 {
   color: var(--font-color-header);
   margin-bottom: 1.8rem;
   margin-top: 3.2rem;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 2rem;
 }
 
@@ -255,7 +255,7 @@ h3 {
   color: var(--font-color-header);
   margin-bottom: 1rem;
   margin-top: 1.6rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .article-body h2 code {
@@ -266,7 +266,7 @@ h3 {
   color: var(--font-color-header);
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.8;
 }
 
@@ -278,7 +278,7 @@ h3 {
   color: var(--font-color-header);
   margin-top: 1.5rem;
   margin-bottom: 1rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .article-body h4 code {
@@ -450,5 +450,16 @@ deckgo-highlight-code {
 
   deckgo-highlight-code:hover::after {
     opacity: 1;
+  }
+}
+
+@media (max-width: 500px) {
+  .base-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 48rem;
+    padding: 2.625rem 0.8rem;
+    min-height: 100%;
+    font-size: 15px;
   }
 }
