@@ -9,10 +9,10 @@ import './index.css'
 
 const GROUP_TITLES = {
   'front-end': '前端杂谈',
-  'introduction-to-algorithms': '抄书系列——《算法导论》',
+  'algorithms-and-leetcode': '数据结构和算法',
   'redbook-series': '抄书系列——“红宝书”',
   'non-tech': '日常杂谈',
-  'electron-docs': 'electron文档翻译系列',
+  'electron-docs': 'electron',
 }
 
 export default function ArticleNavigator({ currArticle }) {
