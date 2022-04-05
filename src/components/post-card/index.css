@@ -5,6 +5,7 @@
   position: absolute;
   bottom: 0;
   left: 50%;
+  background-color: var(--background-color);
   transform: translate(-50%) rotate(-8deg);
   transition: 200ms;
   border-radius: 12px;

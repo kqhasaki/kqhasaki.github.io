@@ -19,7 +19,7 @@
 
 .modal-content {
   position: relative;
-  background: var(--card-background-color);
+  background: var(--background-color);
   padding: 1.5rem;
   border-radius: 1rem;
   border: 1px solid var(--card-background-border-color);
