@@ -1,19 +1,18 @@
 .table-of-content {
-  width: 280px;
+  width: 20%;
   height: 100%;
   position: fixed;
   user-select: none;
-  left: 50%;
-  top: 50%;
-  transform: translateX(25rem) translateY(-50%);
+  right: 0;
+  top: 0;
   border-left: 1px solid var(--card-background-border-color);
   background-color: var(--background-color);
   overflow-y: auto;
-  padding: 1.5rem 1.5rem 3.5rem 1.5rem;
+  padding: 2.5rem 2rem 2.5rem 1.2rem;
   font-size: 15px;
 }
 
-@media (max-width: 810px) {
+@media (max-width: 900px) {
   .table-of-content {
     display: none;
   }

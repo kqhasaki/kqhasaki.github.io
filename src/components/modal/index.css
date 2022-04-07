@@ -23,7 +23,8 @@
   padding: 1.5rem;
   border-radius: 1rem;
   border: 1px solid var(--card-background-border-color);
-  width: 40rem;
+  width: 50vw;
+  min-width: 600px;
 }
 
 .modal-content-wrapper {
@@ -43,4 +44,11 @@
 
 .modal-closer:hover {
   color: var(--blue);
+}
+
+@media (max-width: 900px) {
+  .modal-content {
+    width: 90%;
+    min-width: 90%;
+  }
 }

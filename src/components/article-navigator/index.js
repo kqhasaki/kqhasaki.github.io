@@ -15,6 +15,8 @@ const GROUP_TITLES = {
   'electron-docs': 'electron',
 }
 
+const WIDTH = 900
+
 export default function ArticleNavigator({ currArticle }) {
   const [visible, setVisible] = useState(true)
 
@@ -44,10 +46,10 @@ export default function ArticleNavigator({ currArticle }) {
 
   useEffect(() => {
     document.body.style.overflow =
-      visible && document.body.clientWidth < 810 ? 'hidden' : 'initial'
+      visible && document.body.clientWidth < WIDTH ? 'hidden' : 'initial'
 
     const resizeHandler = debounce(() => {
-      if (window.innerWidth >= 810) {
+      if (window.innerWidth >= WIDTH) {
         document.body.style.overflow = 'initial'
         setVisible(true)
       } else {
@@ -64,7 +66,7 @@ export default function ArticleNavigator({ currArticle }) {
   }, [visible])
 
   useEffect(() => {
-    if (document.body.clientWidth < 810) {
+    if (document.body.clientWidth < WIDTH) {
       setVisible(false)
     }
   }, [])
