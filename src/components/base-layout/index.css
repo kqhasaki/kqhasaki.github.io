@@ -22,6 +22,7 @@
     --code-block-background: rgba(0, 0, 0, 0.1);
     --navigator-hover-color: rgba(255, 255, 255, 0.1);
     --navigator-border-color: #222;
+    --table-border-color: #303030;
   }
 }
 
@@ -45,6 +46,7 @@
     --code-block-background: #313131;
     --navigator-hover-color: rgba(0, 0, 0, 0.08);
     --navigator-border-color: #ddd;
+    --table-border-color: #ededed;
   }
 }
 
@@ -67,6 +69,7 @@
   --code-block-background: rgba(0, 0, 0, 0.1);
   --navigator-hover-color: rgba(255, 255, 255, 0.1);
   --navigator-border-color: #222;
+  --table-border-color: #303030;
 }
 
 .light {
@@ -88,6 +91,7 @@
   --code-block-background: #313131;
   --navigator-hover-color: rgba(0, 0, 0, 0.08);
   --navigator-border-color: #ddd;
+  --table-border-color: #ededed;
 }
 
 html,
@@ -163,6 +167,7 @@ header img {
   margin-left: auto;
   margin-right: auto;
   width: 60%;
+  max-width: 1080px;
   padding: 2.625rem 1.3125rem;
   min-height: 100%;
 }
@@ -402,7 +407,7 @@ table,
 th,
 td {
   padding: 0.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--table-border-color);
   overflow: auto;
 }
 
