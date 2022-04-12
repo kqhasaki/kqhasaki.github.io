@@ -971,4 +971,440 @@ console.log(new Request('https://foo.com', { method: 'POST' }))
 
 ### 克隆`Request`对象
 
-Fetch API提供了两种不太一样的方式用于创建`Request`对象的副本：使用`Request`构造函数和使用`clone()`方法。
+Fetch API 提供了两种不太一样的方式用于创建`Request`对象的副本：使用`Request`构造函数和使用`clone()`方法。
+
+将`Request`实例作为`Input`参数传给`Request`构造函数，会得到该请求的一个副本：
+
+```jsx
+const r1 = new Request('https://foo.com')
+const r2 = new Request(r1)
+
+console.log(r2.url) // https://foo.com/
+```
+
+如果再传入`init`对象，则`init`对象的值会覆盖源对象中同名的值：
+
+```jsx
+const r1 = new Request('https://foo.com')
+const r2 = new Request(r1, { method: 'POST' })
+
+console.log(r1.method) // GET
+console.log(r2.method) // POST
+```
+
+这种克隆方式并不总能得到一模一样的副本。最明显的是，第一个请求的请求体会被标记为“已使用”：
+
+```jsx
+const r1 = new Request('https://foo.com', { method: 'POST', body: 'foobar' })
+const r2 = new Request(r1)
+
+console.log(r1.bodyUsed) // true
+console.log(r2.bodyUsed) // false
+```
+
+如果源对象与创建的新对象不同源，则`referrer`属性会被清除。此外，如果源对象的`mode`为`navigate`，则会被转换为`same-origin`。
+
+第二种克隆`Request`对象的方法是使用`clone()`方法，这个方法会创建一模一样的副本，任何值都不会被覆盖。与第一种方式不同，这种方法不会将任何请求的请求体标记为“已使用”：
+
+```jsx
+const r1 = new Request('https://foo.com', { method: 'POST', body: 'foobar' })
+const r2 = r1.clone()
+
+console.log(r1.url) // https://foo.com/
+console.log(r2.url) // https://foo.com/
+
+console.log(r1.bodyUsed) // false
+console.log(r2.bodyUsed) // false
+```
+
+如果请求对象的`bodyUsed`属性为`true`（即请求体已被读取），那么上述任何一种方式都不能用来创建这个对象的副本。在请求体被读取之后再克隆会导致抛出`TypeError`。
+
+```jsx
+const r = new Request('https://foo.com')
+r.clone()
+new Request(r) // 没有错误
+
+r.text() // 设置bodyUsed为true
+r.clone()
+// TypeError: Failed to execute 'clone' on 'Request': Request body is already used
+
+new Request(r)
+// TypeError: Failed to construct 'Request': Cannot construct a Request with a Requset object that has already been used.
+```
+
+### 在`fetch()`中使用`Request`对象
+
+`fetch()`和`Request`构造函数拥有相同的函数签名并不是巧合。在调用`fetch()`时，可以传入已经创建好的`Request`实例而不是 URL。与`Request`构造函数一样，传给`fetch()`的`init`对象会覆盖传入请求对象的值：
+
+```jsx
+const r = new Request('https://foo.com')
+
+// 向foo.com发送GET请求
+fetch(r)
+
+// 向foo.com发送POST请求
+fetch(r, { method: 'POST' })
+```
+
+`fetch()`会在内部克隆传入的`Request`对象。与克隆`Request`一样，`fetch()`也不能拿请求体已经用过的`Request`对象来发送请求：
+
+```jsx
+const r = new Request('https://foo.com', { method: 'GET', body: 'foobar' })
+r.text()
+
+fetch(r)
+// TypeError: Cannot construct a Request with a Request object that has already been used.
+```
+
+关键在于，通过`fetch()`使用`Request`会将请求体标记为已使用。也就是说，有请求体的`Request`只能在一次`fetch`中使用。（不包含请求体的请求不受此限制。）演示如下：
+
+```jsx
+const r = new Request('https://foo.com', { method: 'POST', body: 'foobar' })
+fetch(r)
+fetch(r)
+// TypeError: Cannot contruct a Request with a Request object that has already been used.
+```
+
+要想基于包含请求体的相同`Request`对象多次调用`fetch()`，必须在第一次发送`fetch()`请求前调用`clone()`：
+
+```jsx
+const r = new Request('https://foo.com', { method: 'POST', body: 'foobar' })
+
+fetch(r.clone())
+fetch(r.clone())
+fetch(r)
+// 3个都会成功
+```
+
+## `Response`对象
+
+顾名思义，`Response`对象是获取资源响应的接口。这个接口暴露了响应的相关信息，也暴露了使用响应体的不同方式。
+
+### 创建`Response`对象
+
+可以通过构造函数初始化`Response`对象且不需要参数。此时响应实例的属性均为默认值，因为它并不代表实际的 HTTP 响应：
+
+```jsx
+const r = new Response()
+console.log(r)
+// Response {
+//   body: (...)
+//   bodyUsed: false
+//   headers: Headers {}
+//   ok: true
+//   redirected: false
+//   status: 200
+//   statusText: 'OK'
+//   type: 'default'
+//   url: ''
+// }
+```
+
+`Response`构造函数接收一个可选的`body`参数。这个`body`可以是`null`，等同于`fetch()`参数`init`中的`body`。还可以接收一个可选的`init`对象，这个对象可以包含下表所列的键和值。
+
+|      键      |                                             值                                             |
+| :----------: | :----------------------------------------------------------------------------------------: |
+|  `headers`   | 必须是`Headers`对象实例或包含字符串键/值对的常规对象实例；默认为没有键/值对的`Headers`对象 |
+|   `status`   |                           表示 HTTP 响应状态码的整数；默认为 200                           |
+| `statusText` |                         表示 HTTP 响应状态的字符串；默认为空字符串                         |
+
+可以像下面这样使用`body`和`init`来构建`Response`对象：
+
+```jsx
+const r = new Response('foobar', {
+  status: 418,
+  statusText: `I'm a teapot`,
+})
+console.log(r)
+// Reponse {
+//   body: (...)
+//   bodyUsed: false
+//   headers: Headers {}
+//   ok: false
+//   redirected: false
+//   status: 418
+//   statusText: "I'm a teapot"
+//   type: "default"
+//   url: ""
+// }
+```
+
+大多数情况下，产生`Response`对象的主要方式是调用`fetch()`，它返回一个最后解决为`Response`对象的期约，这个`Response`对象代表实际的 HTTP 响应。下面的代码展示了这样得到的`Response`对象：
+
+```jsx
+fetch('https://foo.com').then(response => {
+  console.log(response)
+})
+// Response {
+//   body: (...)
+//   bodyUsed: false
+//   headers: Headers {}
+//   ok: true
+//   redirected: false
+//   status: 200
+//   statusText: "OK"
+//   type: "basic"
+//   url: "https://foo.com/"
+// }
+```
+
+`Response`类还有两个用于生成`Response`对象的静态方法：`Response.redirect()`和`Response.error()`。前者接收一个 URL 和一个重定向状态码（301、302、303、307 或 308），或返回重定向的`Response`对象：
+
+```jsx
+console.log(Response.redirect('https://foo.com', 301))
+// Response {
+//   body: (...)
+//   bodyUsed: false
+//   headers: Headers {}
+//   ok: false
+//   redirected: false
+//   status: 301
+//   statusText: ""
+//   type: "default"
+//   url: ""
+// }
+```
+
+提供的状态必须对应重定向，否则会抛出错误：
+
+```jsx
+Response.redirect('https://foo.com', 200)
+// RangeError: Failed to execute 'redirect' on 'Response': Invalid status code
+```
+
+另一个静态方法`Response.error()`用于产生表示网络错误的`Response`对象（网络错误会导致`fetch()`期约被拒绝）。
+
+```jsx
+console.log(Response.error())
+// Response {
+//   body: (...)
+//   bodyUsed: false
+//   headers: Headers {}
+//   ok: false
+//   redirected: false
+//   status: 0
+//   statusText: ""
+//   type: "error"
+//   url: ""
+// }
+```
+
+### 读取响应状态信息
+
+`Response`对象包含一组只读属性，描述了请求完成后的状态，如下表示：
+
+|     属性     |                                                                                                                                          值                                                                                                                                           |
+| :----------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|  `headers`   |                                                                                                                                响应包含的`Headers`对象                                                                                                                                |
+|     `ok`     |                                                                                                 布尔值，表示 HTTP 状态码的含义；200 ～ 299 的状态码返回`true`；其他状态码返回`false`                                                                                                  |
+| `redirected` |                                                                                                                        布尔值，表示响应是否至少经过一次重定向                                                                                                                         |
+|   `status`   |                                                                                                                             整数，表示响应的 HTTP 状态码                                                                                                                              |
+| `statusText` |                                                                 字符串，包含对 HTTP 状态码的正式描述。这个值派生自可选的 HTTP Reason-Phrase 字段，因此如果服务器以 Reason-Phrase 为由拒绝响应，这个字段可能是空字符串                                                                 |
+|    `type`    | 字符串，表示响应类型；可能是下列字符串之一：1）`basic`：表示标准的同源响应；2）`cors`：表示标准的跨源响应；3）`error`：表示响应对象是通过`Response.error()`创建的；4）`opaque`：表示`no-cors`的`fetch()`返回的跨源响应；5）`opaqueredirect`：表示对`redirect`设置为`manual`的请求响应 |
+|    `url`     |                                                                                                    包含响应 URL 的字符串。对于重定向响应，这是最终的 URL，非重定向响应就是它产生的                                                                                                    |
+
+### 克隆`Response`对象
+
+克隆`Response`对象的主要方式是使用`clone()`方法，这个方法会创建一个一模一样的副本，不会覆盖任何值。这样不会将任何请求的请求体标记为已使用：
+
+```jsx
+const r1 = new Response('foobar')
+const r2 = r.clone()
+
+console.log(r1.bodyUsed) // false
+console.log(r2.bodyUsed) // false
+```
+
+如果响应对象的`bodyUsed`属性为`true`（即响应体已被读取），则不能再创建这个对象的副本。在响应体被读取之后再克隆会导致抛出`TypeError`。
+
+```jsx
+const r = new Response('foobar')
+r.clone()
+// 没有错误
+
+r.text() // 设置bodyUsed为true
+
+r.clone()
+// TypeError: Failed to execute 'clone' on 'Response': Response body is already used
+```
+
+有响应体的`Response`对象只能读取一次。（不包含响应体的`Response`对象不受此限制。）例如：
+
+```jsx
+const r = new Response('foobar')
+r.text().then(console.log) // foobar
+r.text().then(console.log)
+// TypeError: Failed to execute 'text' on 'Response': body stream is locked
+```
+
+要多次读取包含响应体的同一个`Response`对象，必须在第一次读取前调用`clone()`：
+
+```jsx
+const r = new Response('foobar')
+
+r.clone().text().then(console.log) // foobar
+r.clone().text().then(console.log) // foobar
+r.text().then(console.log) // foobar
+```
+
+此外通过创建带有原始响应体的`Response`实例，可以执行伪克隆操作。关键是这样不会把第一个`Response`实例标记为已读，而是会在两个响应之间共享：
+
+```jsx
+const r1 = new Response('foobar')
+const r2 = new Response(r1.body)
+
+console.log(r1.bodyUsed) // false
+console.log(r2.bodyUsed) // false
+
+r2.text().then(console.log) // foobar
+r1.text().then(console.log)
+// TypeError: Failed to execute 'text' on 'Response': body stream is locked
+```
+
+## `Request`、`Response`和`Body`混入
+
+`Request`和`Response`都使用了 Fetch API 的`Body`混入，以实现两者承担有效载荷的能力。这个混入为两个类提供了只读的`body`属性（实现为`ReadableSTream`）、只读的`bodyUsed`布尔值（表示`body`流是否已读）和一组方法，用于从流中读取内容，并将结果转换为某种 JavaScript 对象类型。
+
+通常，将`Request`和`Response`主体作为流来使用主要有两个原因。一个原因是有效载荷的大小可能会导致网络延迟，另一个原因是流 API 本身在处理有效载荷方面是有优势的。除此之外，最好是一次性获取资源主体。
+
+`Body`混入提供了 5 个方法，用于将`ReadableStream`转存到缓冲区的内存里，将缓冲区转换为某种 JavaScript 对象类型，以及通过期约来产生结果。在解决之前，期约会等待主体流报告完成及缓冲被解析。这意味着客户端必须等待响应的资源完全加载才能访问其内容。
+
+### `Body.text()`
+
+`Body.text()`方法返回期约，解决为将缓冲区转存得到的 UTF-8 个格式字符串。下面的代码展示了在`Response`对象上使用`Body.text()`：
+
+```jsx
+fetch('https://foo.com')
+  .then(response => response.text())
+  .then(console.log)
+```
+
+以下代码展示了在`Request`对象上使用`Body.text()`：
+
+```jsx
+const request = new Request('https://foo.com', {
+  method: 'POST',
+  body: 'barbazqux',
+})
+
+request.text().then(console.log)
+// barbazqux
+```
+
+### `Body.json()`
+
+`Body.json()`方法返回期约，解决为将缓冲区转存得到的 JSON。下面的代码展示了在`Response`对象上使用`Body.json()`：
+
+```jsx
+fetch('https://foo.com/foo.json')
+  .then(response => response.json())
+  .then(console.log)
+
+// { "foo": "bar" }
+```
+
+以下代码展示了在`Request`对象上使用`Body.json()`：
+
+```jsx
+const request = new Request('https://foo.com', {
+  method: 'POST',
+  body: JSON.stringify({ bar: 'baz' }),
+})
+
+request.json().then(console.log)
+// { "bar": 'baz'}
+```
+
+### `Body.formData()`
+
+浏览器可以将`FormData`对象序列化/反序列化为主体。例如：
+
+```jsx
+const myFormData = new FormData()
+myFormData.append('foo', 'bar')
+```
+
+在通过 HTTP 传送时，WebKit 浏览器会将其序列化为以下内容：
+
+```
+------WebKitFormBoundarydR9Q2kOzE6nbN7eR
+Content-Disposition: form-data; name="foo"
+bar
+------WebKitFormBoundarydR9Q2kOzE6nbN7eR--
+```
+
+`Body.formData()`方法返回期约，解决为将缓冲区转存得到的`FormData`实例。下面的代码展示了在`Response`对象上使用`Body.formData()`：
+
+```jsx
+fetch('https://foo.com/form-data')
+  .then(response => response.formData())
+  .then(formData => console.log(formData.get('foo')))
+//bar
+```
+
+下面例子展示了在`Request`对象上使用`Body.formData()`：
+
+```jsx
+const myFormData = new FormData()
+myFormData.append('foo', 'bar')
+
+const request = new Request('https://foo.com', {
+  method: 'POST',
+  body: myFormData,
+})
+
+request.formData().then(formData => console.log(formData.get('foo')))
+// bar
+```
+
+### `Body.arrayBuffer()`
+
+有时候，可能需要以原始二进制格式查看和修改主体。为此，可以使用`Body.arrayBuffer()`将主体内容转换为`ArrayBuffer`实例。`Body.arrayBuffer()`方法返回期约，解决为将缓冲区转存得到的`ArrayBuffer`实例。下面的代码演示了在`Response`对象上使用`Body.arrayBuffer()`：
+
+```jsx
+fetch('https://foo.com')
+  .then(response => response.arrayBuffer())
+  .then(console.log)
+
+// ArrayBuffer (...) {}
+```
+
+以下代码展示了在`Request`对象上使用`Body.arrayBuffer()`：
+
+```jsx
+const request = new Request('https://foo.com', {
+  method: 'POST',
+  body: 'abcdefg',
+})
+
+request.arrayBuffer().then(buf => console.log(new Int8Array(buf)))
+// Int8Array(7) [97, 98, 99, 100, 101, 102, 103]
+```
+
+### `Body.blob()`
+
+有时候，可能需要以原始二进制格式使用主体，不用查看和修改。为此可以使用`Body.blob()`将主体内容转换为`Blob`实例。`Body.blob()`方法返回期约，解决为将缓冲区转存得到的`Blob`实例。下面的代码展示了在`Response`对象上使用`Body.blob()`：
+
+```jsx
+fetch('https://foo.com')
+  .then(response => response.blob())
+  .then(console.log)
+
+// Blob (...) {size:..., type: "..."}
+```
+
+以下代码展示了在`Request`对象上使用`Body.blob()`：
+
+```jsx
+const request = new Request('https://foo.com', {
+  method: 'POST',
+  body: 'abcdefg',
+})
+
+request.blob().then(console.log)
+// Blob(7) {size: 7, type: 'text/plain;charset=utf-8'}
+```
+
+### 一次性流
+
+因为`Body`混入是构建在`ReadableStream`之上的，所以主体流只能使用一次。这意味着所有主体混入方法都只能调用一次，再次调用就会抛出错误。
