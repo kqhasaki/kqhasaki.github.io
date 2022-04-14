@@ -1408,3 +1408,235 @@ request.blob().then(console.log)
 ### 一次性流
 
 因为`Body`混入是构建在`ReadableStream`之上的，所以主体流只能使用一次。这意味着所有主体混入方法都只能调用一次，再次调用就会抛出错误。
+
+```jsx
+fetch('https://foo.com').then(response =>
+  response.blob().then(() => response.blob())
+)
+
+// TypeError: Failed to execute 'blob' on 'Response': body stream is locked
+const request = new Request('https://foo.com', {
+  method: 'POST',
+  body: 'foobar',
+})
+
+request.blob().then(() => request.blob())
+//TypeError: Failed to execute 'blob' on 'Request': body stream is locked
+```
+
+即使是在读取流的过程中，所有这些方法也会在它们被调用时给`ReadableStream`枷锁，以阻止其他读取器访问：
+
+```jsx
+fetch('https://foo.com').then(response => {
+  response.blob() // 第一次调用给流加锁
+  response.blob() // 第二次调用再次加锁会失败
+})
+
+// TypeError: Failed to execute 'blob' on 'Response': body stream is locked
+const request = new Request('https://foo.com', {
+  method: 'POST',
+  body: 'foobar',
+})
+
+request.blob() // 第一次调用给流加锁
+request.blob() // 第二次调用再次加锁会失败
+// TypeError: Failed to execute 'blob' on 'Request': body stream is locked
+```
+
+作为`Body`混入的一部分，`bodyUsed`布尔值属性表示`ReadableStream`是否已**摄受**（disturbed），意思是读取器是否已经在流上加了锁。这不一定表示流已经被完全读取。下面的代码演示了这个属性：
+
+```jsx
+const request = new Request('https://foo.com', {
+  method: 'POST',
+  body: 'foobar',
+})
+const response = new Response('foobar')
+
+console.log(request.bodyUsed) // fasle
+console.log(request.bodyUsed) // false
+
+request.text().then(console.log) // foobar
+request.text().then(console.log) // foobar
+
+console.log(request.bodyUsed) // true
+console.log(request.bodyUsed) // true
+```
+
+### 使用`ReadableStream`主体
+
+JavaScript 编程逻辑很多时候会将访问网络作为原子操作，比如请求是同时创建和发送的，响应数据也是以统一的格式一次性暴露出来的。这种约定隐藏了底层的混乱，让涉及网络的代码变得很清晰。
+
+从 TCP/IP 角度来看，传输的数据是以分块形式抵达端点的，而且速度收到网速的限制。接收端点会为此分配内存，并将收到的块写入内存。Fetch API 通过`ReadableStream`支持在这些块到达时就实时读取和操作这些数据。
+
+正如 Stream API 所定义的，`ReadableStream`暴露了`getReader()`方法，用于产生`ReadableStreamDefaultReader`，这个读取器可以用于在数据到达时异步获取数据块。数据流的格式是`Uint8Array`。
+
+下面的代码调用了读取器的`read()`方法，把最早可用的块打印了出来：
+
+```jsx
+fetch('https://fetch.spec.whatwg.org')
+  .then(response => response.body)
+  .then(body => {
+    const reader = body.getReader()
+
+    console.log(reader) // ReadableStreamDefaultReader {}
+
+    reader.read().then(console.log)
+  })
+
+// { value: Uint8Array{}, done: false }
+```
+
+在随着数据流的到来取得整个有效载荷，可以向下面这样递归调用`read()`方法：
+
+```jsx
+fetch('https://fetch.spec.whatwg.org')
+  .then(response => response.body)
+  .then(body => {
+    const reader = body.getReader()
+
+    function processNextChunk({ value, done }) {
+      if (done) {
+        return
+      }
+      console.log(value)
+
+      return reader.read().then(processNextChunk)
+    }
+
+    return reader.read().then(processNextChunk)
+  })
+
+// { value: Uint8Array{}, done: false }
+// { value: Uint8Array{}, done: false }
+// { value: Uint8Array{}, done: false }
+// ...
+```
+
+异步函数非常适合这样的`fetch()`操作。可以通过使用`async/await`将上面的递归调用打平：
+
+```jsx
+fetch('https://fetch.spec.whatwg.org')
+  .then(response => response.body)
+  .then(async function (body) {
+    const reader = body.getReader()
+
+    while (true) {
+      const { value, done } = await reader.read()
+
+      if (done) {
+        break
+      }
+
+      console.log(value)
+    }
+  })
+
+// { value: Uint8Array{}, done: false }
+// { value: Uint8Array{}, done: false }
+// { value: Uint8Array{}, done: false }
+// ...
+```
+
+另外，`read()`方法也可以直接封装到`Iterable`接口中。因此可以在`for-await-of`循环中方便地实现这种转换：
+
+```jsx
+fetch('https://fetch.spec.whatwg.org')
+  .then(response => response.body)
+  .then(async function (body) {
+    const reader = body.getReader()
+
+    const asyncIterable = {
+      [Symbol.asyncIterator]() {
+        return {
+          next() {
+            return reader.read()
+          },
+        }
+      },
+    }
+
+    for await (const chunk of asyncIterable) {
+      console.log(chunk)
+    }
+  })
+
+// { value: Uint8Array{}, done: false }
+// { value: Uint8Array{}, done: false }
+// { value: Uint8Array{}, done: false }
+// ...
+```
+
+通过将异步逻辑包装到一个生成器函数中，还可以进一步简化代码。并且这个实现通过支持读取部分流也变得更稳健。如果流因为耗尽或错误而终止，读取器会释放锁，以允许不同的流读取器继续操作：
+
+```jsx
+async function* streamGenerator(stream) {
+  const reader = stream.getReader()
+
+  try {
+    while (true) {
+      const { value, done } = await reader.read()
+
+      if (done) {
+        break
+      }
+
+      yield value
+    }
+  } finally {
+    reader.releaseLock()
+  }
+}
+
+fetch('https://fetch.spec.whatwg.org')
+  .then(response => response.body)
+  .then(async function (body) {
+    for await (const chunk of streamGenerator(body)) {
+      console.log(chunk)
+    }
+  })
+```
+
+在这些例子中，当读取完`Uint8Array`块之后，浏览器会将其标记为可以被垃圾回收。对于需要在不连续的内存中连续检查大量数据的情况，这样可以节省很多内存空间。
+
+缓冲区的大小，以及浏览器是否等待缓冲区被填充后才将其推到流中，要根据 JavaScript 运行时的实现。浏览器会控制等待分配的缓冲区被填满，同时会尽快将缓冲区数据（有时候可能未填充数据）发送到流。
+
+不同浏览器中分块大小可能不同，这取决于带宽和网络延迟。此外，浏览器如果决定不等待网络，也可以将部分填充的缓冲区发送到流。最终，我们的代码要准备好处理以下情况：
+
+- 不同大小的`Uint8Array`块
+- 部分填充的`Uint8Array`块
+- 块到达的时间间隔不确定
+
+默认情况下，块是以`Uint8Array`格式抵达的。因为块的分割不会考虑编码，所以会出现某些值作为多字节字符被分散到两个连续块中的情况。手动处理这些情况是很麻烦的，但很多时候可以使用 Encoding API 的可插拔方案。
+
+要将`Uint8Array`转换为可读文本，可以将缓冲区传给`TextDecoder`，返回转换后的值。通过设置`stream: true`，可以将之前的缓冲区保留在内存，从而让跨越两个块的内容能够被正确解码。
+
+# Beacon API
+
+为了把尽量多的页面信息传到服务器，很多分析工具需要在页面生命周期中尽量晚的时候向服务器发送遥测或分析数据。因此，理想的情况下是通过浏览器的`unload`事件发送网络请求。这个事件表示用户要离开当前页面，不会再生成别的有用信息了。
+
+再`unload`事件触发时，分析工具要停止收集信息并把收集到的数据发给服务器。这时候有一个问题，因为`unload`事件对浏览器意味着没有理由再发送任何结果未知的网络请求（因为页面都要被销毁了）。例如，在`unload`事件处理程序中创建的任何异步请求都会被浏览器取消。为此，异步`XMLHttpRequest`或`fetch()`不合适这个任务。分析工具可以使用同步`XMLHttpRequest`强制发送请求，但这样做会导致用户体验问题。浏览器会因为要等待`unload`事件处理程序完成而延迟导航到下一个页面。
+
+为解决这个问题，W3C 引入了补充性的 Beacon API。这个 API 给`navigator`对象增加了一个`sendBeacon()`方法。这个简单的方法接收一个 URL 和一个数据有效载荷参数，并会发送一个 POST 请求。可选的数据有效载荷参数有`ArrayBufferView`、`Blob`、`DOMString`、`FormData`实例。如果请求成功进入了最终要发送的任务队列，则这个方法返回`true`，否则返回`false`。
+
+可以像下面这样使用这个方法：
+
+```jsx
+// 发送POST请求
+// URL: 'https://example.com/analytics-reporting-url'
+// 请求负载: '{ foo: 'bar' }'
+
+navigator.sendBeacon(
+  'https://example.com/analytics-reporting-url',
+  '{ foo: "bar" }'
+)
+```
+
+这个方法虽然看起来只不过是 POST 请求的一个语法糖，但它有几个重要的特性：
+
+- `sendBeacon()`并不是只能在页面生命周期末尾使用，而是任何时候都可以使用。
+- 调用`sendBeacon()`后，浏览器会把请求添加到一个内部的请求队列。浏览器会主动地发送队列中的请求。
+- 浏览器保证在原始页面已经关闭的情况下也会发送请求。
+- 状态码、超时和其他网络原因造成的失败完全是不透明的，不能通过编程方式处理。
+- 信标（beacon）请求会携带调用`sendBeacon()`时所有相关的 cookie。
+
+# Web Socket

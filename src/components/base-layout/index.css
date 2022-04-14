@@ -1,5 +1,6 @@
 :root {
-  --deckgo-highlight-code-font-family: Menlo, Monaco, Consolas;
+  --deckgo-highlight-code-font-family: source-code-pro, Menlo, Monaco, Consolas,
+    Courier New, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -121,7 +122,7 @@ ol {
 
 ol li {
   list-style-type: decimal;
-  margin: 0.4rem 0 0.4rem 2rem;
+  margin: 0.6rem 0 0.6rem 2rem;
 }
 
 p {
@@ -131,7 +132,7 @@ p {
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   margin-bottom: 0.7rem;
-  line-height: 1.7rem;
+  line-height: 1.7;
   margin-top: 0.7rem;
 }
 
@@ -173,7 +174,7 @@ header img {
 }
 
 .nav-link {
-  font-size: 2rem;
+  font-size: 2.4rem;
   color: var(--font-color);
   margin: 0 1rem 0 1rem;
   cursor: pointer;
@@ -185,7 +186,7 @@ header img {
 }
 
 .nav-link > img {
-  height: 2rem;
+  height: 2.2rem;
   border-radius: 50%;
   transform: scale(1.2);
 }
@@ -216,9 +217,9 @@ header img {
 
 .article-body .article-title {
   text-align: center;
-  font-size: 1.8rem;
-  font-weight: 500;
-  margin-bottom: 1.5rem;
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
 }
 
 .article-body strong {
@@ -244,50 +245,59 @@ h3 {
   cursor: pointer;
 }
 
+.article-body p {
+  font-size: 17px;
+  margin-top: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+
 .article-body h1 {
   color: var(--font-color-header);
   margin-bottom: 1.8rem;
-  margin-top: 3.2rem;
-  font-weight: 500;
-  font-size: 1.8rem;
+  margin-top: 3.5rem;
+  font-weight: bold;
+  font-size: 2rem;
 }
 
 .article-body h1 code {
-  font-size: 1.6rem;
+  font-size: 2rem;
 }
 
 .article-body h2 {
   color: var(--font-color-header);
   margin-bottom: 1rem;
-  margin-top: 1.4rem;
-  font-weight: 500;
+  margin-top: 2.5rem;
+  font-weight: bold;
+  font-size: 1.6rem;
 }
 
 .article-body h2 code {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 .article-body h3 {
   color: var(--font-color-header);
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
+  margin-top: 1.8rem;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: bold;
   line-height: 1.8;
 }
 
 .article-body h3 code {
-  font-size: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .article-body h4 {
   color: var(--font-color-header);
   margin-top: 1.5rem;
   margin-bottom: 1rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .article-body h4 code {
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .article-body h1:first-child {
@@ -312,18 +322,9 @@ h3 {
   margin-bottom: 0.3rem;
 }
 
-.article-body h3::before {
-  background: var(--blue);
-  content: '';
-  display: block;
-  height: 1.5px;
-  width: 54px;
-  margin-top: 0.1rem;
-}
-
 .article-body code {
   font-family: Menlo, Monaco, Consolas, monospace;
-  font-size: 14px;
+  font-size: 15px;
   border: 1px solid var(--code-border-color);
   padding: 1px 4px 1px 4px;
   margin: 0 2px 0 2px;
@@ -351,17 +352,17 @@ h3 {
   object-fit: cover;
   border-radius: 16px;
   display: block;
-  margin: 0 auto 0 auto;
+  margin: 18px auto 20px auto;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 .article-body img {
-  width: 100%;
+  width: 85%;
   min-width: 330px;
   object-fit: cover;
   border-radius: 12px;
   display: block;
-  margin: 0 auto 0 auto;
+  margin: 18px auto 18px auto;
 }
 
 .article-body ul {
@@ -370,7 +371,7 @@ h3 {
 
 .article-body ul li {
   list-style-type: disc;
-  margin: 0.4rem 0 0.4rem 2rem;
+  margin: 0.6rem 0 0.6rem 2rem;
 }
 
 .article-body a {

@@ -10,7 +10,7 @@
   background-color: var(--background-color);
   overflow-y: auto;
   padding: 2.5rem 1.2rem 2.5rem 2rem;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .article-navigator .article-navigator-toggler {
@@ -71,7 +71,7 @@
 }
 
 .article-navigator h4 {
-  font-size: 15px;
+  font-size: 16px;
   margin-bottom: 0.5rem;
   margin-top: 1rem;
 }
@@ -105,7 +105,7 @@
   margin: 0;
   overflow-x: hidden;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   margin: 0;
   padding-left: 0.5rem;
 }
