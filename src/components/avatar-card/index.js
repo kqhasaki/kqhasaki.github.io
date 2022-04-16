@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { GithubOutlined } from '@ant-design/icons'
 import avatar from '../../images/avatar.png'
 import { languageContext } from '../base-layout'
 import ItemList from '../item-list'
@@ -6,11 +7,16 @@ import './index.css'
 
 const SELF_INTROS = {
   Chinese: [
-    `我是一名前端开发者，在这个博客你会看到一些关于前端技术的总结和学习记录。
-    当然，也有涉及其他内容的文章。作为一个自学的开发人员，我绝大多数知识是从网络上习得，
-    我也很愿意将我总结与任何其他人分享。`,
-    `工作之余我也会间断地编写一些我感兴趣的项目、阅读、旅行和绘画，这里也将会更新更多我的项目和作品。
-    如果力所能及，我也很愿意加入任何有趣的开源项目。`,
+    <p>
+      Greetings！欢迎来到
+      <strike>交界地，褪色者</strike>。 我是一名普普通通、兴趣使然（
+      <strike>半路出家</strike>
+      ）的程序员，目前从事Web前端开发。这里主要分享一些我的读书笔记（
+      <strike>抄抄书</strike>）、技术博客（<strike>抄抄英文博客</strike>
+      ）、游戏介绍（<strike>又云又菜</strike>）、杂谈（<strike>吹牛比</strike>
+      ）。 欢迎与我交流，持续学习，共同进步（
+      <strike>But you, I'm afraid, are maidenless</strike>）。
+    </p>,
   ],
 }
 
@@ -18,19 +24,42 @@ const CAREER = {
   Chinese: [
     {
       label: '本科',
-      content: '东南大学 - 机械工程学院 - 工学学士',
+      content: (
+        <p>
+          东南大学 - 机械工程学院 - 工学学士 （<strike>九龙湖野生动物园</strike>
+          ）
+        </p>
+      ),
     },
     {
       label: '硕士',
-      content: '南京审计大学 - 统计与数据科学学院 - 经济学硕士',
+      content: (
+        <p>
+          南京审计大学 - 统计与数据科学学院 - 经济学硕士' （
+          <strike>
+            机械行业劝退 \ 跨考 \ 调剂：凑合过呗，还能离咋滴 \ 后悔没跨CS
+          </strike>
+          ）
+        </p>
+      ),
     },
     {
       label: '2021.7 ~ 2021.10',
-      content: '海沃机械（中国）- 软件工程师 - base 扬州',
+      content: (
+        <p>
+          海沃机械（中国）- 软件工程师 - base 扬州 （
+          <strike>扬州是个“好”地方</strike>？）
+        </p>
+      ),
     },
     {
       label: '2021.10 至今',
-      content: '小鹏汽车 - 自动驾驶中心 - 前端开发工程师 - base 扬州/上海',
+      content: (
+        <p>
+          小鹏汽车 - 自动驾驶中心 - 前端开发工程师 - base 扬州 （
+          <strike>第一份正经写代码的工作</strike>）
+        </p>
+      ),
     },
   ],
   English: [
@@ -44,16 +73,29 @@ const CAREER = {
 const PROJECTS = {
   Chinese: [
     {
-      label: '音乐播放器',
+      label: '一套在react+leaflet项目中可用的工具组件',
       content: (
-        <a href="https://music.louisk.xyz" target="_blank">
-          基于React和网易云音乐API的音乐播放器Web应用
+        <a
+          target="_blank"
+          href="https://github.com/kqhasaki/leaflet-map-tools"
+          rel="noreferer noopener nofollow"
+        >
+          结合在开发地图工具过程中遇到leaflet的一些坑和常见需求场景开发的一组地图工具组件。包括了可拖动窗口、dock栏、更好看的LayerControl等。
+          in progress <GithubOutlined />
         </a>
       ),
     },
     {
-      label: '算法动态演示',
-      content: '基于React的常用算法和数据结构的交互演示Web应用',
+      label: '基于gatsby开发的静态博客',
+      content: (
+        <a
+          target="_blank"
+          rel="noreferer noopener nofollow"
+          href="https://github.com/kqhasaki/kqhasaki.github.io"
+        >
+          本博客代码库（<strike>没几行代码</strike>） <GithubOutlined />
+        </a>
+      ),
     },
   ],
   English: [],
@@ -71,10 +113,10 @@ export default function AvatarCard() {
       {SELF_INTROS[language].map((content, idx) => (
         <p key={idx}>{content}</p>
       ))}
-      <h2 className="homepage-title">个人项目</h2>
-      <ItemList items={PROJECTS[language]} />
-      <h2 className="homepage-title">工作生涯</h2>
+      <h2 className="homepage-title">生涯</h2>
       <ItemList items={CAREER[language]} />
+      <h2 className="homepage-title">开源项目</h2>
+      <ItemList items={PROJECTS[language]} />
     </main>
   )
 }
