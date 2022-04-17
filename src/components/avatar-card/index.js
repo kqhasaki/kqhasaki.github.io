@@ -35,7 +35,7 @@ const CAREER = {
       label: '硕士',
       content: (
         <p>
-          南京审计大学 - 统计与数据科学学院 - 经济学硕士' （
+          南京审计大学 - 统计与数据科学学院 - 经济学硕士 （
           <strike>
             机械行业劝退 \ 跨考 \ 调剂：凑合过呗，还能离咋滴 \ 后悔没跨CS
           </strike>
@@ -97,6 +97,32 @@ const PROJECTS = {
         </a>
       ),
     },
+    {
+      label: '一个简单的电影推荐网站（在校项目）',
+      content: (
+        <a
+          target="_blank"
+          rel="noreferer noopener nofollow"
+          href="https://github.com/kqhasaki/Team-Website"
+        >
+          爬取部分豆瓣数据，使用了简单协同过滤算法的电影推荐系统项目。使用了Django编写的非前后端分离网站。获得全国应用统计研究生案例大赛二等奖。
+          （<strike>混了三千块经费</strike>） <GithubOutlined />
+        </a>
+      ),
+    },
+    {
+      label: '硕士论文latex模版（在校项目）',
+      content: (
+        <a
+          target="_blank"
+          rel="noreferer noopener nofollow"
+          href="https://github.com/kqhasaki/thesis"
+        >
+          本渣的硕士论文repo，包含了论文和答辩slide。适合统计、经济、数学类的latex苦手参考。
+          （<strike>上帝保佑永远不要论文抽检到我！</strike>） <GithubOutlined />
+        </a>
+      ),
+    },
   ],
   English: [],
 }
@@ -113,10 +139,10 @@ export default function AvatarCard() {
       {SELF_INTROS[language].map((content, idx) => (
         <p key={idx}>{content}</p>
       ))}
-      <h2 className="homepage-title">生涯</h2>
-      <ItemList items={CAREER[language]} />
       <h2 className="homepage-title">开源项目</h2>
       <ItemList items={PROJECTS[language]} />
+      <h2 className="homepage-title">生涯</h2>
+      <ItemList items={CAREER[language]} />
     </main>
   )
 }

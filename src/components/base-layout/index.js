@@ -55,6 +55,13 @@ export default function BaseLayout({ children, pageTitle }) {
     }
   }, [])
 
+  useEffect(() => {
+    if (!sessionStorage.getItem('alerted')) {
+      setProfileModalVisible(true)
+      sessionStorage.setItem('alerted', true)
+    }
+  }, [])
+
   return (
     <div className={clsx('base-wrapper')}>
       <title>
