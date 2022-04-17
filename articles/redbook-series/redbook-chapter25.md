@@ -815,7 +815,7 @@ const store = db.transaction('users').objectStore('users')
 const range = IDBKeyRange.bound('007', 'ace')
 const request = store.openCursor(range)
 
-request.onsuccess = function(event) {
+request.onsuccess = function (event) {
   const cursor = event.target.result
   if (cursor) {
     console.log(`Key: ${cursor.key}, Value: ${JSON.stringify(cursor.value)}`)
@@ -833,9 +833,9 @@ request.onsuccess = function(event) {
 `openCursor()`方法实际上可以接收两个参数，第一个是`IDBKeyRange`的实例，第二个是表示方向的字符串。通常，游标都是从对象存储的第一条记录开始，每次调用`continue()`或`advance()`都会向最后一条记录前进。这样的游标其默认方向为`"next"`。如果对象存储中有重复的记录，可能需要游标跳过那些重复的项。为此，可以给`openCursor()`的第二个参数传入`"nextunique"`：
 
 ```jsx
-const transaction = db.transaction("users")
-const store = transaction.objectStore("users")
-const request = store.openCursor(null, "nextunique")
+const transaction = db.transaction('users')
+const store = transaction.objectStore('users')
+const request = store.openCursor(null, 'nextunique')
 ```
 
 注意，`openCursor()`的第一个参数是`null`，表示默认的键范围是所有值。此游标会遍历对象存储中的记录，从第一条记录开始迭代，到最后一条记录，但会跳过重复的记录。
@@ -852,3 +852,148 @@ const request = store.openCursor(null, 'prevunique')
 
 ## 索引
 
+对某些数据集，可能需要为对象存储指定多个键。例如，如果同时记录了用户 ID 和用户名，那可能需要通过任何一种方式来获取用户数据。为此，可以考虑将用户 ID 作为主键，然后在用户名上创建索引。
+
+要创建新索引，首先要取得对象存储的引用，然后像下面的例子一样调用`createIndex()`：
+
+```jsx
+const transaction = db.transaction('users')
+const store = transaction.objectStore('users')
+const index = store.createIndex('username', 'username', { unique: true })
+```
+
+`createIndex()`的第一个参数是索引的名称，第二个参数是索引属性的名称，第三个参数是包含键`unique`的`options`对象。这个选项中的`unique`应该必须指定，表示这个键是否在所有记录中唯一。因为`username`可能不会重复，所以这个键是唯一的。
+
+`createIndex()`返回的是`IDBIndex`实例。在对象存储上调用`index()`方法也可以得到同一个实例。例如，要使用一个已存在的名为`"username"`的索引，可以像下面这样：
+
+```jsx
+const transaction = db.transaction('users')
+const store = transaction.objectStore('users')
+const index = store.index('username')
+```
+
+索引非常像对象存储。可以在索引上使用`openCursor()`方法新建游标，这个游标与在对象存储上调用`openCursor()`创建的游标完全一样。只是其`result.key`属性中保存的是索引键，而不是主键。下面看一个例子：
+
+```jsx
+const transaction = db.transaction('users')
+const store = transaction.objectStore('users')
+const index = store.index('username')
+const request = index.openCursor()
+request.onsuccess = event => {
+  // 处理成功
+}
+```
+
+使用`openKeyCursor()`方法也可以在索引上创建特殊游标，只返回每条记录的主键。这个方法接收的参数与`openCursor()`一样。最大的不同在于，`event.result.key`是索引键，且`event.result.value`是主键而不是整个记录。
+
+```jsx
+const transaction = db.transaction('users')
+const store = transaction.objectStore('users')
+const index = store.index('username')
+const request = index.openKeyCursor()
+request.onsuccess = event => {
+  // 处理成功
+  // event.result.key是索引键，event.result.value是主键
+}
+```
+
+可以使用`get()`方法并传入索引键通过索引取得单条记录，这会创建一个新请求：
+
+```jsx
+const transaction = db.transaction('users')
+const store = transaction.objectStore('users')
+const index = store.index('username')
+const request = index.get('007')
+
+request.onsuccess = event => {
+  // 处理成功
+}
+
+request.onerror = event => {
+  // 处理错误
+}
+```
+
+如果想只取得给定索引键的主键，可以使用`getKey()`方法。这样也会创建一个新请求，但`result.value`等于主键而不是整个记录：
+
+```jsx
+const transaction = db.transaction('users')
+const store = transaction.objectStore('users')
+const index = store.index('username')
+const request = index.getKey('007')
+
+request.onsuccess = event => {
+  // 处理成功
+  // event.target.result.key是索引键，event.target.result.value是主键
+}
+```
+
+在这个`onsuccess`事件处理程序中，`event.target.result.value`中应该是用户ID。
+
+任何时候，都可以使用`IDBIndex`对象的下列属性取得索引的相关信息。
+
+- `name`：索引的名称。
+- `keyPath`：调用`createIndex()`时传入的属性路径。
+- `objectStore`：索引对应的对象存储。
+- `unique`：表示索引键是否唯一的布尔值。
+
+对象存储自身也有一个`indexNames`属性，保存着与之相关的索引的名称。使用如下代码可以方便地了解对象存储上已存在哪些索引：
+
+```jsx
+const transaction = db.transaction('users')
+const store = transaction.objectStore('users')
+const indexNames = store.indexNames
+
+for (const indexName in indexnames) {
+  const index = store.index(indexName)
+  console.log(`Index name: ${index.name}, KeyPath: ${index.keyPath}, Unique: ${index.unique}`)
+}
+```
+
+以上代码迭代了每个索引并在控制台输出了它们的信息。
+
+在对象存储上调用`deleteIndex()`方法并传入索引的名称可以删除索引：
+
+```jsx
+const transaction = db.transaction('users')
+const store = transaction.objectStore('users')
+store.deleteIndex('username')
+```
+
+因为删除索引不会影响对象存储中的数据，所以这个操作没有回调。
+
+## 并发问题
+
+IndexedDB虽然是网页中的异步API，但仍然存在并发问题。如果两个不同的浏览器标签页同时打开了一个网页，则有可能出现一个网页尝试升级数据库而另一个尚未就绪的情形。有问题的操作是设置数据库为新版本，而版本变化只能在浏览器只有一个标签页使用数据库时才能完成。
+
+第一次打开数据库时，添加`onversionchange`事件处理程序非常重要。另一个同源标签页将数据库打开到新版本时，将执行此回调。对这个事件最好的回应是立即关闭数据库，以便完成版本升级。例如：
+
+```jsx
+let request, database
+
+request = indexedDB.open('admin', 1)
+request.onsuccess = event => {
+  database = event.target.result
+  database.onversionchange = () => database.close()
+}
+```
+
+应该在每次成功打开数据库后都指定`onversionchange`事件处理程序。记住，`onversionchange`有可能会被其他标签页触发。
+
+通过始终都指定这些事件处理程序，可以保证Web应用程序能够更好地处理与IndexedDB相关的并发问题。
+
+## 限制
+
+IndexedDB的很多限制实际上与Web Storage一样。首先IndexedDB数据库是与页面源（协议、域和端口）绑定的，因此信息不能共享。这意味着`www.wrox.com`和`p2p.wrox.com`会对应不同的数据存储。
+
+其次，每个源都有可以存储的空间限制。当前Firefox的限制是每个源50MB，而Chrome是5MB。移动版Firefox有5MB限制，如果用度超过配额则会请求用户许可。
+
+Firefox还有一个限制，本地文本不能访问IndexedDB数据库。Chrome则没有这个限制。
+
+# 小结
+
+Web Storage定义了两个对象用户存储数据：`sessionStorage`和`localStorage`。前者用于严格保存浏览器一次会话期间的数据，因为数据会在浏览器关闭时被删除。后者用于会话之外保存数据。
+
+IndexedDB是类似于SQL数据库的结构化数据存储机制。不同的是，IndexedDB存储的是对象，而不是数据表。对象存储是通过定义键然后添加数据来创建的。游标用于查询对象存储中的特定数据，而索引可以针对特定属性实现更快的查询。
+
+有了这些存储手段，就可以在客户端通过使用JavaScript存储客观的数据。因为这些数据没有加密，所以要注意不能使用它们存储敏感信息。
