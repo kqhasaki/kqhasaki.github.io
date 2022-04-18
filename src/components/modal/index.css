@@ -25,6 +25,7 @@
   border: 1px solid var(--card-background-border-color);
   width: 50vw;
   min-width: 600px;
+  max-width: 1080px;
 }
 
 .modal-content-wrapper {
