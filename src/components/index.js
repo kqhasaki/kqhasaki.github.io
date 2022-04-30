@@ -1,7 +1,5 @@
-import Modal from './modal'
-import PostCard from './post-card'
-import ItemList from './item-list'
-import BaseLayout from './base-layout'
-import message from './message'
-
-export { Modal, PostCard, ItemList, BaseLayout, message }
+export { default as Modal } from './modal'
+export { default as PostCard } from './post-card'
+export { default as ItemList } from './item-list'
+export { default as BaseLayout } from './base-layout'
+export { default as message } from './message'
