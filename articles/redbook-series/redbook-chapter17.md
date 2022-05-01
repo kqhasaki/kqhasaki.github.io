@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（十七）事件
+title: （十七）事件
 date: 2022-02-22
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xwn569lnj20lz0gqabr.jpg
 ---

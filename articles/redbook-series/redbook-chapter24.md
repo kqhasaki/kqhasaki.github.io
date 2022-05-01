@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（二十四）网络请求与远程资源
+title: （二十四）网络请求与远程资源
 date: 2022-04-05
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0z7nmxobmj20sg0hnmxd.jpg
 ---

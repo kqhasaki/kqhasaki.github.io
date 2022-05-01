@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（七）迭代器与生成器
+title: （七）迭代器与生成器
 date: 2022-02-07
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xw5gatecj20xc0ildgg.jpg
 ---

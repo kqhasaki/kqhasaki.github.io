@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（一）什么是JavaScript？
+title: （一）什么是JavaScript？
 date: 2022-01-08
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xvyadkw4j20jz0iqdhq.jpg
 ---

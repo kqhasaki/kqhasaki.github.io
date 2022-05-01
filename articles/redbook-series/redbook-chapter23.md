@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（二十三）JSON
+title: （二十三）JSON
 date: 2022-04-04
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0yxgog5uzj20zk0k0ab8.jpg
 ---

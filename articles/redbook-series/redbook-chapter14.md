@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（十四）DOM
+title: （十四）DOM
 date: 2022-02-12
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xwa4k5h0j20rs0jg759.jpg
 ---

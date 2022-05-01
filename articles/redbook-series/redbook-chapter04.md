@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（四）变量、作用域与内存
+title: （四）变量、作用域与内存
 date: 2022-04-03
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xvv0rzwuj20m80br757.jpg
 ---

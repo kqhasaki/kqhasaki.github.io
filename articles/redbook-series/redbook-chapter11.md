@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（十一）期约与异步函数
+title: （十一）期约与异步函数
 date: 2022-02-09
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xw8fi1wfj20sg0lcdh0.jpg
 ---

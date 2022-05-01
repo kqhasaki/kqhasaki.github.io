@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（五）基本引用类型
+title: （五）基本引用类型
 date: 2022-04-26
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h1nij4egf8j20p00gtq3m.jpg
 ---

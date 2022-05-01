@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（三）JavaScript语言基础
+title: （三）JavaScript语言基础
 date: 2022-01-09
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xw24rfidj20zk0k0jtg.jpg
 ---

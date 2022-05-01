@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（二十五）客户端存储
+title: （二十五）客户端存储
 date: 2022-04-16
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h1bjh8vvjyj20kq0e8js5.jpg
 ---
@@ -928,7 +928,7 @@ request.onsuccess = event => {
 }
 ```
 
-在这个`onsuccess`事件处理程序中，`event.target.result.value`中应该是用户ID。
+在这个`onsuccess`事件处理程序中，`event.target.result.value`中应该是用户 ID。
 
 任何时候，都可以使用`IDBIndex`对象的下列属性取得索引的相关信息。
 
@@ -946,7 +946,9 @@ const indexNames = store.indexNames
 
 for (const indexName in indexnames) {
   const index = store.index(indexName)
-  console.log(`Index name: ${index.name}, KeyPath: ${index.keyPath}, Unique: ${index.unique}`)
+  console.log(
+    `Index name: ${index.name}, KeyPath: ${index.keyPath}, Unique: ${index.unique}`
+  )
 }
 ```
 
@@ -964,7 +966,7 @@ store.deleteIndex('username')
 
 ## 并发问题
 
-IndexedDB虽然是网页中的异步API，但仍然存在并发问题。如果两个不同的浏览器标签页同时打开了一个网页，则有可能出现一个网页尝试升级数据库而另一个尚未就绪的情形。有问题的操作是设置数据库为新版本，而版本变化只能在浏览器只有一个标签页使用数据库时才能完成。
+IndexedDB 虽然是网页中的异步 API，但仍然存在并发问题。如果两个不同的浏览器标签页同时打开了一个网页，则有可能出现一个网页尝试升级数据库而另一个尚未就绪的情形。有问题的操作是设置数据库为新版本，而版本变化只能在浏览器只有一个标签页使用数据库时才能完成。
 
 第一次打开数据库时，添加`onversionchange`事件处理程序非常重要。另一个同源标签页将数据库打开到新版本时，将执行此回调。对这个事件最好的回应是立即关闭数据库，以便完成版本升级。例如：
 
@@ -980,20 +982,20 @@ request.onsuccess = event => {
 
 应该在每次成功打开数据库后都指定`onversionchange`事件处理程序。记住，`onversionchange`有可能会被其他标签页触发。
 
-通过始终都指定这些事件处理程序，可以保证Web应用程序能够更好地处理与IndexedDB相关的并发问题。
+通过始终都指定这些事件处理程序，可以保证 Web 应用程序能够更好地处理与 IndexedDB 相关的并发问题。
 
 ## 限制
 
-IndexedDB的很多限制实际上与Web Storage一样。首先IndexedDB数据库是与页面源（协议、域和端口）绑定的，因此信息不能共享。这意味着`www.wrox.com`和`p2p.wrox.com`会对应不同的数据存储。
+IndexedDB 的很多限制实际上与 Web Storage 一样。首先 IndexedDB 数据库是与页面源（协议、域和端口）绑定的，因此信息不能共享。这意味着`www.wrox.com`和`p2p.wrox.com`会对应不同的数据存储。
 
-其次，每个源都有可以存储的空间限制。当前Firefox的限制是每个源50MB，而Chrome是5MB。移动版Firefox有5MB限制，如果用度超过配额则会请求用户许可。
+其次，每个源都有可以存储的空间限制。当前 Firefox 的限制是每个源 50MB，而 Chrome 是 5MB。移动版 Firefox 有 5MB 限制，如果用度超过配额则会请求用户许可。
 
-Firefox还有一个限制，本地文本不能访问IndexedDB数据库。Chrome则没有这个限制。
+Firefox 还有一个限制，本地文本不能访问 IndexedDB 数据库。Chrome 则没有这个限制。
 
 # 小结
 
-Web Storage定义了两个对象用户存储数据：`sessionStorage`和`localStorage`。前者用于严格保存浏览器一次会话期间的数据，因为数据会在浏览器关闭时被删除。后者用于会话之外保存数据。
+Web Storage 定义了两个对象用户存储数据：`sessionStorage`和`localStorage`。前者用于严格保存浏览器一次会话期间的数据，因为数据会在浏览器关闭时被删除。后者用于会话之外保存数据。
 
-IndexedDB是类似于SQL数据库的结构化数据存储机制。不同的是，IndexedDB存储的是对象，而不是数据表。对象存储是通过定义键然后添加数据来创建的。游标用于查询对象存储中的特定数据，而索引可以针对特定属性实现更快的查询。
+IndexedDB 是类似于 SQL 数据库的结构化数据存储机制。不同的是，IndexedDB 存储的是对象，而不是数据表。对象存储是通过定义键然后添加数据来创建的。游标用于查询对象存储中的特定数据，而索引可以针对特定属性实现更快的查询。
 
-有了这些存储手段，就可以在客户端通过使用JavaScript存储客观的数据。因为这些数据没有加密，所以要注意不能使用它们存储敏感信息。
+有了这些存储手段，就可以在客户端通过使用 JavaScript 存储客观的数据。因为这些数据没有加密，所以要注意不能使用它们存储敏感信息。

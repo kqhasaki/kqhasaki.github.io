@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（二十六）模块
+title: （二十六）模块
 date: 2022-04-30
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h1rym2wl06j20xc0lqjwa.jpg
 ---

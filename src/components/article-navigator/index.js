@@ -9,7 +9,7 @@ import './index.css'
 
 const GROUP_TITLES = {
   'front-end': '前端杂谈',
-  'algorithms-and-leetcode': '数据结构和算法',
+  'javascript-algorithm-and-data-structure': 'JavaScript数据结构和算法',
   'redbook-series': 'JavaScript高级程序设计',
   'non-tech': '日常杂谈',
   'electron-docs': 'electron',

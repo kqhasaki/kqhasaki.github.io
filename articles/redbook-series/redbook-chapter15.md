@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（十五）DOM扩展
+title: （十五）DOM扩展
 date: 2022-02-19
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xwli81noj218g0p0jrx.jpg
 ---

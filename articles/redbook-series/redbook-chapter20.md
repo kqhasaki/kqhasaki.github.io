@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（二十）JavaScript API
+title: （二十）JavaScript API
 date: 2022-03-10
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xwpwnc30j20e80e8glq.jpg
 ---

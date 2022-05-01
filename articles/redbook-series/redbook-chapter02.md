@@ -1,5 +1,5 @@
 ---
-title: 红宝书系列（二）HTML中的JavaScript
+title: （二）HTML中的JavaScript
 date: 2022-01-09
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xw0fsbufj20jg0bo0td.jpg
 ---
