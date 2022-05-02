@@ -56,9 +56,9 @@ export default function BaseLayout({ children, pageTitle }) {
   }, [])
 
   useEffect(() => {
-    if (!sessionStorage.getItem('alerted')) {
+    if (!localStorage.getItem('alerted')) {
       setProfileModalVisible(true)
-      sessionStorage.setItem('alerted', true)
+      localStorage.setItem('alerted', true)
     }
   }, [])
 

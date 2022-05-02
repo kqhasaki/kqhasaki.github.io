@@ -394,3 +394,230 @@ remove(key) {
 ```
 
 > 除了使用`delete`运算符，也可以直接将`hash`位置赋值为`null`或`undefined`。
+
+## 散列表和散列集合
+
+在一些编程语言中，还有一种叫**散列集合**的实现。散列集合由一个集合构成，但是插入、移除或获取元素时，使用的是`hashCode()`函数。我们可以复用本章所有的代码来实现散列集合，不同之处在于，不再添加键值对，只是插入值而没有键。和集合相似，散列集合只存储不重复的唯一值。
+
+## 处理散列表中的冲突
+
+有时候一些键会有相同的散列值。不同的散列值在散列表中对应相同位置的时候，我们称为**冲突**。当这种情况发生时，就需要解决冲突。处理冲突有几种方法：**分离链接**、**线性探查**和**双散列法**。
+
+### 分离链接
+
+**分离链接**法包括为散列表的每一个位置创建一个链表并将元素存储在里面。它是解决冲突的最简单的方法，但是在`HashTable`实例之外还需要额外的存储空间。
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1tw8ifomej21em0mo76e.jpg)
+
+对于分离链接和线性探查来说，只需要重写三个方法；`put`、`get`和`remove`。这三个方法在每种技术实现中都是不同的。和之前一样，我们来声明`HashTableSeparateChaining`的基本结构。
+
+```jsx
+class HashTableSeparateChaining {
+  constructor(toStrFn = defaultToString) {
+    this.toStrFn = toStrFn
+    this.table = {}
+  }
+}
+```
+
+我们来实现第一个方法，即`put`方法。
+
+```jsx
+put(key, value) {
+  if (!isNullOrUndefined(key) && !isNullOrUndefined(value)) {
+    const position = this.hashCode(key)
+    if (isNullOrUndefined(this.table[position])) {
+      this.table[position] = new LinkedList()
+    }
+    this.table[position].push(new ValuePair(key, value))
+    return true
+  }
+
+  return false
+}
+```
+
+在这个方法中，我们将验证要加入新元素的位置是否已经被占据。如果是第一次向该位置加入元素，我们会在该位置上初始化一个`LinkedList`类的实例。然后使用链表的`push`方法向`LinkedList`实例中添加一个`ValuePair`实例。
+
+然后，我们实现`get`方法，用来获取给定键的值。
+
+```jsx
+get(key) {
+  const position = this.hashCode(key)
+  const linkedList = this.table[position]
+  if (!isNullOrUndefined(linkedList) && !linkedList.isEmpty()) {
+    let current = linkedList.getHead()
+    while (!isNullOrUndefined(current)) {
+      if (current.element.key === key) {
+        return current.element.value
+      }
+      current = current.next
+    }
+  }
+
+  return undefined
+}
+```
+
+首先要验证的是在特定位置上是否有元素存在。我们在`position`位置检索`linkedList`，并检验是否存在`linkedList`实例。如果没有，则返回`undefined`，表示没有找到该值。如果位置上有值存在，则搜索这个链表，看是否有对应的值存储在链表中。
+
+接下来实现`remove()`方法，从`HashTableSeparateChaining`实例中移除一个元素和之前实现`remove()`方法有一些不同。我们需要从链表中移除一个元素。
+
+```jsx
+remove(key) {
+  const position = this.hashCode(key)
+  const linkedList = this.table[position]
+  if (!isNullOrUndefined(linkedList) && !linkedList.isEmpty()) {
+    let current = linkedList.getHead()
+    while (!isNullOrUndefined(current)) {
+      if (current.element.key === key) {
+        linkedList.remove(current.element)
+        if (linkedList.isEmpty()) {
+          // delete this.table[position]
+          this.table[position] = undefined
+        }
+        return true
+      }
+      current = current.next
+    }
+  }
+  return false
+}
+```
+
+> 注意，开发中不鼓励使用`delete`运算符来删除对象的属性，原因是`delete`并不保证触发 gc，因此并不会优化性能；此外，对于 V8 引擎而言，通过`delete`运算符删除对象的属性，会变更其隐藏类，频繁对对象进行`delete`操作可能导致对象变成一个“慢对象”（属性查询通过字典结构，而非通过隐藏类和描述符数组。见[文章](/articles/front-end/fast-properties-in-v8)），使得对象属性的访问性能下降。所以如果不再使用某个对象属性，将其置为`undefined`是比较好的选择。
+
+在`remove()`方法中，我们使用和`get()`方法一样的步骤找到要找的元素。迭代`linkedList`实例时，如果链表中的`current`元素就是要找的元素，使用`remove()`方法将其从链表中移除。然后进行额外验证，如果链表空了，则将散列表该位置设置为`undefined`。这样搜索一个元素的时候，就可以跳过这个位置了。
+
+### 线性探查
+
+另一种解决冲突的方法是**线性探查**。之所以称为线性，是因为它处理冲突的方法是将元素直接存储到表中，而不是在单独的数据结构中。
+
+当像向表中某个位置添加一个新元素的时候，如果索引为`position`的位置已经被占据了，就尝试`position+1`的位置。如果它也被占据，则尝试`position+2`的位置，以此类推，直到在散列表中找到一个空闲的位置。想象一下，有一个已经包含一些元素的散列表，我们想要添加一个新的键和值。我们计算这个新键的`hash`，并检查散列表中对应的位置是否被占据。如果没有就将该值添加到正确的位置，如果被占据了，就迭代散列表，直到找到一个空闲的位置。
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1txmmpn9vj21cs0ocju0.jpg)
+
+当我们从散列表中移除一个键值对的时候，仅将之前数据结构所实现位置的元素移除是不够的。如果我们仅是移除了元素，就可能在查找有相同`hash`的其他元素时找到一个空的位置，这会导致算法出现问题。
+
+线性探查技术分为两种。第一种是**软删除**方法。我们使用一个特殊的值（标记）来表示键值对被删除了（惰性删除或软删除），而不是真的删除它。经过一段时间，散列表被操作过后，我们会得到了一个标记了若干删除位置的散列表。这会逐渐降低散列表的效率，因为搜索键值会随着时间变慢。
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1txte30xej214q0kudi1.jpg)
+
+第二种方法需要检验是否有必要将一个或多个元素移动到之前的位置。当搜索一个键的时候，这种方法可以避免找到一个空位置。如果移动元素是必要的，就需要在散列表中挪动键值对。
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1txvhbmlmj214e0towgg.jpg)
+
+在线性探查的情况下，我们实现需要重写的三个方法。第一个是`put()`方法。
+
+```jsx
+put(key, value) {
+  if (!isNullOrUndefined(key) && !isNullOrUndefined(value)) {
+    const position = this.hashCode(key)
+    if (isNullOrUndefined(this.table[position])) {
+      this.table[position] = new ValuePair(key, value)
+    } else {
+      let index = position + 1
+      while (!isNullOrUndefined(this.table[index])) {
+        index++
+      }
+      this.table[index] = new ValuePair(key, value)
+    }
+    return true
+  }
+  return false
+}
+```
+
+> 在一些编程语言中，我们需要定义数组的大小。如果使用线性探查的话，需要注意的一个问题是数组的可用位置可能会被用完。当算法到达数组的尾部时，它需要循环回到开头并继续迭代元素。如果必要的话，我们还需要创建一个更大的数组并将元素复制到新数组中。在JavaScript中，我们不需要担心这个问题。我们不需要定义数组的大小，因为它可以根据需要自动改变，这是JavaScript内置的一个功能。
+
+接下来实现`get()`方法来获取它们的值。
+
+```jsx
+get(key) {
+  const position = this.hashCode(key) 
+  if (!isNullOrUndefined(this.table[position])) {
+    if (this.table[position].key === key) {
+      return this.table[position].value
+    }
+    let index = position + 1
+    while (!isNullOrUndefined(this.table[index]) && this.table[index].key !== key) {
+      index++
+    }
+    if (!isNullOrUndefined(this.table[index]) && this.table[index].key === key) {
+      return this.table[position].value
+    }
+  }
+  return undefined
+}
+```
+
+要获得一个键对应的值，先要确定这个键存在。如果这个键不存在，说明要查找的值不在散列表中，因此可以返回`undefined`。如果这个键存在，需要检查我们要找的值是否就是原始位置上的值。如果是就返回这个值。如果不是，就在`HashTableLinearProbing`的下一个位置继续查找，我们会按位置递增的顺序查找散列表上的元素直到找到我们想要的键。
+
+下面实现`remove()`方法：
+
+```jsx
+remove(key) {
+  const position = this.hashCode(key) 
+  if (!isNullOrUndefined(this.table[position])) {
+    if (this.table[position].key === key) {
+      this.table[position] = undefined
+      this.verifyRemoveSideEffect(key, position) 
+      return true
+    }
+    let index = position + 1
+    while (!isNullOrUndefined(this.table[index]) && this.table[index].key === key) {
+      this.table[index] = undefined
+      this.verifyRemoveSideEffect(key, index)
+      return true
+    }
+  }
+  return false
+}
+```
+
+在`get`方法中，当我们找到了要找的`key`后，返回它的值。在`remove()`中，我们会从散列表中删除元素。
+
+## 更好的散列函数
+
+我们使用的lose lose散列函数并不是一个表现良好的散列函数，因为它会产生太多的冲突。一个表现良好的散列函数是由几个方面组成的：插入和检索元素的时间（即性能），以及较低冲突的可能性。
+
+一个更好的，容易实现的散列函数是`djb2`。
+
+```jsx
+djb2HashCode(key) {
+  const tableKey = this.toStrFn(key)
+  let hash = 5381
+  for (let i = 0; i < tableKey.length; i++) {
+    hash = 33 * hash + tableKey.charCodeAt(i)
+  }
+  
+  return hash % 1013
+}
+```
+
+在将键转化为字符串后，`djbHashCode`方法包括初始化一个`hash`变量并赋值为一个质数，然后迭代参数`key`，将`hash`与33相乘，并和当前迭代到的码元的Unicdoe码值相加。
+
+# ES6 `Map`类
+
+ES6新增了`Map`类。和我们的`Dictionary`类不同，ES6的`Map`类的`values()`方法和`keys()`方法都返回一个迭代器，而不是值或键构成的数组。另一个区别是，我们实现的`size()`方法返回字典中存储值的个数，ES6的`Map`类有一个`size`属性。
+
+删除`map`中的元素可以使用`delete()`方法。`clear()`方法会重置`map`数据结构，与我们在`Dictionary`类中实现的一样。
+
+# ES6 `WeakMap`类和`WeakSet`类
+
+除了`Set`和`Map`这两种新的数据结构，ES6还增加了它们的弱化版本，`WeakSet`和`WeakMap`。基本上，`Map`和`Set`与其弱化版本的区别是：
+
+- `WeakSet`或`WeakMap`类没有`entries()`、`keys()`或`values()`等方法；
+- 只能用对象作为键。
+
+创建和使用这两个类主要是为了性能。`WeakSet`和`WeakMap`是弱化的（用对象作为键），没有强引用的键。这是的JavaScript的垃圾回收器可以从中清除整个入口。
+
+另一个优点是，必须用键才可以取出值。这些类没有迭代器方法，因此除非你知道键，否则没有办法取出值。使用`WeakMap`类可以封装ES6类的私有属性。
+
+`WeakMap`类也可以使用`set()`方法，但是不能使用除了对象以外的类型。
+
+# 小结
+
+本章介绍了字典相关的知识，了解了如何添加、移除和获取元素以及其他一些方法。还了解了字典和集合的不同之处。
+
+我们也学习了散列运算，怎样创建一个散列表数据结构，如何添加、移动和获取元素，以及如何创建散列函数。还了解了如何使用两种不同的方法解决散列表中的冲突问题，分离链接和线性探查。
