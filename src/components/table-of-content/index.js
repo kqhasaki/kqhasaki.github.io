@@ -40,23 +40,21 @@ export default function TableOfContent({ headers }) {
   }, [])
 
   return (
-    headers?.length && (
-      <div className="table-of-content" ref={ref}>
-        {headers.map((header, idx) => (
-          <p
-            className={`header-level-${header.level} ${
-              topHeaderKey === idx ? 'topHeader' : ''
-            }`}
-            id={`header-number-${idx}`}
-            key={idx}
-            onClick={event => {
-              handleClickHeader(event, header)
-            }}
-          >
-            {header.label}
-          </p>
-        ))}
-      </div>
-    )
+    <div className="table-of-content" ref={ref}>
+      {headers.map((header, idx) => (
+        <p
+          className={`header-level-${header.level} ${
+            topHeaderKey === idx ? 'topHeader' : ''
+          }`}
+          id={`header-number-${idx}`}
+          key={idx}
+          onClick={event => {
+            handleClickHeader(event, header)
+          }}
+        >
+          {header.label}
+        </p>
+      ))}
+    </div>
   )
 }

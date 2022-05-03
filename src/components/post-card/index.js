@@ -1,8 +1,14 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { navigate } from 'gatsby'
-import { FieldTimeOutlined } from '@ant-design/icons'
+import { FieldTimeOutlined, TagOutlined } from '@ant-design/icons'
 import './index.css'
+import { GROUP_TITLES } from '../article-navigator'
+
+function getArticleGroupTitle(slug) {
+  const relativePath = slug.split('/')[0]
+  return GROUP_TITLES[relativePath]
+}
 
 export default function PostCard({ article }) {
   return (
@@ -21,8 +27,15 @@ export default function PostCard({ article }) {
       </div>
       <h2>{article.frontmatter.title}</h2>
       <p className="post-card-meta">
-        <FieldTimeOutlined />
-        <span> {article.frontmatter.date}</span>
+        <span style={{ fontWeight: 'normal' }}>
+          <TagOutlined style={{ fontSize: 12 }} />{' '}
+          {getArticleGroupTitle(article.slug)}{' '}
+        </span>
+      </p>
+      <p className="post-card-meta" style={{ marginTop: 4 }}>
+        <span>
+          <FieldTimeOutlined /> {article.frontmatter.date}
+        </span>
         <span>
           {' '}
           | {Math.round((article.wordCount.sentences * 40) / 100) * 100}

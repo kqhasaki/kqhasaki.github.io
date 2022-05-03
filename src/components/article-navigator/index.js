@@ -7,7 +7,7 @@ import { debounce } from 'lodash'
 
 import './index.css'
 
-const GROUP_TITLES = {
+export const GROUP_TITLES = {
   'front-end': '前端杂谈',
   'javascript-algorithm-and-data-structure': 'JavaScript数据结构和算法',
   'redbook-series': 'JavaScript高级程序设计',

@@ -30,6 +30,7 @@
   margin: 140px auto 0 auto;
   transition: 200ms;
   cursor: pointer;
+  position: relative;
 }
 
 .post-card:hover {
@@ -59,7 +60,7 @@
   margin: 0;
   font-weight: 300;
   font-size: 0.9rem;
-  padding: 0.5rem 1rem 0.5rem 1rem;
+  padding: 5px 10px;
   margin-top: 1rem;
   border-radius: 0.5rem;
   background-color: var(--card-background-color);
