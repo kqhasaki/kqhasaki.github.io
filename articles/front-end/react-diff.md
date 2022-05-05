@@ -10,7 +10,7 @@ React 提供的声明式 API 让开发者可以在对 React 底层实现并不�
 
 在某一时间节点调用 React 的`render()`方法，会创建一棵由 React 元素组成的树。在下一次`state`或者`props`更新时，相同的`render()`方法会返回一棵不同的树。React 需要基于这两棵树之间的差别来判断如何高效地更新 UI，以保证当前 UI 和最新的树保持同步。
 
-此算法有一些通用的解决方案，即生成将一个棵树转换为另一棵树的最小操作次数。然而，即使使用[最优的算法](https://grfia.dlsi.ua.es/ml/algorithms/references/editsurvey_bille.pdf)，该算法的复杂程度仍为 O(n<sup>2</sup>)，其中`n`是树中元素的数量。
+此算法有一些通用的解决方案，即生成将一个棵树转换为另一棵树的最小操作次数。然而，即使使用[最优的算法](https://grfia.dlsi.ua.es/ml/algorithms/references/editsurvey_bille.pdf)，该算法的复杂程度仍为 O(n<sup>3</sup>)，其中`n`是树中元素的数量。
 
 如果在 React 中使用该算法，那么展示 1000 个元素需要 10 亿次比较。这个开销过于高昂。于是 React 在以下两个假设的基础之上提出了一套 O(n)的启发式算法：
 
