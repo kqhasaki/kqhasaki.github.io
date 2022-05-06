@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import resume from '../../static/resume/resume.pdf'
+import resumeEn from '../../static/resume/resume-en.pdf'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWeixin, faQq, faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
@@ -64,6 +65,11 @@ export default function Footer() {
           </span>
           <span>
             <a href={resume} download="resume.pdf" title="简历下载">
+              <FontAwesomeIcon icon={faFile} />
+            </a>
+          </span>
+          <span>
+            <a href={resumeEn} download="resume-en.pdf" title="resume">
               <FontAwesomeIcon icon={faFile} />
             </a>
           </span>
