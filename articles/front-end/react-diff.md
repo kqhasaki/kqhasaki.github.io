@@ -6,7 +6,7 @@ date: 2022-03-09
 
 React 提供的声明式 API 让开发者可以在对 React 底层实现并不了解的情况下编写应用。在开发者编写应用时，可以保持相对简单的心智，但开发者无法了解其内部的实现原理。本文描述了在实现 React 的“diffing”算法过程中做出的设计决策，以保证组件更新可预测，且在繁杂的业务场景下仍然保持应用的高性能。
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/7YhdqIR2Yzo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7YhdqIR2Yzo" title="React如何工作？" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 # 设计动机
 

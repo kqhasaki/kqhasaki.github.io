@@ -4,7 +4,7 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1gzl96e9bqpj20lc0c0dhk.jpg
 date: 2022-02-21
 ---
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/0IsQqJ7pwhw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0IsQqJ7pwhw" title="浏览器如何工作" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 页面内容快速加载和交互是用户希望得到的 Web 体验，因此开发者应该力争实现这两个目标。**为了解如何提升性能和感知性能，需要大致了解浏览器的工作原理**。
 
@@ -66,7 +66,7 @@ TCP 的“三次握手”（“SYN-(SYN+ACK)-ACK”）。这意味着在 HTTP �
 
 # 解析
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/SmE4OwHztCc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/SmE4OwHztCc" title="浏览器如何渲染网页" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 一旦浏览器收到收据的第一块，就可以开始解析收到的信息。**解析**是浏览器将通过网络接口接收到的 HTML 文档转换为 DOM 和 CSSOM 的步骤，之后才可以进入**渲染**阶段，通过渲染器将 DOM 和 CSSOM 在屏幕上绘制成页面。
 

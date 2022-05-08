@@ -4,7 +4,7 @@ date: 2022-04-03
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xvv0rzwuj20m80br757.jpg
 ---
 
-<iframe src="https://www.youtube.com/embed/AeUCN2lPqL8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/AeUCN2lPqL8" title="JavaScript中的内存管理" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 相比于其他语言，JavaScript 中的变量可谓独树一帜。正如 ECMA-262 所规定的，JavaScript 中的变量是松散类型的。而且变量不过就是特定时间点一个特定值的名称而已。由于没有规则定义变量必须包含什么数据类型，变量的值和数据类型在脚本生命期内可以改变。这样的变量很有意思，很强大，当然也会有不少问题。本章会剖析错综复杂的变量。
 
@@ -415,7 +415,7 @@ JavaScript 是使用垃圾回收的语言，也就是说执行环境负责在代
 
 ## 标记清理
 
-<iframe src="https://www.youtube.com/embed/DIzouoy13UM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/DIzouoy13UM" title="内存管理与垃圾回收" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 JavaScript 最常用的垃圾回收策略是**标记清理**（mark-and-sweep）。当变量进入上下文，比如在函数内部声明一个变量时，这个变量会被加上存在于上下文中的标记。而在上下文中的变量，逻辑上讲，永远不应该释放它们的内存，因为只要上下文中的代码在运行，就有可能用到它们。当变量离开上下文时，也会被加上离开上下文的标记。
 

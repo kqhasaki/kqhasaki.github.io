@@ -7,7 +7,7 @@ import './index.css'
 
 const SELF_INTROS = {
   Chinese: [
-    <p>
+    <div>
       Greetings！欢迎来到
       <strike>交界地，褪色者</strike>。 我是一名普普通通、兴趣使然（
       <strike>半路出家</strike>
@@ -16,7 +16,7 @@ const SELF_INTROS = {
       ）、游戏介绍（<strike>又云又菜</strike>）、杂谈（<strike>吹牛比</strike>
       ）。 欢迎与我交流，持续学习，共同进步（
       <strike>But you, I'm afraid, are maidenless</strike>）。
-    </p>,
+    </div>,
   ],
 }
 
@@ -25,40 +25,40 @@ const CAREER = {
     {
       label: '本科',
       content: (
-        <p>
+        <div>
           东南大学 - 机械工程学院 - 工学学士 （<strike>九龙湖野生动物园</strike>
           ）
-        </p>
+        </div>
       ),
     },
     {
       label: '硕士',
       content: (
-        <p>
+        <div>
           南京审计大学 - 统计与数据科学学院 - 经济学硕士 （
           <strike>
             机械行业劝退 \ 跨考 \ 调剂：凑合过呗，还能离咋滴 \ 后悔没跨CS
           </strike>
           ）
-        </p>
+        </div>
       ),
     },
     {
       label: '2021.7 ~ 2021.10',
       content: (
-        <p>
+        <div>
           海沃机械（中国）- 软件工程师 - base 扬州 （
           <strike>扬州是个“好”地方</strike>？）
-        </p>
+        </div>
       ),
     },
     {
       label: '2021.10 至今',
       content: (
-        <p>
+        <div>
           小鹏汽车 - 自动驾驶中心 - 前端开发工程师 - base 扬州 （
           <strike>第一份正经写代码的工作</strike>）
-        </p>
+        </div>
       ),
     },
   ],
@@ -137,7 +137,7 @@ export default function AvatarCard() {
       </div>
       <h2 style={{ textAlign: 'center' }}>Hey, I'm Louis K.</h2>
       {SELF_INTROS[language].map((content, idx) => (
-        <p key={idx}>{content}</p>
+        <div key={idx}>{content}</div>
       ))}
       <h2 className="homepage-title">开源项目</h2>
       <ItemList items={PROJECTS[language]} />

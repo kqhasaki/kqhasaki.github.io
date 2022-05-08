@@ -15,7 +15,7 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h1tz3g74f5j20it0czq3j.jpg
 
 # 树的基本概念
 
-<iframe src="https://www.youtube.com/embed/qH6yxkw0u78" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/qH6yxkw0u78" title="树数据结构简介" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 一个树结构包含一系列存在父子关系的节点。每个节点都有一个父节点（除了顶部的第一个节点，根节点）以及零个或多个子节点。
 
@@ -35,11 +35,11 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h1tz3g74f5j20it0czq3j.jpg
 
 **二叉树**中的节点最多只能有两个子节点：一个是左侧子节点，另一个是右侧子节点。这个定义有助于我们写出更高效地在树中插入、查找和删除节点的算法。二叉树在计算机科学中的应用非常广泛。
 
-<iframe src="https://www.youtube.com/embed/H5JubkIy_p8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/H5JubkIy_p8" title="二叉树简介" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 **二叉搜索树**（BST）是二叉树的一种，但是只允许在左侧节点存储（比父节点）小的值，右侧节点存储（比父节点）大的值。
 
-<iframe src="https://www.youtube.com/embed/pYT9F8_LFTM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/pYT9F8_LFTM" title="二叉搜索树简介" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 二叉搜索树将是本章中主要研究的数据结构。
 
@@ -402,7 +402,7 @@ removeNode(node, key) {
 
 ## Adelson-Velskii-Landi 树（AVL 树）
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/vRwi_UcZGjU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/vRwi_UcZGjU" title="AVL树及其旋转" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 AVL 树是一种自平衡树。添加或移除节点时，AVL 树会尝试保持自平衡。任意一个节点（不论深度）的左子树和右子树高度最多相差 1。添加或移除节点时，AVL 树会尽可能尝试转换为完全树。
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { YoutubeOutlined } from '@ant-design/icons'
 import { debounce } from 'lodash'
 import './index.css'
 
@@ -52,7 +53,7 @@ export default function TableOfContent({ headers }) {
             handleClickHeader(event, header)
           }}
         >
-          {header.label}
+          {header.name === 'media' && <YoutubeOutlined />} {header.label}
         </p>
       ))}
     </div>

@@ -139,6 +139,6 @@ function minCoinChange(coins, amount) {
 
 最后判断`newAmount`是否有效，`minValue`是否是最优解，与此同时`minValue`和`newAmount`是否是合理的值。若以上判断都成立，意味着有一个比之前更优的答案。最后，返回结果。
 
-<iframe src="https://www.youtube.com/embed/jgiZlGzXMBw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/jgiZlGzXMBw" title="解决最少硬币问题" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## 背包问题

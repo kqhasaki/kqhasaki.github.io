@@ -6,7 +6,7 @@ date: 2022-03-03
 
 # 什么是 CORS？
 
-<iframe src="https://www.youtube.com/embed/4KHiSt0oLJ0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/4KHiSt0oLJ0" title="100秒解释CORS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 **跨源资源共享**（CORS）（或通俗翻译为跨域资源共享）是一种基于 HTTP 头的机制，该机制通过允许服务器标示出了它自己以外的其他`origin`（域，协议和端口），这样浏览器可以访问加载这些资源。跨源资源共享还通过一种机制来检查服务器是否允许要发送的真实请求，该机制通过浏览器发起一个到服务器托管的跨源资源的**“预检”请求**。在预检中，浏览器发送的头中标示有 HTTP 方法和真实请求中会用到的头。
 

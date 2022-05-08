@@ -4,24 +4,24 @@
 
 - name: Louis K (蒯强)
 - gender: male
-- birthday：1995/12/08
-- from：Jiangsu Province, China
+- birthday: 1995/12/08
+- from: Jiangsu Province, China
 - intention: front-end web developer
 
 ## Education
 
 - undergraduate - Southeast University (东南大学) - mechanical engineering - Bachelor of Engineering
-- postgraduate - Nanjing Aduit University (南京审计大学) - statistics - Master of economics
+- postgraduate - Nanjing Audit University (南京审计大学) - statistics - Master of economics
 
 ## Career
 
 - **intern**：2020.7 ～ 2020.9
 
-  Dipont (base Nanjing), summer break internship，front-end engineer. Working with company's OA system, dealing with JavaScript/Vue2.
+  Dipont (base Nanjing), summer break internship, front-end engineer. Working with company's OA system, dealing with JavaScript/Vue2.
 
 - **intern**：2020.10 ～ 2020.12
 
-  Terminus（base Nanjing), internship, front-end engineer. Working with company's business progect, dealing with JavaScript/React.
+  Terminus (base Nanjing), internship, front-end engineer. Working with company's business progect, dealing with JavaScript/React.
 
 - 2021.7 ～ 2021.10
 
@@ -33,8 +33,8 @@
 
 ## Personal Project
 
-- [Louis K's blog](https://blog.louisk.xyz) static blog site built with Gatsby.
-- [A movie recommender site](http://louisk.top:8000) A movie recommender site demo built with Django，won a secondary award in _2020's case analysis contest for graduate of statistics_.
+- [Louis K's blog](https://blog.louisk.xyz)  A static blog site built with Gatsby.
+- [A movie recommender site](http://louisk.top:8000) A movie recommender site demo built with Django, won a secondary award in _2020's case analysis contest for graduate of statistics_.
 
 ## Advantage
 
@@ -50,3 +50,5 @@ Mail: k1664032884@gmail.com
 Wechat: kuaiqianghasai (perferred)
 
 Phone: 19961843976
+
+Home Page: https://blog.louisk.xyz
