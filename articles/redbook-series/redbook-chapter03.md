@@ -4,6 +4,8 @@ date: 2022-01-09
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xw24rfidj20zk0k0jtg.jpg
 ---
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8aGhZQkoFbQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 任何语言的核心所描述的都是这门语言在最基本的层面上如何工作，涉及语法、操作符、数据类型以及内置功能，在此基础之上才可以构建复杂的解决方案。如前所属，ECMA-262 以一个名为 ECMAScript 的伪语言的形式，定义了 JavaScript 的所有这些方面。
 
 ECMA-262 第 5 版（ES5）定义的 ECMAScript，是目前实现得最为广泛（受浏览器支持最好）的一个版本。第 6 版（ES6）在浏览器中的实现程度次之。到了 2017 年底，大多数主流浏览几乎或全部实现了这一版的规范。为此，本章接下来的内容主要基于 ECMAScript 的第 6 版。

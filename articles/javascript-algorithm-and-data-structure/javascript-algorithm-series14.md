@@ -89,3 +89,56 @@ export function binarySearch(array, value, compareFn = defaultCompare) {
 ## 最少硬币找零问题
 
 **最少硬币找零问题**是**硬币找零问题**的一个变种。硬币找零问题是给定要找零的钱数，以及可用的硬币面额 d1，...，dn 以及其数量，找出有多少种找零方法。最少硬币找零问题是给出要找零的钱数，以及可用的硬币面额 d1，...，dn 以及其数量，找到所需的最少硬币的个数。
+
+例如美国有日下面额的硬币：d1 = 1, d2 = 5, d3 = 10, d4 = 25。
+
+如果要找 36 美分的零钱，我们可以使用 1 个 25 美分、1 个 10 美分和 1 个便士（1 美分），那么如何使用算法找到这个问题的解？
+
+```jsx
+function minCoinChange(coins, amount) {
+  const cache = []
+
+  const makeChange = value => {
+    if (!value) {
+      return []
+    }
+
+    if (cache[value]) {
+      return cache[value]
+    }
+
+    let min = []
+    let newMin
+    let newAmount
+    for (let i = 0; i < coins.length; i++) {
+      const coin = coins[i]
+      newAmount = value - coin
+      if (newAmount >= 0) {
+        newMin = makeChange(newAmount)
+      }
+
+      if (
+        newAmount >= 0 &&
+        (newMin.length < min.length - 1 || !min.length) &&
+        (newMin.length || !newAmount)
+      ) {
+        min = [coin].concat(newMin)
+        console.log(`new Min ${min} for ${amount}`)
+      }
+    }
+    return (cache[value] = min)
+  }
+
+  return makeChange(amount)
+}
+```
+
+我们来看算法的主要逻辑。首先，如果`amount`不为正，就返回空数组。方法执行结束后，会返回一个数组，包含用来找零的各个面额的硬币数量（最少硬币数）。接着，检查`cache`缓存，如果结果已经缓存，则直接返回结果；否则执行算法。
+
+对每个面额都计算`newAmount`的值，它会一直减小，直到能找零的最小钱数。假设`newAmount`是正值，我们会计算它的找零结果。
+
+最后判断`newAmount`是否有效，`minValue`是否是最优解，与此同时`minValue`和`newAmount`是否是合理的值。若以上判断都成立，意味着有一个比之前更优的答案。最后，返回结果。
+
+<iframe src="https://www.youtube.com/embed/jgiZlGzXMBw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+## 背包问题

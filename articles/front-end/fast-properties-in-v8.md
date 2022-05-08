@@ -6,6 +6,8 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h1tcbih9avj218g0p00ta.jpg
 
 > 本文翻译自 V8 文档 [Fast properties in V8](https://v8.dev/blog/fast-properties)
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/z-RXUzkFOSI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 本文将阐述 V8 引擎内部如何处理 JavaScript 对象属性访问。从 JavaScript 角度来看，对象的属性有仅有少量的区别。大多情况下，JavaScript 对象表现得很像一个字典，拥有字符串类型的键和任意类型的值。[语言规范](https://tc39.es/ecma262/#sec-ordinaryownpropertykeys)要求在进行迭代时要对整数作为键时的属性进行区别对待。其他情况下，JavaScript 属性几乎没有任何区别，不管是数值属性还是其他字符串属性。
 
 但是，在 V8 的实现底层，考虑到性能优化，会对不同的属性做不同的处理。本文将阐述 V8 如何提供高性能的属性访问，同时如何处理动态添加的属性。理解 V8 中 JavaScript 属性是如何工作的，对于理解 V8 的一些优化工作（例如[inline caches](https://mrale.ph/blog/2012/06/03/explaining-js-vms-in-js-inline-caches.html)）是十分重要的。

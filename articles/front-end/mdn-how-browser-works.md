@@ -4,6 +4,8 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1gzl96e9bqpj20lc0c0dhk.jpg
 date: 2022-02-21
 ---
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0IsQqJ7pwhw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 页面内容快速加载和交互是用户希望得到的 Web 体验，因此开发者应该力争实现这两个目标。**为了解如何提升性能和感知性能，需要大致了解浏览器的工作原理**。
 
 快速响应的网站提供更好的用户体验。用户期待内容快速加载和交互流畅的 Web 体验。**等待资源加载时间和大部分情况下的浏览器单线程执行是影响 Web 性能的两大主要原因**。
@@ -63,6 +65,8 @@ TCP 的“三次握手”（“SYN-(SYN+ACK)-ACK”）。这意味着在 HTTP �
 当服务器用 TCP 包来发送数据时，客户端通过返回确认帧来确认传输。由于硬件和网络条件，连接的容量是有限的。如果服务器太快地发送太多的包，他们可能被丢弃。意味着，将不会有确认帧的返回。服务器把它们当作确认帧丢失。拥塞控制算法使用这个发送包和确认帧来确定发送速率。
 
 # 解析
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/SmE4OwHztCc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 一旦浏览器收到收据的第一块，就可以开始解析收到的信息。**解析**是浏览器将通过网络接口接收到的 HTML 文档转换为 DOM 和 CSSOM 的步骤，之后才可以进入**渲染**阶段，通过渲染器将 DOM 和 CSSOM 在屏幕上绘制成页面。
 

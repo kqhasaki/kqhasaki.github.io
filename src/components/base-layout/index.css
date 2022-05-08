@@ -6,7 +6,7 @@
 @media (prefers-color-scheme: dark) {
   body {
     --blue: #02bbff;
-    --background-color: #202124;
+    --background-color: #151617;
     --background-color-transparent: rgba(0, 0, 0, 0.9);
     --font-color: #bdc1c6;
     --font-color-header: #eaeaea;
@@ -53,7 +53,7 @@
 
 .dark {
   --blue: #02bbff;
-  --background-color: #202124;
+  --background-color: #151617;
   --background-color-transparent: rgba(0, 0, 0, 0.9);
   --font-color: #bdc1c6;
   --font-color-header: #eaeaea;
@@ -427,6 +427,15 @@ td {
   background-color: var(--background-color);
   border: 1px solid var(--card-background-border-color);
   border-radius: 50%;
+}
+
+iframe {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 deckgo-highlight-code {

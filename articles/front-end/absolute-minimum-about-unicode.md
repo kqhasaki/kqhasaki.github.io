@@ -8,6 +8,10 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h1z5o20k5mj20fu09i0ue.jpg
 >
 > PS：这个博主是个超级大牛，他是知名网站 Stack Overflow 的创始人，著名黑客，甚至还参加过以色列伞兵。。。
 
+先上一段关于 Unicode 的视频。
+
+<iframe src="https://www.youtube.com/embed/cCoed5Oo_J4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 你是否曾好奇 HTTP 报文中`Content-Type`的作用？（当然它作为响应头告诉客户端实际返回内容的类型；在请求中，如 POST、PUT，告知服务器实际发送的数据类型）
 
 你是否曾接受到来自保加利亚朋友的邮件，结果主题变成了“？？？？？？？”？

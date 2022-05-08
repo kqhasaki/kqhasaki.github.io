@@ -6,6 +6,8 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xw8fi1wfj20sg0lcdh0.jpg
 
 ES6 及之后发布的版本逐步加大了对异步编程机制的支持，提供了令人眼前一亮的特性。ES6 新增了正式的`Promise`（期约）引用类型，支持优雅定义和组织异步逻辑。接下来几个版本增加了使用`async`和`await`关键字定义异步函数的机制。
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/SrNQS8J67zc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 # 异步编程
 
 同步行为和异步行为的对立统一是计算机科学的一个基本概念。JavaScript 运行时才用了单线程事件循环模型，因此同步操作和异步操作更是代码所要依赖的核心机制。异步行为是为了优化因计算量大而时间长的操作。如果在等待其他操作完成的同时，即使运行其他指令，系统也能保持稳定，那么这样做就是务实的。
