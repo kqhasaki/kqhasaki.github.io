@@ -72,19 +72,19 @@ const CAREER = {
 
 const PROJECTS = {
   Chinese: [
-    {
-      label: '一套在react+leaflet项目中可用的工具组件',
-      content: (
-        <a
-          target="_blank"
-          href="https://github.com/kqhasaki/leaflet-map-tools"
-          rel="noreferer noopener nofollow"
-        >
-          结合在开发地图工具过程中遇到leaflet的一些坑和常见需求场景开发的一组地图工具组件。包括了可拖动窗口、dock栏、更好看的LayerControl等。
-          in progress <GithubOutlined />
-        </a>
-      ),
-    },
+    // {
+    //   label: '一套在react+leaflet项目中可用的工具组件',
+    //   content: (
+    //     <a
+    //       target="_blank"
+    //       href="https://github.com/kqhasaki/leaflet-map-tools"
+    //       rel="noreferer noopener nofollow"
+    //     >
+    //       结合在开发地图工具过程中遇到leaflet的一些坑和常见需求场景开发的一组地图工具组件。包括了可拖动窗口、dock栏、更好看的LayerControl等。
+    //       in progress <GithubOutlined />
+    //     </a>
+    //   ),
+    // },
     {
       label: '基于gatsby开发的静态博客',
       content: (

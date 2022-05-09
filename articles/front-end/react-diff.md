@@ -163,3 +163,5 @@ React 团队定期优化启发式算法，让常见用例更高效地执行。�
 
 - 该算法不会尝试匹配不同组件类型的子树。如果你发现自己在两种不同类型的组件之间相互切换，但输出非常相似的内容，建议把它们改成同一类型。在实践中很少遇到这类问题。
 - key 应该具有稳定、可预测，以及列表内唯一的特质。不稳定的 key（例如随机数）会导致许多组件实例和 DOM 节点被不必要地重新创建，可能导致性能下降和子组件中的状态丢失。
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/i793Qm6kv3U" title="React如何渲染UI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

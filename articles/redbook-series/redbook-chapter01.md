@@ -1,10 +1,18 @@
 ---
 title: （一）什么是JavaScript？
-date: 2022-01-08
+date: 2022-05-09
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xvyadkw4j20jz0iqdhq.jpg
 ---
 
-《JavaScript 高级程序设计》，也就是前端 er 们常说的红宝书，已经出到了第四版了。相比第三版，内容充实了非常多，把 ES6 和更新的 JS 改动都介绍得很好，是前端工程师打基础的必读书籍。接下来，我将按照每个章节一篇的进度完成本书阅读的系列分享，概述每个章节的内容，并且讲讲我自己读书的收获和体会。
+《JavaScript 高级程序设计》，也就是前端 er 们常说的红宝书，已经出到了第四版了。相比第三版，内容充实了非常多，把 ES6 和更新的 JS 改动都介绍得很好，是前端工程师打基础的必读书籍。我在阅读本书的过程中发现了书中存在一些错误，或是翻译错误、或是原文就有错，也或是已经过时的知识点；于是有了这个抄书系列，实际上就是把每个涉及重要知识点的章节摘抄一遍，同时纠正一些细节上的错误。对于部分有歧义的地方，我也会进行标注。
+
+> 笔者注：JavaScript 并不是我最早接触的编程语言，前端也不是我最早接触的技术领域。和许多人一样，我最早接触编程语言是大学时学习的 C 语言，也接触过汇编语言，读研期间，我常用 Python 进行数据分析和处理，甚至用 Django 完成了我的第一个网站。但是让我彻底喜欢上编程，并且决心以此为职业，是在我接触了 JavaScript 之后。前端开发这件事和 JavaScript 语言本身都让我觉得编程是一件美妙、快乐和充满成就感的事情。
+>
+> 但是不得不说的是，JavaScript 诞生很久以来一直是一门 DSL（Domain Specific Lanugage），而不是一门通用的编程语言。再加上最初语言草案的仓促和很久以来 Web 开发的随意性，导致了很多人对 JavaScript 和前端开发有些刻板印象。认为 JavaScript 并非真正的编程语言，前端开发者也不能算是严肃的程序员。但是随着 Web 技术的进步、Node.js 等可以直运行于操作系统上的运行时出现以及 JavaScript 自身语言规范的一次次修订，如今的 JavaScript 已经是一门通用的、强大的编程语言了。不仅在开源领域大放异彩，在企业开发中也已经不可或缺。
+>
+> 如今，掌握 JavaScript 已经是一门有趣、充满挑战，并且能够带来回报的事！
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uVwtVBpw7RQ" title="什么是Node.js" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 本书的第一章有一句话让我印象很深：
 
@@ -14,6 +22,8 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xvyadkw4j20jz0iqdhq.jpg
 
 # JavaScript 的诞生
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/80wh_-7c4TU" title="浏览器之战（上）" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 红宝书第一章内容简要介绍了 JavaScript 的历史以及其现状。最初的问题便是——为什么要有 JavaScript？要了解一个新事物的意义，那么需看没有这个事物之前的状况。在 JavaScript 出现之前，万维网已经在 1991 年首次亮相公共服务，1993 年万维网更是向世界上任何人免费开放。最早的网页浏览器也已经出现，很多著名网站也开始活跃。当时网络浏览器的主要功能仅仅是接受 HTML 文档并展示，而用户已经可以在网页中进行输入来和服务器进行交互。由于网页没有自己的脚本语言，因此所有的数据检查都必须返回到服务器端来进行。在那个年代，网络的时延让人们非常不耐烦，因此催生出在客户端处理某些数据验证的迫切需求。
 
 1994 年，Mosaic 的主要开发人员创立了网景（Netscape）公司，推出了 Netscape Navigator 浏览器，很快占领了绝大部分市场。网景公司也预感到需要一种胶水语言，丰富浏览器的能力。
@@ -21,6 +31,8 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xvyadkw4j20jz0iqdhq.jpg
 1995 年，布兰登·艾克（Brendan Eich）进入网景公司，他希望把 Scheme 语言嵌入到 Netscape Navigator 浏览器中。但是在更早之前，网景公司已经和 Sun 公司合作在其浏览器中支持 Java，于是在公司内部产生了激烈争论。最终公司决定发明一种和 Java 搭配使用的辅助语言脚本并且在语法上有类似。为了能够尽快在公司争论中给出提案，艾克需要给出一个可以运作的原型，于是他在 1995 年 5 月份仅仅花了 10 天就设计出来了。最初，这门语言被命名为 Mocha，1995 年 9 月在浏览器的 2.0 Beta 版本中改名为 LiveScript。就在当年的 12 月，浏览器的 2.0 Beta3 版本中命名为 JavaScript。实际上为了赶上发布时间，当时的网景公司和 Sun 公司组成了开发者联盟，因此为了蹭上 Java 编程语言“热词”，因此在发布前给它取了这个名字。然而这门语言和 Java 编程语言可说是风马牛不相及，日后 JavaScript 这个名字引起了大众的诸多误解。
 
 1995 年 3 月正式发布的 Netscape Navigator 上的 JavaScript1.0 收获了很大成功，同年微软就在 IE 浏览器上发布了一个实现。微软的实现（JScript，这个名字是为了避免和网景发生许可纠纷）意味着出现了两个版本的 JavaScript。此时 JavaScript 没有规范其语法或特性的标准，业界开始担忧起语言的未来。于是在 1997 年 JavaScript1.1 被网景公司提交给 ECMA（欧洲计算机制造商协会，European Computer Manufacturers Association）制定为标准，称为 ECMAScript。希望能够发展为一门“通用的、跨平台、厂商中立的脚本语言”。自此以后，ISO 也将 ECMAScript 采纳为标准，自此以后各个浏览器都将 ECMAScript 标准作为自己实现 JavaScript 实现的依据。
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/vFAlh4ws3m0" title="浏览器之战（下）" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 # ECMAScript
 
@@ -74,3 +86,13 @@ DOM Level3 又进一步扩展了 DOM。目前 W3C 已经不再按照 Level 来�
 - 其他自定义对象，如 XHR，Fetch 等
 
 在很长的时间内，BOM 没有对应的标准，所以每个浏览器都实现自己的 BOM。但是在各个厂商的版本迭代中，逐渐形成了一些共识，现在又有了 HTML5，BOM 的实现细节应该会逐渐一致。
+
+# 小结
+
+上一个短视频吧：
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/DHjqpvDnNGE" title="100秒了解JavaScript" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+另外，随着 JavaScript 日渐运用于企业开发和大型项目，对类型系统的呼声也越来越高。[TypeScript](https://www.typescriptlang.org/)就是一门由微软推出的 JavaScript 语言扩展，引入了强大的类型系统，能够有效提升大型项目的开发效率和可维护性。
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/zQnBQ4tB3ZA" title="100秒了解TypeScript" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

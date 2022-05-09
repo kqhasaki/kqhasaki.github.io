@@ -28,7 +28,8 @@ function getIframeAltBackgroundImg() {
   return altImgList[randomPos]
 }
 
-function getNextLevel(levelStr) {
+function getNextLevel(levelStr, tagName) {
+  console.log(tagName)
   const dict = {
     h1: 'h2',
     h2: 'h3',
@@ -75,7 +76,7 @@ export default function ArticleView({ data }) {
       if (header.tagName === 'IFRAME') {
         const lastHeader = array[idx - 1]
         return {
-          level: getNextLevel(lastHeader.localName) ?? 'h2',
+          level: getNextLevel(lastHeader.localName, lastHeader.tagName) ?? 'h2',
           name: 'media',
           label: header.title,
           target: header,
@@ -138,11 +139,11 @@ export default function ArticleView({ data }) {
             words {Math.round(article.wordCount.sentences / 7)}min
           </span>
         </p>
-        <img
+        {/* <img
           className="article-cover"
           src={article.frontmatter.cover}
           alt={article.frontmatter.cover}
-        />
+        /> */}
         <MDXRenderer>{article.body}</MDXRenderer>
       </div>
       <ArticleNavigator currArticle={article} />

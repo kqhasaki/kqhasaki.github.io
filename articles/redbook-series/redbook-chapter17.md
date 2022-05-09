@@ -4,6 +4,8 @@ date: 2022-02-22
 cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xwn569lnj20lz0gqabr.jpg
 ---
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/MY0UBGX2FtA" title="古怪的JavaScript面试题" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 JavaScript 与 HTML 的交互是通过事件实现的，**事件代表文档或浏览器窗口某个有意义的时刻**。可以使用仅在事件发生时执行的**监听器**（也叫处理程序）订阅事件。在传统软件工程领域，这个模型叫“观察者模式”，其能够做到页面行为（在 JavaScript 中定义）与页面展示（在 HTML 和 CSS 中定义）的分离。
 
 事件最早时在 IE3 和 Netscape Navigator2 中出现的，当时的用意是把某些表单处理工作从服务器转移到浏览器上来。到了 IE4 和 Netscape Navigator3 发布的时候，这两家浏览器都提供了类似但又不同的 API，而且持续了好几代。**DOM2 开始尝试以符合逻辑的方式来标准化 DOM 事件 API**。**目前所有现代浏览器都实现了 DOM2 Events 的核心部分**。IE8 是最后一个使用专有事件系统的主浏览器。
@@ -935,3 +937,5 @@ btn.disptachEvent(event)
 使用 JavaScript 也可以在浏览器中模拟事件。DOM2 Events 和 DOM3 Events 规范提供了模拟方法，可以模拟所有原生 DOM 事件。
 
 事件是 JavaScript 中最重要的主题之一，理解事件的原理及其对性能的影响非常重要。
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jOupHNvDIq8" title="Nodejs如何工作" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

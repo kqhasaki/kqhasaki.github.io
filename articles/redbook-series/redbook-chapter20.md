@@ -10,6 +10,8 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xwpwnc30j20e80e8glq.jpg
 
 Web API 的数量之多令人难以置信。本章要介绍的 API 仅限于与大多数开发者有关、已经得到多个浏览器支持的部分。
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/4ba0G8FQt5M" title="字节和二进制块" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 # Atomics 和`SharedArrayBuffer`
 
 多个上下文访问`SharedArrayBuffer`时，如果同时对缓冲区执行操作，就可能出现资源争用问题。Atomics API 通过强制同一时刻只能对缓冲区执行一个操作，可以让多个上下文安全地读写一个`SharedArrayBuffer`。Atomics API 是 ES2017 中定义的。

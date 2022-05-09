@@ -10,6 +10,8 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h1rym2wl06j20xc0lqjwa.jpg
 
 因为 JavaScript 是异步加载的解释性语言，所以得到广泛应用的各种模块实现也表现出不同的形态。这些不同的形态决定了不同的结果，但最终它们都实现了经典的模块模式。
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qgRUr-YUk1Q" title="100秒认识JS模块" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 # 理解模块模式
 
 将代码拆分成独立的模块，然后再把这些块连接起来可以通过模块模式实现。这种模式背后的思想很简单：把逻辑分块，各自封装，相互独立，每个块自行决定对外暴露什么，同时自行决定引入执行哪些外部代码。不同的实现和特性让这些基本的概念变得有些复杂，但这个基本的思想是所有 JavaScript 模块系统的基础。

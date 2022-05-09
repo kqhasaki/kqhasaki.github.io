@@ -10,6 +10,8 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h1sw6q5z09j20zk0k0dgk.jpg
 
 本章内容包括：字典数据结构、散列表数据结构、处理散列表中的冲突、ES6 中的`Map`、`WeakMap`和`WeakSet`类。
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/KyUTuwz_b7Q" title="哈希表" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 # 字典
 
 我们已经知道，集合表示一组互不相同的元素（不重复的元素）。在字典中，存储的是键/值对，其中键名是用来查询特定元素的。字典和集合很相似，集合以值/值的形式存储元素，字典则以键/值的形式来存储元素。字典也称作**映射**、**符号表**或**关联数组**。
@@ -528,13 +530,13 @@ put(key, value) {
 }
 ```
 
-> 在一些编程语言中，我们需要定义数组的大小。如果使用线性探查的话，需要注意的一个问题是数组的可用位置可能会被用完。当算法到达数组的尾部时，它需要循环回到开头并继续迭代元素。如果必要的话，我们还需要创建一个更大的数组并将元素复制到新数组中。在JavaScript中，我们不需要担心这个问题。我们不需要定义数组的大小，因为它可以根据需要自动改变，这是JavaScript内置的一个功能。
+> 在一些编程语言中，我们需要定义数组的大小。如果使用线性探查的话，需要注意的一个问题是数组的可用位置可能会被用完。当算法到达数组的尾部时，它需要循环回到开头并继续迭代元素。如果必要的话，我们还需要创建一个更大的数组并将元素复制到新数组中。在 JavaScript 中，我们不需要担心这个问题。我们不需要定义数组的大小，因为它可以根据需要自动改变，这是 JavaScript 内置的一个功能。
 
 接下来实现`get()`方法来获取它们的值。
 
 ```jsx
 get(key) {
-  const position = this.hashCode(key) 
+  const position = this.hashCode(key)
   if (!isNullOrUndefined(this.table[position])) {
     if (this.table[position].key === key) {
       return this.table[position].value
@@ -557,11 +559,11 @@ get(key) {
 
 ```jsx
 remove(key) {
-  const position = this.hashCode(key) 
+  const position = this.hashCode(key)
   if (!isNullOrUndefined(this.table[position])) {
     if (this.table[position].key === key) {
       this.table[position] = undefined
-      this.verifyRemoveSideEffect(key, position) 
+      this.verifyRemoveSideEffect(key, position)
       return true
     }
     let index = position + 1
@@ -579,7 +581,7 @@ remove(key) {
 
 ## 更好的散列函数
 
-我们使用的lose lose散列函数并不是一个表现良好的散列函数，因为它会产生太多的冲突。一个表现良好的散列函数是由几个方面组成的：插入和检索元素的时间（即性能），以及较低冲突的可能性。
+我们使用的 lose lose 散列函数并不是一个表现良好的散列函数，因为它会产生太多的冲突。一个表现良好的散列函数是由几个方面组成的：插入和检索元素的时间（即性能），以及较低冲突的可能性。
 
 一个更好的，容易实现的散列函数是`djb2`。
 
@@ -590,29 +592,31 @@ djb2HashCode(key) {
   for (let i = 0; i < tableKey.length; i++) {
     hash = 33 * hash + tableKey.charCodeAt(i)
   }
-  
+
   return hash % 1013
 }
 ```
 
-在将键转化为字符串后，`djbHashCode`方法包括初始化一个`hash`变量并赋值为一个质数，然后迭代参数`key`，将`hash`与33相乘，并和当前迭代到的码元的Unicdoe码值相加。
+在将键转化为字符串后，`djbHashCode`方法包括初始化一个`hash`变量并赋值为一个质数，然后迭代参数`key`，将`hash`与 33 相乘，并和当前迭代到的码元的 Unicdoe 码值相加。
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/b4b8ktEV4Bg" title="散列算法与安全" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 # ES6 `Map`类
 
-ES6新增了`Map`类。和我们的`Dictionary`类不同，ES6的`Map`类的`values()`方法和`keys()`方法都返回一个迭代器，而不是值或键构成的数组。另一个区别是，我们实现的`size()`方法返回字典中存储值的个数，ES6的`Map`类有一个`size`属性。
+ES6 新增了`Map`类。和我们的`Dictionary`类不同，ES6 的`Map`类的`values()`方法和`keys()`方法都返回一个迭代器，而不是值或键构成的数组。另一个区别是，我们实现的`size()`方法返回字典中存储值的个数，ES6 的`Map`类有一个`size`属性。
 
 删除`map`中的元素可以使用`delete()`方法。`clear()`方法会重置`map`数据结构，与我们在`Dictionary`类中实现的一样。
 
 # ES6 `WeakMap`类和`WeakSet`类
 
-除了`Set`和`Map`这两种新的数据结构，ES6还增加了它们的弱化版本，`WeakSet`和`WeakMap`。基本上，`Map`和`Set`与其弱化版本的区别是：
+除了`Set`和`Map`这两种新的数据结构，ES6 还增加了它们的弱化版本，`WeakSet`和`WeakMap`。基本上，`Map`和`Set`与其弱化版本的区别是：
 
 - `WeakSet`或`WeakMap`类没有`entries()`、`keys()`或`values()`等方法；
 - 只能用对象作为键。
 
-创建和使用这两个类主要是为了性能。`WeakSet`和`WeakMap`是弱化的（用对象作为键），没有强引用的键。这是的JavaScript的垃圾回收器可以从中清除整个入口。
+创建和使用这两个类主要是为了性能。`WeakSet`和`WeakMap`是弱化的（用对象作为键），没有强引用的键。这是的 JavaScript 的垃圾回收器可以从中清除整个入口。
 
-另一个优点是，必须用键才可以取出值。这些类没有迭代器方法，因此除非你知道键，否则没有办法取出值。使用`WeakMap`类可以封装ES6类的私有属性。
+另一个优点是，必须用键才可以取出值。这些类没有迭代器方法，因此除非你知道键，否则没有办法取出值。使用`WeakMap`类可以封装 ES6 类的私有属性。
 
 `WeakMap`类也可以使用`set()`方法，但是不能使用除了对象以外的类型。
 

@@ -24,6 +24,8 @@ Web 性能优化的目标之一就是缩短导航完成所花费的时间，理�
 
 对于一个 Web 页面来说导航的第一步就是定位资源。如果导航到`https://example.com`HTML 页面被定位到`93.184.216.34`的服务器。如果以前没有访问过这个网站，就需要进行 DNS 查找。
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/mpQZVYPuDGU" title="DNS如何工作" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 浏览器通过服务器名称请求 DNS 进行查找，最终返回一个 IP 地址，第一次初始化请求之后，这个 IP 地址可能会被缓存一段时间，这样可以通过缓存里面检索 IP 地址而不再是通过域名服务器进行查找来加速后续的请求。
 
 通过主机名加载一个页面通常仅需要 DNS 查找一次。但是 DNS 需要对页面加载的各种资源指向的主机名进行查找。如果 fonts、images、scripts 等都有不同的主机名，那么 DNS 需要对每一个进行查找。
@@ -37,6 +39,8 @@ DNS 查找对于性能来说是一个问题，特别是对于移动网络。当�
 一旦获取到服务器的 IP 地址，浏览器就会通过 TCP“三次握手”和服务器建立连接。这个机制是用来让两端尝试通过 HTTP 或 HTTPS 这样的应用层协议通信之前，先建立 TCP 连接。通过上层协议也可以协商 TCP 套接字连接时采用的一些参数。
 
 TCP 的“三次握手”（“SYN-(SYN+ACK)-ACK”）。这意味着在 HTTP 报文传输发生之前还需要花费 3 次消息传送的时间。
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/F27PLin3TV0" title="建立TCP连接" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## TLS 协商
 
@@ -111,6 +115,8 @@ CSSOM 树包括来自用户代理样式表的样式。浏览器从适用于节�
 # 渲染
 
 渲染步骤包括样式、布局、绘制，在某些情况下还包括合成。在解析步骤中插棍见的 CSSOM 树和 DOM 树组合成一个 Render 树，然后用于计算每个可见元素的布局，然后将其绘制到屏幕上。在某些情况下，可以将内容提升到它们自己的层并进行合成，通过在 GPU 而不是 CPU 上绘制屏幕的一部分来提高性能，从而释放主线程。
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/lvb06W_VKVE" title="渲染树" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Style 样式计算
 

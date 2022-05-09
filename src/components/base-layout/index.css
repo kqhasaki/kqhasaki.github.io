@@ -228,7 +228,8 @@ header img {
 
 .article-meta {
   text-align: center;
-  margin: 1rem auto 1.5rem auto;
+  margin: 1rem auto 1rem auto;
+  margin-bottom: 3rem !important;
   font-size: 0.9rem;
 }
 
@@ -442,6 +443,7 @@ td {
 }
 
 .iframe-wrapper .loader {
+  user-select: none;
   font-size: 2.5rem;
   text-align: center;
   color: rgba(255, 255, 255, 0.6);

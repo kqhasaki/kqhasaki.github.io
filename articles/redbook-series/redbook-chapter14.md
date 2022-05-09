@@ -8,6 +8,8 @@ cover: https://tva1.sinaimg.cn/large/e6c9d24egy1h0xwa4k5h0j20rs0jg759.jpg
 
 DOM Level 1 在 1998 年成为 W3C 推荐标准，提供了基本文档结构和查询的接口。DOM 直接与浏览器中的 HTML 网页相关，并且在浏览器环境 JavaScript 中提供了 DOM API。
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/cCOL7MC4Pl0" title="更多关于事件循环" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 # 节点层级
 
 任何 HTML 或 XML 文档都可以用 DOM 表示为一个由节点构成的层级结构。节点分为很多类型，每种类型对应着文档中不同的信息和标记，也都有自己不同的特性、数据和方法，并且和其他类型有某种关系。这些关系构成了层级，让标记可以表示为一个以特定节点为根的树形结构。以下面的 HTML 为例：
