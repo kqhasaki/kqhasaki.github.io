@@ -1,13 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { YoutubeOutlined } from '@ant-design/icons'
 import { debounce } from 'lodash'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 import './index.css'
 
 export default function TableOfContent({ headers }) {
   const ref = useRef()
+  const switchRef = useRef()
   const [topHeaderKey, setTopHeaderKey] = useState(0)
 
+  function toggleTableOfContent() {
+    ref.current.classList.toggle('table-of-content-visible')
+  }
+
   function handleClickHeader(event, header) {
+    ref.current.classList.remove('table-of-content-visible')
     ref.current.scrollTo({
       behavior: 'smooth',
       top: event.target.offsetTop - 200,
@@ -38,24 +46,49 @@ export default function TableOfContent({ headers }) {
     document.addEventListener('scroll', scrollHandlerDebounced)
 
     return () => document.removeEventListener('scroll', scrollHandlerDebounced)
+  }, [headers])
+
+  useEffect(() => {
+    const handler = e => {
+      const { target } = e
+      if (
+        !switchRef.current.contains(target) &&
+        !ref.current.contains(target)
+      ) {
+        ref.current.classList.remove('table-of-content-visible')
+      }
+    }
+    window.addEventListener('mousedown', handler)
+    return () => {
+      window.removeEventListener('mousedown', handler)
+    }
   }, [])
 
   return (
-    <div className="table-of-content" ref={ref}>
-      {headers.map((header, idx) => (
-        <p
-          className={`header-level-${header.level} ${
-            topHeaderKey === idx ? 'topHeader' : ''
-          }`}
-          id={`header-number-${idx}`}
-          key={idx}
-          onClick={event => {
-            handleClickHeader(event, header)
-          }}
-        >
-          {header.name === 'media' && <YoutubeOutlined />} {header.label}
-        </p>
-      ))}
-    </div>
+    <>
+      <div
+        ref={switchRef}
+        className="table-of-content-switch"
+        onClick={toggleTableOfContent}
+      >
+        <FontAwesomeIcon icon={faBars} />
+      </div>
+      <div className="table-of-content" ref={ref}>
+        {headers.map((header, idx) => (
+          <p
+            className={`header-level-${header.level} ${
+              topHeaderKey === idx ? 'topHeader' : ''
+            }`}
+            id={`header-number-${idx}`}
+            key={idx}
+            onClick={event => {
+              handleClickHeader(event, header)
+            }}
+          >
+            {header.name === 'media' && <YoutubeOutlined />} {header.label}
+          </p>
+        ))}
+      </div>
+    </>
   )
 }

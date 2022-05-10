@@ -29,7 +29,6 @@ function getIframeAltBackgroundImg() {
 }
 
 function getNextLevel(levelStr, tagName) {
-  console.log(tagName)
   const dict = {
     h1: 'h2',
     h2: 'h3',
@@ -64,7 +63,9 @@ export default function ArticleView({ data }) {
     document.title = article.frontmatter.title
 
     const links = document.querySelectorAll('.article-body a')
-    links?.forEach(link => (link.target = '_blank'))
+    if (links) {
+      links.forEach(link => (link.target = '_blank'))
+    }
 
     const allHeaders = document.querySelectorAll(
       '.article-body h1, .article-body iframe, .article-body h2, .article-body h3'
@@ -104,7 +105,7 @@ export default function ArticleView({ data }) {
     return () => {
       document.removeEventListener('click', headNavigate)
     }
-  }, [data])
+  }, [article.frontmatter.title, data])
 
   useEffect(() => {
     const allIframes = document.querySelectorAll('iframe')

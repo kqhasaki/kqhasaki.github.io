@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { useStaticQuery, graphql } from 'gatsby'
 import { navigate } from 'gatsby'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark, faList } from '@fortawesome/free-solid-svg-icons'
-import { debounce } from 'lodash'
+import { faList } from '@fortawesome/free-solid-svg-icons'
 
 import './index.css'
 
@@ -15,11 +14,7 @@ export const GROUP_TITLES = {
   'electron-docs': 'electron',
 }
 
-const WIDTH = 900
-
 export default function ArticleNavigator({ currArticle }) {
-  const [visible, setVisible] = useState(true)
-
   const articleGroups = useStaticQuery(graphql`
     query {
       allFile {
@@ -44,52 +39,39 @@ export default function ArticleNavigator({ currArticle }) {
     }
   })
 
-  useEffect(() => {
-    document.body.style.overflow =
-      visible && document.body.clientWidth < WIDTH ? 'hidden' : 'initial'
+  const ref = useRef()
+  const switchRef = useRef()
 
-    const resizeHandler = debounce(() => {
-      if (window.innerWidth >= WIDTH) {
-        document.body.style.overflow = 'initial'
-        setVisible(true)
-      } else {
-        if (visible) {
-          document.body.style.overflow = 'hidden'
-        }
+  function toggleTableOfContent() {
+    ref.current.classList.toggle('article-navigator-visible')
+  }
+
+  useEffect(() => {
+    const handler = e => {
+      const { target } = e
+      if (
+        !switchRef.current.contains(target) &&
+        !ref.current.contains(target)
+      ) {
+        ref.current.classList.remove('article-navigator-visible')
       }
-    }, 150)
-
-    window.onresize = resizeHandler
-    return () => {
-      window.onresize = null
     }
-  }, [visible])
-
-  useEffect(() => {
-    if (document.body.clientWidth < WIDTH) {
-      setVisible(false)
+    window.addEventListener('mousedown', handler)
+    return () => {
+      window.removeEventListener('mousedown', handler)
     }
   }, [])
 
   return (
     <>
       <div
-        className="navigator-switch"
-        onClick={() => setVisible(true)}
-        style={{ display: !visible ? 'block' : 'none' }}
+        className="article-navigator-switch"
+        ref={switchRef}
+        onClick={toggleTableOfContent}
       >
         <FontAwesomeIcon icon={faList} />
       </div>
-      <div
-        className="article-navigator"
-        style={{ display: visible ? 'block' : 'none' }}
-      >
-        <div
-          className="article-navigator-toggler"
-          onClick={() => setVisible(false)}
-        >
-          <FontAwesomeIcon icon={faXmark} />
-        </div>
+      <div className="article-navigator" ref={ref}>
         {articleGroups.map((articleGroup, idx) => {
           const groupTitle = GROUP_TITLES[articleGroup.fieldValue]
           const articles = articleGroup.nodes
