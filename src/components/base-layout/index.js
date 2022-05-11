@@ -12,7 +12,7 @@ deckDeckGoHighlightElement()
 
 export const languageContext = React.createContext('Chinese')
 
-export default function BaseLayout({ children, pageTitle }) {
+export default function BaseLayout({ children, pageTitle, name }) {
   const { title } = useStaticQuery(graphql`
     query {
       site(siteMetadata: {}) {
@@ -63,7 +63,7 @@ export default function BaseLayout({ children, pageTitle }) {
   }, [])
 
   return (
-    <div className={clsx('base-wrapper')}>
+    <div className={clsx('base-wrapper')} name={name}>
       <title>
         {pageTitle && `${pageTitle} |`}
         {title}

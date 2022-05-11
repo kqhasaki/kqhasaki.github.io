@@ -21,6 +21,11 @@ function getIframeAltBackgroundImg() {
     'https://tva1.sinaimg.cn/large/e6c9d24egy1h21azonp62g20hs09yx6p.gif',
     'https://tva1.sinaimg.cn/large/e6c9d24egy1h21azu0dldg20dc07inph.gif',
     'https://tva1.sinaimg.cn/large/e6c9d24egy1h21azr2o2ig20du07q4qp.gif',
+    'https://tva1.sinaimg.cn/large/e6c9d24egy1h24zp18rk3g20hs0a0qv7.gif',
+    'https://tva1.sinaimg.cn/large/e6c9d24egy1h24zp1u2okg20du07lhdv.gif',
+    'https://tva1.sinaimg.cn/large/e6c9d24egy1h24zp3i44kg20f008ghdz.gif',
+    'https://tva1.sinaimg.cn/large/e6c9d24egy1h24zp4331gg20be0bex5e.gif',
+    'https://tva1.sinaimg.cn/large/e6c9d24egy1h24zp5tve8g20du07se89.gif',
   ]
 
   const randomPos = Math.floor(Math.random() * 100) % altImgList.length
@@ -129,9 +134,9 @@ export default function ArticleView({ data }) {
   }, [])
 
   return (
-    <BaseLayout>
+    <BaseLayout name="article-wrapper">
       <ScrollProgresser />
-      <div className="article-body">
+      <article className="article-body">
         <h1 className="article-title">{article.frontmatter.title}</h1>
         <p className="article-meta">
           <span>
@@ -140,13 +145,8 @@ export default function ArticleView({ data }) {
             words {Math.round(article.wordCount.sentences / 7)}min
           </span>
         </p>
-        {/* <img
-          className="article-cover"
-          src={article.frontmatter.cover}
-          alt={article.frontmatter.cover}
-        /> */}
         <MDXRenderer>{article.body}</MDXRenderer>
-      </div>
+      </article>
       <ArticleNavigator currArticle={article} />
       {headers.length && <TableOfContent headers={headers} />}
     </BaseLayout>

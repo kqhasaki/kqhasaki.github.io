@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { YoutubeOutlined } from '@ant-design/icons'
+import MusicPlayer from '../music-player'
 import { debounce } from 'lodash'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
@@ -8,6 +9,7 @@ import './index.css'
 export default function TableOfContent({ headers }) {
   const ref = useRef()
   const switchRef = useRef()
+  const contentRef = useRef()
   const [topHeaderKey, setTopHeaderKey] = useState(0)
 
   function toggleTableOfContent() {
@@ -35,7 +37,7 @@ export default function TableOfContent({ headers }) {
       setTopHeaderKey(idx)
       const topHeader = document.getElementById(`header-number-${idx}`)
       if (!topHeader) return
-      ref.current.scrollTo({
+      contentRef.current.scrollTo({
         behavior: 'smooth',
         top: topHeader.offsetTop - 200,
       })
@@ -74,20 +76,25 @@ export default function TableOfContent({ headers }) {
         <FontAwesomeIcon icon={faBars} />
       </div>
       <div className="table-of-content" ref={ref}>
-        {headers.map((header, idx) => (
-          <p
-            className={`header-level-${header.level} ${
-              topHeaderKey === idx ? 'topHeader' : ''
-            }`}
-            id={`header-number-${idx}`}
-            key={idx}
-            onClick={event => {
-              handleClickHeader(event, header)
-            }}
-          >
-            {header.name === 'media' && <YoutubeOutlined />} {header.label}
-          </p>
-        ))}
+        <div className="table-of-content-header">
+          <MusicPlayer />
+        </div>
+        <div className="table-of-content-main" ref={contentRef}>
+          {headers.map((header, idx) => (
+            <p
+              className={`header-level-${header.level} ${
+                topHeaderKey === idx ? 'topHeader' : ''
+              }`}
+              id={`header-number-${idx}`}
+              key={idx}
+              onClick={event => {
+                handleClickHeader(event, header)
+              }}
+            >
+              {header.name === 'media' && <YoutubeOutlined />} {header.label}
+            </p>
+          ))}
+        </div>
       </div>
     </>
   )

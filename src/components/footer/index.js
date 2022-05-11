@@ -7,6 +7,7 @@ import {
   faMoon,
   faSun,
   faFile,
+  faFileSignature,
   faEnvelope,
 } from '@fortawesome/free-solid-svg-icons'
 import './index.css'
@@ -58,7 +59,7 @@ export default function Footer() {
             <a
               href="https://github.com/kqhasaki"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <FontAwesomeIcon icon={faGithub} />
             </a>
@@ -70,7 +71,7 @@ export default function Footer() {
           </span>
           <span>
             <a href={resumeEn} download="resume-en.pdf" title="resume">
-              <FontAwesomeIcon icon={faFile} />
+              <FontAwesomeIcon icon={faFileSignature} />
             </a>
           </span>
           <span>
@@ -96,7 +97,7 @@ export default function Footer() {
           {outerLinks.map(({ url, label }, idx) => (
             <li key={idx}>
               <span>
-                <a href={url} rel="noreferrer" target="_blank">
+                <a href={url} rel="noopener noreferrer" target="_blank">
                   {label}
                 </a>
               </span>
