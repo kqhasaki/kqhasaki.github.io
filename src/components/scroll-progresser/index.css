@@ -1,6 +1,7 @@
 .progresser {
   user-select: none;
   position: fixed;
+  z-index: 9;
   right: 1rem;
   top: 3.2rem;
   width: 30px;
@@ -12,10 +13,10 @@
   font-size: 13px;
   font-weight: lighter;
   font-family: 'Courier New', Courier, monospace;
-  z-index: 900;
   color: var(--font-color);
   background-color: var(--background-color);
   border: 1px solid var(--card-background-border-color);
+  visibility: hidden;
 }
 
 .progresser::after {
@@ -39,4 +40,10 @@
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+@media (max-width: 750px) {
+  .progresser {
+    visibility: visible;
+  }
 }

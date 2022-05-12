@@ -6,10 +6,10 @@
 @media (prefers-color-scheme: dark) {
   body {
     --blue: #02bbff;
-    --background-color: #151617;
+    --background-color: hsl(0deg 0% 8%);
     --background-color-transparent: rgba(0, 0, 0, 0.9);
-    --font-color: #bdc1c6;
-    --font-color-header: #eaeaea;
+    --font-color: #dedede;
+    --font-color-header: #fff;
     --font-color-highlight: #efefef;
     --btn-color: #333;
     --card-background-color: #222;
@@ -20,7 +20,7 @@
     --code-font-color: #c678dd;
     --code-background-color: rgba(0, 0, 0, 0.1);
     --code-border-color: rgba(0, 0, 0, 0.02);
-    --code-block-background: rgba(0, 0, 0, 0.1);
+    --code-block-background: hsl(0deg 0% 11%);
     --navigator-hover-color: rgba(255, 255, 255, 0.1);
     --navigator-border-color: #222;
     --table-border-color: #303030;
@@ -32,7 +32,7 @@
     --blue: #02bbff;
     --background-color: #fff;
     --background-color-transparent: rgba(255, 255, 255, 0.9);
-    --font-color: #1a2027;
+    --font-color: #000;
     --font-color-header: #3c4043;
     --btn-color: #fff;
     --card-background-color: #efefef;
@@ -53,10 +53,10 @@
 
 .dark {
   --blue: #02bbff;
-  --background-color: #151617;
+  --background-color: hsl(0deg 0% 8%);
   --background-color-transparent: rgba(0, 0, 0, 0.9);
-  --font-color: #bdc1c6;
-  --font-color-header: #eaeaea;
+  --font-color: #dedede;
+  --font-color-header: #fff;
   --font-color-highlight: #efefef;
   --btn-color: #333;
   --card-background-color: #222;
@@ -67,7 +67,7 @@
   --code-font-color: #c678dd;
   --code-background-color: rgba(0, 0, 0, 0.1);
   --code-border-color: rgba(0, 0, 0, 0.02);
-  --code-block-background: rgba(0, 0, 0, 0.1);
+  --code-block-background: hsl(0deg 0% 11%);
   --navigator-hover-color: rgba(255, 255, 255, 0.1);
   --navigator-border-color: #222;
   --table-border-color: #303030;
@@ -77,7 +77,7 @@
   --blue: #02bbff;
   --background-color: #fff;
   --background-color-transparent: rgba(255, 255, 255, 0.9);
-  --font-color: #1a2027;
+  --font-color: #000;
   --font-color-header: #3c4043;
   --btn-color: #fff;
   --card-background-color: #efefef;
@@ -99,7 +99,7 @@ html,
 body {
   background-color: var(--background-color);
   color: var(--font-color);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Lato, Georgia, serif;
 }
 
 a {
@@ -132,7 +132,7 @@ p {
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   margin-bottom: 0.7rem;
-  line-height: 1.7;
+  line-height: 1.8;
   margin-top: 0.7rem;
 }
 
@@ -160,59 +160,20 @@ header > .route-link {
   margin: 0 1rem 0 1rem;
 }
 
-header img {
-  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.5);
+.layout {
+  display: flex;
+  flex-direction: row;
 }
 
 .base-wrapper {
+  min-width: 350px;
   margin-left: auto;
   margin-right: auto;
   width: 60%;
   max-width: 1080px;
   padding: 2.625rem 1.3125rem;
   min-height: 100%;
-}
-
-.nav-link {
-  font-size: 2.2rem;
-  transition: 200ms;
-  color: var(--font-color);
-  margin: 0 1rem 0 1rem;
-  cursor: pointer;
-  min-width: 3rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.nav-link > img {
-  height: 2.2rem;
-  border-radius: 50%;
-  transform: scale(1.2);
-}
-
-.nav-link:hover {
-  color: var(--blue);
-  text-decoration: none;
-}
-
-.nav-link:hover .link-label {
-  visibility: visible;
-}
-
-.nav-link .link-label {
-  padding-top: 6px;
-  text-align: center;
-  bottom: -24px;
-  font-size: 0.9rem;
-  display: block;
-  visibility: hidden;
-  width: 8rem;
-}
-
-.link-active {
-  color: var(--blue);
+  padding-bottom: 8rem;
 }
 
 .article-body .article-title {
@@ -498,6 +459,11 @@ deckgo-highlight-code {
     padding-right: 0;
   }
 
+  .base-wrapper {
+    width: 80%;
+    padding-bottom: 8rem !important;
+  }
+
   .article-body h1,
   .article-body h2,
   .article-body h3,
@@ -506,9 +472,14 @@ deckgo-highlight-code {
     padding-left: 0.8rem;
   }
 
+  .article-body li {
+    padding-right: 0.8rem;
+  }
+
   .article-body img,
   deckgo-highlight-code,
-  .iframe-wrapper {
+  .iframe-wrapper,
+  blockquote {
     border-radius: 0 !important;
   }
 
@@ -529,8 +500,10 @@ deckgo-highlight-code {
   .base-wrapper {
     margin-left: auto;
     margin-right: auto;
+    margin-top: 64px;
     width: 100%;
     padding: 2.625rem 1rem;
     min-height: 100%;
+    padding-bottom: 8rem !important;
   }
 }

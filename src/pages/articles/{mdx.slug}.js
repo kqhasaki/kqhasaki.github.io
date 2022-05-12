@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import BaseLayout from '../../components/base-layout'
+import { getIframeAltBackgroundImg } from '../../components/header'
 import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { FieldTimeOutlined, ReadOutlined } from '@ant-design/icons'
@@ -7,31 +8,6 @@ import ScrollProgresser from '../../components/scroll-progresser'
 import TableOfContent from '../../components/table-of-content'
 import ArticleNavigator from '../../components/article-navigator'
 import '../../components/base-layout/index.css'
-
-function getIframeAltBackgroundImg() {
-  const altImgList = [
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h218jhhnzqg20dc07ikjm.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h21adr50r1g209w05k7wi.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h21adqj3x1g20dc07ib2b.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h21adpsp5yg20hs09q1ky.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h21adp13cag20hs0a0x6u.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h21amqaifwg20dc07i4qr.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h21ampu8l1g20dc068u0x.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h21ampagtwg20dc07i7wh.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h21azonp62g20hs09yx6p.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h21azu0dldg20dc07inph.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h21azr2o2ig20du07q4qp.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h24zp18rk3g20hs0a0qv7.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h24zp1u2okg20du07lhdv.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h24zp3i44kg20f008ghdz.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h24zp4331gg20be0bex5e.gif',
-    'https://tva1.sinaimg.cn/large/e6c9d24egy1h24zp5tve8g20du07se89.gif',
-  ]
-
-  const randomPos = Math.floor(Math.random() * 100) % altImgList.length
-
-  return altImgList[randomPos]
-}
 
 function getNextLevel(levelStr, tagName) {
   const dict = {
@@ -134,7 +110,11 @@ export default function ArticleView({ data }) {
   }, [])
 
   return (
-    <BaseLayout name="article-wrapper">
+    <BaseLayout
+      name="article-wrapper"
+      navigator={<ArticleNavigator currArticle={article} />}
+      tableOfContent={<TableOfContent headers={headers} />}
+    >
       <ScrollProgresser />
       <article className="article-body">
         <h1 className="article-title">{article.frontmatter.title}</h1>
@@ -147,8 +127,6 @@ export default function ArticleView({ data }) {
         </p>
         <MDXRenderer>{article.body}</MDXRenderer>
       </article>
-      <ArticleNavigator currArticle={article} />
-      {headers.length && <TableOfContent headers={headers} />}
     </BaseLayout>
   )
 }

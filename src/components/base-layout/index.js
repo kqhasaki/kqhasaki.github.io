@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useStaticQuery, graphql } from 'gatsby'
-import { ReadOutlined, DesktopOutlined } from '@ant-design/icons'
-import { Modal, message } from '../../components'
-import AvatraCard from '../avatar-card'
+import React, { useEffect } from 'react'
+import { useStaticQuery, graphql } from 'gatsby'
+import { message } from '../../components'
 import Footer from '../footer'
-import avatar from '../../images/avatar.png'
+import Header from '../header'
 import clsx from 'clsx'
 import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/highlight-code/dist/loader'
 import './index.css'
@@ -12,7 +10,13 @@ deckDeckGoHighlightElement()
 
 export const languageContext = React.createContext('Chinese')
 
-export default function BaseLayout({ children, pageTitle, name }) {
+export default function BaseLayout({
+  children,
+  pageTitle,
+  name,
+  navigator,
+  tableOfContent,
+}) {
   const { title } = useStaticQuery(graphql`
     query {
       site(siteMetadata: {}) {
@@ -22,7 +26,6 @@ export default function BaseLayout({ children, pageTitle, name }) {
       }
     }
   `).site.siteMetadata
-  const [profileModalVisible, setProfileModalVisible] = useState(false)
 
   useEffect(() => {
     const copyHandler = e => {
@@ -55,50 +58,26 @@ export default function BaseLayout({ children, pageTitle, name }) {
     }
   }, [])
 
-  useEffect(() => {
-    if (!localStorage.getItem('alerted')) {
-      setProfileModalVisible(true)
-      localStorage.setItem('alerted', true)
-    }
-  }, [])
-
   return (
-    <div className={clsx('base-wrapper')} name={name}>
+    <>
       <title>
         {pageTitle && `${pageTitle} |`}
         {title}
       </title>
-      <header>
-        <Link to="/nonTech/" className="nav-link" activeClassName="link-active">
-          <ReadOutlined />
-          <span className="link-label">杂谈文章</span>
-        </Link>
-        <Link to="/" className="nav-link" activeClassName="link-active">
-          <DesktopOutlined />
-          <span className="link-label">技术文章</span>
-        </Link>
-        <div
-          className="nav-link"
-          onClick={() => {
-            setProfileModalVisible(true)
-          }}
-        >
-          <img alt="avatar" src={avatar} />
-          <span className="link-label">关于作者</span>
-        </div>
-      </header>
-      <Modal
-        visible={profileModalVisible}
-        onClose={() => {
-          setProfileModalVisible(false)
-        }}
-      >
-        <AvatraCard />
-      </Modal>
 
-      <main>{children}</main>
+      <Header />
+
+      <main className="layout">
+        {navigator}
+
+        <main className={clsx('base-wrapper')} name={name}>
+          <main>{children}</main>
+        </main>
+
+        {tableOfContent}
+      </main>
 
       <Footer />
-    </div>
+    </>
   )
 }

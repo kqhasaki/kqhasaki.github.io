@@ -1,10 +1,8 @@
 .article-navigator {
   user-select: none;
-  z-index: 998;
   width: 20%;
-  height: 100%;
-  position: fixed;
-  left: 0;
+  height: 100vh;
+  position: sticky;
   top: 0;
   border-right: 1px solid var(--card-background-border-color);
   background-color: var(--background-color);
@@ -22,7 +20,9 @@
 
 @media (max-width: 1100px) {
   .article-navigator {
+    position: fixed;
     transition: 300ms;
+    z-index: 10;
     left: 0;
     left: auto !important;
     height: 100%;
@@ -72,8 +72,8 @@
 }
 
 .article-navigator-switch {
-  z-index: 998;
   position: fixed;
+  z-index: 9;
   left: 1rem;
   top: 1rem;
   width: 30px;

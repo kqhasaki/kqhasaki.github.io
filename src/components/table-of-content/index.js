@@ -68,13 +68,6 @@ export default function TableOfContent({ headers }) {
 
   return (
     <>
-      <div
-        ref={switchRef}
-        className="table-of-content-switch"
-        onClick={toggleTableOfContent}
-      >
-        <FontAwesomeIcon icon={faBars} />
-      </div>
       <div className="table-of-content" ref={ref}>
         <div className="table-of-content-header">
           <MusicPlayer />
@@ -95,6 +88,14 @@ export default function TableOfContent({ headers }) {
             </p>
           ))}
         </div>
+      </div>
+
+      <div
+        ref={switchRef}
+        className="table-of-content-switch"
+        onClick={toggleTableOfContent}
+      >
+        <FontAwesomeIcon icon={faBars} />
       </div>
     </>
   )

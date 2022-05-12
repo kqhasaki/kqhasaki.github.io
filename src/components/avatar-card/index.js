@@ -72,25 +72,12 @@ const CAREER = {
 
 const PROJECTS = {
   Chinese: [
-    // {
-    //   label: '一套在react+leaflet项目中可用的工具组件',
-    //   content: (
-    //     <a
-    //       target="_blank"
-    //       href="https://github.com/kqhasaki/leaflet-map-tools"
-    //       rel="noreferer noopener nofollow"
-    //     >
-    //       结合在开发地图工具过程中遇到leaflet的一些坑和常见需求场景开发的一组地图工具组件。包括了可拖动窗口、dock栏、更好看的LayerControl等。
-    //       in progress <GithubOutlined />
-    //     </a>
-    //   ),
-    // },
     {
       label: '基于gatsby开发的静态博客',
       content: (
         <a
           target="_blank"
-          rel="noreferer noopener nofollow"
+          rel="noreferrer noopener nofollow"
           href="https://github.com/kqhasaki/kqhasaki.github.io"
         >
           本博客代码库（<strike>没几行代码</strike>） <GithubOutlined />
@@ -102,7 +89,7 @@ const PROJECTS = {
       content: (
         <a
           target="_blank"
-          rel="noreferer noopener nofollow"
+          rel="noopener noreferrer"
           href="https://github.com/kqhasaki/Team-Website"
         >
           爬取部分豆瓣数据，使用了简单协同过滤算法的电影推荐系统项目。使用了Django编写的非前后端分离网站。获得全国应用统计研究生案例大赛二等奖。
@@ -115,7 +102,7 @@ const PROJECTS = {
       content: (
         <a
           target="_blank"
-          rel="noreferer noopener nofollow"
+          rel="noreferrer noopener nofollow"
           href="https://github.com/kqhasaki/thesis"
         >
           本渣的硕士论文repo，包含了论文和答辩slide。适合统计、经济、数学类的latex苦手参考。
@@ -135,7 +122,9 @@ export default function AvatarCard() {
       <div className="avatar">
         <img src={avatar} alt="avatar" />
       </div>
-      <h2 style={{ textAlign: 'center' }}>Hey, I'm Louis K.</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: 24, marginTop: 18 }}>
+        Hey, I'm Louis K.
+      </h2>
       {SELF_INTROS[language].map((content, idx) => (
         <div key={idx}>{content}</div>
       ))}
