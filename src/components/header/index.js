@@ -34,9 +34,26 @@ export default function Header() {
   const [profileModalVisible, setProfileModalVisible] = useState(false)
   const [imgUrl, setImgUrl] = useState(getIframeAltBackgroundImg())
   const inputRef = useRef()
+  const lampRef = useRef()
+
+  function changeTheme() {
+    const theme = document.documentElement.dataset.theme
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    localStorage.setItem('theme', newTheme)
+    document.documentElement.dataset.theme = newTheme
+  }
 
   function handleAnswer() {
-    const rightAnswers = ['ranni', 'Ranni', '拉妮', '魔女拉妮']
+    const rightAnswers = [
+      'Ranni',
+      '拉妮',
+      '魔女拉妮',
+      '魔女菈妮',
+      '菈妮',
+      'Marika',
+      'Queen Marika',
+      '玛莉卡',
+    ]
     const { value } = inputRef.current
     if (!rightAnswers.includes(value.trim())) {
       if (!value) {
@@ -62,9 +79,17 @@ export default function Header() {
   }, [])
 
   useEffect(() => {
-    if (!localStorage.getItem('alerted')) {
-      setProfileModalVisible(true)
-      localStorage.setItem('alerted', true)
+    const lamp = lampRef.current
+    const target = document.querySelector('.lamp-base')
+    lamp.onmousedown = () => {
+      target.classList.add('lamp-base-down')
+    }
+    lamp.onmouseup = () => {
+      target.classList.remove('lamp-base-down')
+    }
+
+    lamp.onclick = () => {
+      changeTheme()
     }
   }, [])
 
@@ -95,6 +120,14 @@ export default function Header() {
           >
             <span className="link-label">Ramble</span>
           </Link>
+
+          <div className="nav-link" ref={lampRef}>
+            <button className="lamp" aria-pressed="true" type="button">
+              <span className="lamp-base"></span>
+              <span className="lamp-neck"></span>
+              <span className="lamp-head"></span>
+            </button>
+          </div>
         </nav>
       </header>
 

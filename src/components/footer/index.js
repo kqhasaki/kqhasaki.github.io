@@ -10,23 +10,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import './index.css'
 
-let globalTheme = null
-
 export default function Footer() {
-  const [theme, setTheme] = useState(globalTheme)
-
-  function changeTheme(newTheme) {
-    document.querySelector('body').className = `${newTheme}`
-    setTheme(newTheme)
-    globalTheme = newTheme
-  }
+  const [enableDownload, setEnableDownload] = useState(false)
 
   useEffect(() => {
-    if (!globalTheme) {
-      const themeMedia = window.matchMedia('(prefers-color-scheme: light)')
-      const initTheme = themeMedia.matches ? 'light' : 'dark'
-      setTheme(initTheme)
-      globalTheme = initTheme
+    const path = window.location.pathname
+    if (path === '/about') {
+      setEnableDownload(true)
     }
   }, [])
 
@@ -59,16 +49,20 @@ export default function Footer() {
                 <FontAwesomeIcon icon={faGithub} />
               </a>
             </span>
-            {/* <span>
-              <a href={resume} download="resume.pdf" title="简历下载">
-                <FontAwesomeIcon icon={faFile} />
-              </a>
-            </span>
-            <span>
-              <a href={resumeEn} download="resume-en.pdf" title="resume">
-                <FontAwesomeIcon icon={faFileSignature} />
-              </a>
-            </span> */}
+            {enableDownload && (
+              <>
+                <span>
+                  <a href={resume} download="resume.pdf" title="简历下载">
+                    <FontAwesomeIcon icon={faFile} />
+                  </a>
+                </span>
+                <span>
+                  <a href={resumeEn} download="resume-en.pdf" title="resume">
+                    <FontAwesomeIcon icon={faFileSignature} />
+                  </a>
+                </span>
+              </>
+            )}
           </p>
         </div>
       </div>

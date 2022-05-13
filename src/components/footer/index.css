@@ -1,7 +1,7 @@
 .footer {
   user-select: none;
   color: #efefef;
-  height: 154px;
+  height: 184px;
   position: relative;
   display: flex;
   flex-direction: row;
@@ -26,9 +26,10 @@
 }
 
 .footer h3 {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   width: 100%;
   margin-top: 8px;
+  font-weight: lighter;
 }
 
 .footer p {

@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { throttle } from 'lodash'
 import './index.css'
 
 export default function ScrollProgresser() {
   const [progress, setProgress] = useState(0)
+  const ref = useRef()
+  const scrollTopRef = useRef(null)
 
   function scrollToTop() {
     window.scrollTo({
@@ -14,6 +16,16 @@ export default function ScrollProgresser() {
 
   useEffect(() => {
     const handler = throttle(() => {
+      const currentScrollTop =
+        window.pageYOffset || document.documentElement.scrollTop
+      if (scrollTopRef.current !== null) {
+        if (currentScrollTop > scrollTopRef.current) {
+          ref.current.classList.add('progresser-hide')
+        } else {
+          ref.current.classList.remove('progresser-hide')
+        }
+      }
+      scrollTopRef.current = currentScrollTop
       const totalScroll =
         document.body.scrollHeight - document.documentElement.clientHeight
       const currScroll = document.documentElement.scrollTop
@@ -31,8 +43,8 @@ export default function ScrollProgresser() {
   }, [])
 
   return (
-    <div className="progresser" onClick={scrollToTop}>
-      {progress}
+    <div ref={ref} className="progresser" onClick={scrollToTop}>
+      {progress}%
     </div>
   )
 }

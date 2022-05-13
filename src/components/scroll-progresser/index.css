@@ -1,13 +1,14 @@
 .progresser {
+  transition: 200ms;
   user-select: none;
   position: fixed;
   z-index: 9;
-  right: 1rem;
-  top: 3.2rem;
-  width: 30px;
+  right: 0;
+  bottom: 4rem;
+  width: 48px;
   height: 30px;
-  line-height: 29px;
-  border-radius: 50%;
+  line-height: 30px;
+  border-radius: 15px 0 0 15px;
   text-align: center;
   cursor: pointer;
   font-size: 13px;
@@ -16,13 +17,12 @@
   color: var(--font-color);
   background-color: var(--background-color);
   border: 1px solid var(--card-background-border-color);
-  visibility: hidden;
 }
 
 .progresser::after {
   transition: 200ms;
   opacity: 0;
-  border-radius: 50%;
+  border-radius: 15px 0 0 15px;
   content: '';
   position: absolute;
   top: 0;
@@ -42,8 +42,6 @@
   right: 0;
 }
 
-@media (max-width: 750px) {
-  .progresser {
-    visibility: visible;
-  }
+.progresser-hide {
+  transform: translateX(100%);
 }

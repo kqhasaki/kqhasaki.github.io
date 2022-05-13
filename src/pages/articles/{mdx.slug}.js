@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import BaseLayout from '../../components/base-layout'
 import { getIframeAltBackgroundImg } from '../../components/header'
 import { graphql } from 'gatsby'
@@ -36,9 +36,19 @@ export const query = graphql`
   }
 `
 
+function getCommentTheme() {
+  const theme = document.documentElement.dataset.theme
+  if (theme === 'light') {
+    return 'github-light'
+  } else {
+    return 'github-dark'
+  }
+}
+
 export default function ArticleView({ data }) {
   const article = data.mdx
   const [headers, setHeaders] = useState([])
+  const commentBox = useRef()
 
   useEffect(() => {
     document.title = article.frontmatter.title
@@ -109,6 +119,25 @@ export default function ArticleView({ data }) {
     })
   }, [])
 
+  useEffect(() => {
+    const scriptEl = document.createElement('script')
+    scriptEl.async = true
+    scriptEl.src = 'https://utteranc.es/client.js'
+    scriptEl.setAttribute('repo', 'kqhasaki/kqhasaki.github.io')
+    scriptEl.setAttribute('issue-term', 'pathname')
+    scriptEl.setAttribute('label', 'blog comment')
+    scriptEl.setAttribute('theme', getCommentTheme())
+    scriptEl.setAttribute('crossorigin', 'anonymous')
+
+    if (commentBox && commentBox.current) {
+      commentBox.current.appendChild(scriptEl)
+    } else {
+      console.log(`Error adding utterances comments on: ${commentBox}`)
+    }
+
+    return () => scriptEl.remove()
+  }, [])
+
   return (
     <BaseLayout
       name="article-wrapper"
@@ -116,7 +145,7 @@ export default function ArticleView({ data }) {
       tableOfContent={<TableOfContent headers={headers} />}
     >
       <ScrollProgresser />
-      <article className="article-body">
+      <article className="article-body" style={{ marginBottom: '4rem' }}>
         <h1 className="article-title">{article.frontmatter.title}</h1>
         <p className="article-meta">
           <span>
@@ -127,6 +156,8 @@ export default function ArticleView({ data }) {
         </p>
         <MDXRenderer>{article.body}</MDXRenderer>
       </article>
+
+      <div ref={commentBox} id="commentBoxScript"></div>
     </BaseLayout>
   )
 }
