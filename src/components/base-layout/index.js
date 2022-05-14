@@ -16,6 +16,7 @@ export default function BaseLayout({
   name,
   navigator,
   tableOfContent,
+  additionalClass = [],
 }) {
   const { title } = useStaticQuery(graphql`
     query {
@@ -67,7 +68,7 @@ export default function BaseLayout({
 
       <Header />
 
-      <main className="layout">
+      <main className={clsx([...additionalClass, 'layout'])}>
         {navigator}
 
         <main className={clsx('base-wrapper')} name={name}>

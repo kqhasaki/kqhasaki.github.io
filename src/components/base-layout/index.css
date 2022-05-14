@@ -55,10 +55,11 @@ html[data-theme='light'] {
 
 html {
   background-color: hsl(0deg 0% 13%);
+  border: none;
 }
 
 body {
-  background-color: var(--background-color);
+  background-color: hsl(0deg 0% 13%);
   color: var(--font-color);
   font-family: Lato, Georgia, serif;
 }
@@ -124,6 +125,7 @@ header > .route-link {
 .layout {
   display: flex;
   flex-direction: row;
+  background-color: var(--background-color);
 }
 
 .base-wrapper {
@@ -365,10 +367,11 @@ td {
 }
 
 .iframe-wrapper .loader {
+  font-family: sans-serif;
   user-select: none;
   font-size: 2.5rem;
   text-align: center;
-  color: rgba(255, 255, 255, 0.6);
+  color: #dcdcdc;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -390,6 +393,22 @@ deckgo-highlight-code {
   user-select: none;
   margin-top: 1rem;
   cursor: pointer;
+}
+
+.not-found-background {
+  width: 100%;
+  user-select: none;
+  aspect-ratio: 16 / 9;
+}
+
+.not-found-background h1 {
+  color: rgb(239, 57, 57);
+  margin-top: 4rem;
+  text-align: center;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 3rem rgba(0, 0, 0, 0.9);
 }
 
 @media (min-width: 900px) {
@@ -435,6 +454,10 @@ deckgo-highlight-code {
     padding-right: 0.8rem;
   }
 
+  .article-body li p {
+    margin: 0;
+  }
+
   .article-body img,
   deckgo-highlight-code,
   .iframe-wrapper,
@@ -463,5 +486,10 @@ deckgo-highlight-code {
     width: 100%;
     padding: 2.625rem 1rem;
     min-height: 100%;
+  }
+
+  .not-found-background {
+    user-select: none;
+    aspect-ratio: 9 / 20;
   }
 }

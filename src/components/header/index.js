@@ -33,6 +33,7 @@ export function getIframeAltBackgroundImg() {
 export default function Header() {
   const [profileModalVisible, setProfileModalVisible] = useState(false)
   const [imgUrl, setImgUrl] = useState(getIframeAltBackgroundImg())
+  const lampClickCount = useRef(0)
   const inputRef = useRef()
   const lampRef = useRef()
 
@@ -89,7 +90,13 @@ export default function Header() {
     }
 
     lamp.onclick = () => {
+      console.log(lampClickCount.current)
+      if (lampClickCount.current >= 5) {
+        message.error('台灯坏了')
+        navigate('/lamp-broken')
+      }
       changeTheme()
+      lampClickCount.current++
     }
   }, [])
 

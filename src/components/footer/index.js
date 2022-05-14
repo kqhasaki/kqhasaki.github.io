@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import resume from '../../static/resume/resume.pdf'
 import resumeEn from '../../static/resume/resume-en.pdf'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faWeixin, faQq, faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
-  faFile,
-  faFileSignature,
-  faEnvelope,
-} from '@fortawesome/free-solid-svg-icons'
+  MailFilled,
+  QqCircleFilled,
+  DownloadOutlined,
+  GithubFilled,
+  WechatFilled,
+} from '@ant-design/icons'
 import './index.css'
 
 export default function Footer() {
@@ -30,14 +30,14 @@ export default function Footer() {
         <div>
           <p style={{ fontSize: '1.3rem' }}>
             <span>
-              <FontAwesomeIcon icon={faWeixin} />
+              <WechatFilled />
             </span>
             <span>
-              <FontAwesomeIcon icon={faQq} />
+              <QqCircleFilled />
             </span>
             <span>
               <a href="mailto:k1664032884@gmail.com">
-                <FontAwesomeIcon icon={faEnvelope} />
+                <MailFilled />
               </a>
             </span>
             <span>
@@ -46,19 +46,19 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FontAwesomeIcon icon={faGithub} />
+                <GithubFilled />
               </a>
             </span>
             {enableDownload && (
               <>
                 <span>
                   <a href={resume} download="resume.pdf" title="简历下载">
-                    <FontAwesomeIcon icon={faFile} />
+                    <DownloadOutlined />
                   </a>
                 </span>
                 <span>
                   <a href={resumeEn} download="resume-en.pdf" title="resume">
-                    <FontAwesomeIcon icon={faFileSignature} />
+                    <DownloadOutlined />
                   </a>
                 </span>
               </>

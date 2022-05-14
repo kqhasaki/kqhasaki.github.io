@@ -102,6 +102,7 @@
   overflow: hidden;
   width: 100%;
   height: auto;
+  object-fit: cover;
   padding: 0;
   aspect-ratio: 16 / 9;
   border-radius: 8px;
