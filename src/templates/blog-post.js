@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import BaseLayout from '../../components/base-layout'
-import { getIframeAltBackgroundImg } from '../../components/header'
-import { graphql } from 'gatsby'
+import BaseLayout from '../components/base-layout'
+import { getIframeAltBackgroundImg } from '../components/header'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { FieldTimeOutlined, ReadOutlined } from '@ant-design/icons'
-import ScrollProgresser from '../../components/scroll-progresser'
-import TableOfContent from '../../components/table-of-content'
-import ArticleNavigator from '../../components/article-navigator'
-import '../../components/base-layout/index.css'
+import ScrollProgresser from '../components/scroll-progresser'
+import TableOfContent from '../components/table-of-content'
+import ArticleNavigator from '../components/article-navigator'
+import '../components/base-layout/index.css'
 
-function getNextLevel(levelStr, tagName) {
+function getNextLevel(levelStr) {
   const dict = {
     h1: 'h2',
     h2: 'h3',
@@ -17,24 +16,6 @@ function getNextLevel(levelStr, tagName) {
   }
   return dict[levelStr]
 }
-
-export const query = graphql`
-  query ($id: String) {
-    mdx(id: { eq: $id }) {
-      id
-      frontmatter {
-        cover
-        date(formatString: "YYYY-MM-DD")
-        title
-      }
-      body
-      slug
-      wordCount {
-        sentences
-      }
-    }
-  }
-`
 
 function getCommentTheme() {
   const theme = document.documentElement.dataset.theme
@@ -45,8 +26,8 @@ function getCommentTheme() {
   }
 }
 
-export default function ArticleView({ data }) {
-  const article = data.mdx
+export default function ArticleView({ pageContext }) {
+  const article = pageContext.data.node
   const [headers, setHeaders] = useState([])
   const commentBox = useRef()
 
@@ -96,7 +77,7 @@ export default function ArticleView({ data }) {
     return () => {
       document.removeEventListener('click', headNavigate)
     }
-  }, [article.frontmatter.title, data])
+  }, [article.frontmatter.title])
 
   useEffect(() => {
     const allIframes = document.querySelectorAll('iframe')

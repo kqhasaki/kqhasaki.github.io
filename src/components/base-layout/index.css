@@ -484,7 +484,7 @@ deckgo-highlight-code {
     margin-right: auto;
     margin-top: 64px;
     width: 100%;
-    padding: 2.625rem 1rem;
+    padding: 2.625rem 0rem;
     min-height: 100%;
   }
 

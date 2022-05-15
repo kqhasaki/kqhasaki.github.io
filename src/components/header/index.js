@@ -90,7 +90,6 @@ export default function Header() {
     }
 
     lamp.onclick = () => {
-      console.log(lampClickCount.current)
       if (lampClickCount.current >= 5) {
         message.error('台灯坏了')
         navigate('/lamp-broken')
@@ -121,7 +120,7 @@ export default function Header() {
             <span className="link-label">Tech</span>
           </Link>
           <Link
-            to="/nonTech/"
+            to="/non-tech/"
             className="nav-link"
             activeClassName="link-active"
           >
