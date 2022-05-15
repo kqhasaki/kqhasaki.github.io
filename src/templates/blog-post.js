@@ -127,6 +127,11 @@ export default function ArticleView({ pageContext }) {
     >
       <ScrollProgresser />
       <article className="article-body" style={{ marginBottom: '4rem' }}>
+        <img
+          alt={article.frontmatter.cover}
+          src={article.frontmatter.cover}
+          className="article-cover"
+        ></img>
         <h1 className="article-title">{article.frontmatter.title}</h1>
         <p className="article-meta">
           <span>

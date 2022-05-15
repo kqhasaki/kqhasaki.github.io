@@ -128,6 +128,18 @@ header > .route-link {
   background-color: var(--background-color);
 }
 
+.article-body .article-cover {
+  width: 225px !important;
+  aspect-ratio: 16 / 10;
+  object-fit: contain;
+  border-radius: 6px !important;
+}
+
+.article-body p strong {
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
 .base-wrapper {
   min-width: 350px;
   margin-left: auto;
@@ -143,6 +155,7 @@ header > .route-link {
   font-size: 2.2rem;
   font-weight: bold;
   margin-bottom: 2rem;
+  margin-top: 0.5rem;
 }
 
 .article-body strong {
@@ -229,7 +242,11 @@ h3 {
   border-radius: 0.5rem;
 }
 
-.article-body h1:not(:first-child)::before {
+.article-body h1.article-title::before {
+  content: none !important;
+}
+
+.article-body h1::before {
   background: var(--blue);
   content: '';
   display: block;
