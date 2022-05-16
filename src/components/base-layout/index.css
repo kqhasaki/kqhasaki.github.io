@@ -58,6 +58,10 @@ html {
   border: none;
 }
 
+html[usrfont='non-mac'] {
+  font-family: STSong, sans-serif !important;
+}
+
 body {
   background-color: hsl(0deg 0% 13%);
   color: var(--font-color);

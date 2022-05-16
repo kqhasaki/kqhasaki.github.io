@@ -21,6 +21,11 @@ export default function HTML(props) {
               const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
               document.documentElement.dataset.theme = preferredTheme;
             }
+
+            const isMacOS = navigator.platform === 'MacIntel'
+            if (!isMacOS) {
+              document.documentElement.dataset.usrfont = 'non-mac';
+            }
             `,
           }}
         ></script>
