@@ -8,8 +8,20 @@ exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
   const result = await graphql(`
     query {
-      allMdx {
+      allMdx(sort: { fields: [slug], order: ASC }) {
         edges {
+          previous {
+            slug
+            frontmatter {
+              title
+            }
+          }
+          next {
+            slug
+            frontmatter {
+              title
+            }
+          }
           node {
             id
             frontmatter {
@@ -38,6 +50,8 @@ exports.createPages = async ({ graphql, actions }) => {
       context: {
         title: edge.node.title,
         data: edge,
+        next: edge.next,
+        previous: edge.previous,
       },
     })
   })

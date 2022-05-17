@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import BaseLayout from '../components/base-layout'
+import { navigate } from 'gatsby'
 import { getIframeAltBackgroundImg } from '../components/header'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { FieldTimeOutlined, ReadOutlined } from '@ant-design/icons'
 import ScrollProgresser from '../components/scroll-progresser'
 import TableOfContent from '../components/table-of-content'
 import ArticleNavigator from '../components/article-navigator'
+import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 import '../components/base-layout/index.css'
 
 function getNextLevel(levelStr) {
@@ -28,6 +30,7 @@ function getCommentTheme() {
 
 export default function ArticleView({ pageContext }) {
   const article = pageContext.data.node
+  const { next, previous } = pageContext
   const [headers, setHeaders] = useState([])
   const commentBox = useRef()
 
@@ -142,6 +145,37 @@ export default function ArticleView({ pageContext }) {
         </p>
         <MDXRenderer>{article.body}</MDXRenderer>
       </article>
+
+      <div className="foot-post-navigator">
+        <button
+          className={
+            'previous ' +
+            (previous?.slug.startsWith('non-tech') ? 'to-non-tech' : '')
+          }
+          onClick={() => navigate(`/articles/${previous?.slug}`)}
+          style={{ visibility: previous ? 'visible' : 'hidden' }}
+        >
+          <div>
+            <LeftOutlined />
+            上一篇
+          </div>
+          <span>{previous?.frontmatter.title}</span>
+        </button>
+
+        <button
+          className={
+            'next ' + (next?.slug.startsWith('non-tech') ? 'to-non-tech' : '')
+          }
+          onClick={() => navigate(`/articles/${next?.slug}`)}
+          style={{ visibility: next ? 'visible' : 'hidden' }}
+        >
+          <div>
+            下一篇
+            <RightOutlined />
+          </div>
+          <span>{next?.frontmatter.title}</span>
+        </button>
+      </div>
 
       <div ref={commentBox} id="commentBoxScript"></div>
     </BaseLayout>

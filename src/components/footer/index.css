@@ -1,4 +1,6 @@
 .footer {
+  font-family: Lato, Georgia, serif;
+  min-width: 350px;
   user-select: none;
   color: #efefef;
   height: 184px;

@@ -58,7 +58,7 @@ html {
   border: none;
 }
 
-html[usrfont='non-mac'] {
+html[data-usrfont='non-mac'] body {
   font-family: STSong, sans-serif !important;
 }
 
@@ -423,6 +423,7 @@ deckgo-highlight-code {
 }
 
 .not-found-background h1 {
+  font-family: Lato, Georgia, serif;
   color: rgb(239, 57, 57);
   margin-top: 4rem;
   text-align: center;
@@ -430,6 +431,52 @@ deckgo-highlight-code {
   padding: 8px;
   background-color: rgba(0, 0, 0, 0.8);
   box-shadow: 0 0 3rem rgba(0, 0, 0, 0.9);
+}
+
+.foot-post-navigator {
+  display: flex;
+  flex-direction: row;
+  padding: 0 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.foot-post-navigator button {
+  max-width: 45%;
+  transition: 200ms;
+  background: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  font-family: inherit !important;
+  color: var(--font-color);
+  margin: 0 4px;
+}
+
+.foot-post-navigator button.next {
+  align-items: flex-end;
+}
+
+.foot-post-navigator button div {
+  margin-bottom: 6px;
+}
+
+.foot-post-navigator button span {
+  font-size: 15px;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.foot-post-navigator button.to-non-tech:hover {
+  color: gold;
+}
+
+.foot-post-navigator button:hover {
+  color: var(--blue);
 }
 
 @media (min-width: 900px) {
