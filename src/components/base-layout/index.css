@@ -55,6 +55,7 @@ html[data-theme='light'] {
 
 html {
   background-color: hsl(0deg 0% 13%);
+  overflow-y: overlay;
   border: none;
 }
 

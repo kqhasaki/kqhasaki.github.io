@@ -8,6 +8,7 @@ import ScrollProgresser from '../components/scroll-progresser'
 import TableOfContent from '../components/table-of-content'
 import ArticleNavigator from '../components/article-navigator'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
+import { debounce, throttle } from 'lodash'
 import '../components/base-layout/index.css'
 
 function getNextLevel(levelStr) {
@@ -120,6 +121,23 @@ export default function ArticleView({ pageContext }) {
     }
 
     return () => scriptEl.remove()
+  }, [])
+
+  useEffect(() => {
+    const scrollingAdder = throttle(() => {
+      document.body.classList.add('scrolling')
+    }, 100)
+    window.addEventListener('scroll', scrollingAdder)
+
+    const scrollingRemover = debounce(() => {
+      document.body.classList.remove('scrolling')
+    }, 500)
+    window.addEventListener('scroll', scrollingRemover)
+
+    return () => {
+      window.removeEventListener('scroll', scrollingAdder)
+      window.removeEventListener('scroll', scrollingRemover)
+    }
   }, [])
 
   return (
