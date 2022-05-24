@@ -20,6 +20,7 @@
 
 .post-card {
   padding: 1.5rem 2rem 1.5rem 2rem;
+  font-weight: 300;
   display: flex;
   max-width: 50rem;
   flex-direction: column;
@@ -45,6 +46,10 @@
   transform: translate(-50%) rotate(0deg);
 }
 
+.post-card h2 {
+  font-weight: 400;
+}
+
 .post-card h2::after {
   background: var(--blue);
   content: '';
@@ -65,6 +70,7 @@
   border-radius: 0.5rem;
   background-color: var(--card-background-color);
   border: 1px solid var(--card-background-border-color);
+  font-family: var(--font-serif);
 }
 
 @media (max-width: 750px) {

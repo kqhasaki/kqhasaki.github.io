@@ -5,7 +5,8 @@
   width: 100%;
   user-select: none;
   min-width: 350px;
-  font-family: Lato, Georgia, serif;
+  font-family: var(--font-sans-serif);
+  font-weight: 100;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
 }
 
@@ -60,6 +61,11 @@
   text-decoration: none;
 }
 
+.nav-link-gold:hover {
+  color: gold !important;
+  text-decoration: none;
+}
+
 .nav-link .link-label {
   text-align: center;
   font-size: 16px;
@@ -69,6 +75,10 @@
 
 .link-active {
   color: var(--blue);
+}
+
+.link-active-gold {
+  color: gold;
 }
 
 .game .question {

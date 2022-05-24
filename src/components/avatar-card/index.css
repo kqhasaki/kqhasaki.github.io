@@ -16,3 +16,21 @@
   border-radius: 50%;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
+
+.avatar-wrapper {
+  font-weight: 300;
+}
+
+.avatar-wrapper a {
+  text-decoration: none;
+  transition: 300ms;
+}
+
+.avatar-wrapper a:hover {
+  color: gold;
+}
+
+.avatar-wrapper h1,
+.avatar-wrapper h2 {
+  font-weight: 400;
+}

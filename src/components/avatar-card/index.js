@@ -118,11 +118,18 @@ export default function AvatarCard() {
   const language = useContext(languageContext)
 
   return (
-    <main>
+    <main className="avatar-wrapper">
       <div className="avatar">
         <img src={avatar} alt="avatar" />
       </div>
-      <h2 style={{ textAlign: 'center', marginBottom: 24, marginTop: 18 }}>
+      <h2
+        style={{
+          textAlign: 'center',
+          marginBottom: 24,
+          marginTop: 18,
+          fontWeight: 100,
+        }}
+      >
         Hey, I'm Louis K.
       </h2>
       {SELF_INTROS[language].map((content, idx) => (

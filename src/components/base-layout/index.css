@@ -1,6 +1,14 @@
 :root {
-  --deckgo-highlight-code-font-family: source-code-pro, Menlo, Monaco, Consolas,
-    Courier New, monospace;
+  --deckgo-highlight-code-font-family: 'PT Mono', ui-monospace, source-code-pro,
+    Menlo, Monaco, Consolas, Courier New, monospace;
+  --font-sans-serif: PingFangSC, -apple-system, BlinkMacSystemFont,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Segoe UI',
+    'PingFang SC', HarmonyOS_Regular, 'Hiragino Sans GB', 'Microsoft YaHei',
+    'Helvetica Neue', Helvetica, 'Source Han Sans SC', 'Noto Sans CJK SC',
+    'WenQuanYi Micro Hei', Arial, sans-serif;
+  --font-serif: Lato, Georgia, serif, STZhongsong, STSong, 'Noto Serif SC',
+    'Noto Serif CJK', PMingLiu, SimSun, 'WenQuanYi Bitmap Song',
+    'Times New Roman', Times;
 }
 
 html[data-theme='dark'] {
@@ -16,7 +24,7 @@ html[data-theme='dark'] {
   --font-color-quote: #bdcbdc;
   --card-background-border-color: #2a2a2a;
   --card-box-shadow: #333;
-  --code-font-color: #c678dd;
+  --code-font-color: #64de64;
   --code-background-color: rgba(0, 0, 0, 0.1);
   --code-border-color: rgba(0, 0, 0, 0.02);
   --code-block-background: hsl(0deg 0% 11%);
@@ -42,7 +50,7 @@ html[data-theme='light'] {
   --code-font-color: #444;
   --code-background-color: rgba(255, 229, 100, 0.2);
   --code-border-color: rgba(255, 229, 100, 0.2);
-  --code-block-background: #313131;
+  --code-block-background: hsl(0deg 0% 16%);
   --navigator-hover-color: rgba(0, 0, 0, 0.08);
   --navigator-border-color: #ddd;
   --table-border-color: #ededed;
@@ -60,13 +68,14 @@ html {
 }
 
 html[data-usrfont='non-mac'] body {
-  font-family: STSong, sans-serif !important;
+  font-family: Microsoft Yahei, STSong, sans-serif !important;
 }
 
 body {
   background-color: hsl(0deg 0% 13%);
   color: var(--font-color);
-  font-family: Lato, Georgia, serif;
+  font-family: var(--font-sans-serif);
+  font-weight: 400;
 }
 
 a {
@@ -140,11 +149,6 @@ header > .route-link {
   border-radius: 6px !important;
 }
 
-.article-body p strong {
-  font-family: sans-serif;
-  font-weight: bold;
-}
-
 .base-wrapper {
   min-width: 350px;
   margin-left: auto;
@@ -158,7 +162,7 @@ header > .route-link {
 .article-body .article-title {
   text-align: center;
   font-size: 2.2rem;
-  font-weight: bold;
+  font-weight: normal;
   margin-bottom: 2rem;
   margin-top: 0.5rem;
 }
@@ -179,6 +183,7 @@ header > .route-link {
   border-radius: 0.5rem;
   background-color: var(--card-background-color);
   font-weight: lighter;
+  font-family: var(--font-serif);
 }
 
 .article-body h1,
@@ -187,9 +192,11 @@ h3 {
   cursor: pointer;
 }
 
-.article-body p {
+.article-body {
   font-size: 16px;
-  font-weight: 400;
+}
+
+.article-body p {
   margin-top: 1.2rem;
   margin-bottom: 1.2rem;
 }
@@ -197,8 +204,8 @@ h3 {
 .article-body h1 {
   color: var(--font-color-header);
   margin-bottom: 1.8rem;
+  font-weight: 400;
   margin-top: 3.5rem;
-  font-weight: bold;
   font-size: 2rem;
 }
 
@@ -209,8 +216,8 @@ h3 {
 .article-body h2 {
   color: var(--font-color-header);
   margin-bottom: 1rem;
+  font-weight: 400;
   margin-top: 2.5rem;
-  font-weight: bold;
   font-size: 1.6rem;
 }
 
@@ -223,7 +230,7 @@ h3 {
   margin-top: 1.8rem;
   margin-bottom: 1rem;
   font-size: 1.3rem;
-  font-weight: bold;
+  font-weight: 300;
   line-height: 1.8;
 }
 
@@ -260,17 +267,8 @@ h3 {
   margin-bottom: 0.5rem;
 }
 
-.article-body h2::before {
-  background: var(--blue);
-  content: '';
-  display: block;
-  height: 2px;
-  width: 70px;
-  margin-bottom: 0.3rem;
-}
-
 .article-body code {
-  font-family: Menlo, Monaco, Consolas, monospace;
+  font-family: var(--deckgo-highlight-code-font-family);
   font-size: 15px;
   border: 1px solid var(--code-border-color);
   padding: 1px 4px 1px 4px;
@@ -286,6 +284,7 @@ h3 {
   border-left: 2px solid var(--blue);
   margin-top: 1rem;
   background-color: var(--quote-background-color);
+  font-weight: 300;
   color: var(--font-color-quote);
 }
 
@@ -412,9 +411,7 @@ deckgo-highlight-code {
   background-color: var(--code-block-background);
   border-radius: 0.5rem;
   position: relative;
-  user-select: none;
   margin-top: 1rem;
-  cursor: pointer;
 }
 
 .not-found-background {
@@ -452,6 +449,7 @@ deckgo-highlight-code {
   display: flex;
   flex-direction: column;
   font-family: inherit !important;
+  font-weight: 300 !important;
   color: var(--font-color);
   margin: 0 4px;
 }
@@ -478,25 +476,6 @@ deckgo-highlight-code {
 
 .foot-post-navigator button:hover {
   color: var(--blue);
-}
-
-@media (min-width: 900px) {
-  deckgo-highlight-code::after {
-    content: '双击复制';
-    opacity: 0;
-    font-size: 11px;
-    position: absolute;
-    text-align: center;
-    height: 2rem;
-    width: 4rem;
-    right: 1rem;
-    top: 1rem;
-    transition: 400ms;
-  }
-
-  deckgo-highlight-code:hover::after {
-    opacity: 1;
-  }
 }
 
 @media (max-width: 1100px) {

@@ -121,8 +121,8 @@ export default function Header() {
           </Link>
           <Link
             to="/non-tech/"
-            className="nav-link"
-            activeClassName="link-active"
+            className="nav-link-gold nav-link"
+            activeClassName="link-active-gold"
           >
             <span className="link-label">Ramble</span>
           </Link>

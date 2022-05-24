@@ -2,7 +2,6 @@
   height: 100vh;
   width: 20%;
   user-select: none;
-  border-left: 1px solid var(--card-background-border-color);
   background-color: var(--background-color);
   position: sticky;
   top: 0;
@@ -76,7 +75,7 @@
   }
 
   .table-of-content p.header-level-h1 {
-    font-weight: bold;
+    font-weight: 500;
     padding-left: 2rem;
     margin-top: 0.8rem;
   }
@@ -145,7 +144,7 @@ p.header-level-h1:first-child {
 }
 
 p.header-level-h1 {
-  font-weight: bold;
+  font-weight: 500;
   margin-top: 0.8rem;
   font-size: 15px;
 }
@@ -160,4 +159,5 @@ p.header-level-h3 {
   font-size: 14px;
   margin-top: 0.2rem;
   padding-left: 2rem;
+  font-weight: 300;
 }
