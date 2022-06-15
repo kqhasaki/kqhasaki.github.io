@@ -44,3 +44,76 @@ function bubbleSort(array, compareFn = defaultCompare) {
 注意冒泡排序算法的复杂度是 O(n<sup>2</sup>)，性能很差，不推荐使用。
 
 ## 选择排序
+
+## 快速排序
+
+**快速排序**也许是最常用的排序算法了。它的时间复杂度为 O(<i>n</i>log(<i>n</i>))，且性能通常比其他复杂度相同的算法要好。和归并排序一样，快速排序也使用分而治之的方法，将原始数组分为较小的数组（但它没有像归并排序那样将它们分割开）。
+
+快速排序比其他排序算法略为复杂一些。我们一步步来学习：
+
+1. 首先，从数组中选出一值作为**主元**（pivot），也就是数组中间的那个值。
+2. 创建两个指针（引用），左边一个指向数组第一个值，右边一个指向数组最后一个值。移动左指针直到我们找到一个比主元大的值，接着移动右指针找到一个比主元小的值，然后交换它们，重复这个过程，直到左指针超过了右指针。这个过程将使得比主元小的值都排在主元之前，而比主元大的值都排在主元之后。这一步叫做**划分**（partition）操作。
+3. 接着，算法对划分后的小数组（较主元小的值组成的子数组，以及较主元大的值组成的子数组）重复之前的两个步骤，直至数组已经完全排序。
+
+一个快速的动画示意如下：
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h3a7zxefl1g20l40b3gx7.gif)
+
+再看下详细的慢速演示：
+
+![](https://assets.leetcode-cn.com/solution-static/912/912_fig1.gif)
+
+让我们来实现一下快速排序：
+
+```jsx
+function quickSort(nums) {
+  return quick(nums, 0, nums.length - 1)
+}
+
+function quick(array, left, right) {
+  let idx
+  if (array.length > 1) {
+    idx = partition(array, left, right)
+    if (left < idx - 1) {
+      quick(array, left, idx - 1)
+    }
+    if (idx < right) {
+      quick(array, idx, right)
+    }
+  }
+
+  return array
+}
+
+function partition(array, left, right) {
+  const pivot = array[Math.floor((right + left) / 2)]
+  let i = left
+  let j = right
+
+  while (i <= j) {
+    while (array[i] < pivot) {
+      i++
+    }
+    while (array[j] > pivot) {
+      j--
+    }
+    if (i <= j) {
+      swap(array, i, j)
+      i++
+      j--
+    }
+  }
+
+  return i
+}
+
+function swap(array, i, j) {
+  const temp = array[j]
+  array[j] = array[i]
+  array[i] = temp
+}
+
+const arr = [11, 3, 4, 0, 9, 1, 5, 0, 2]
+
+console.log(quickSort(arr))
+```
