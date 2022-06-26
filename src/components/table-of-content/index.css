@@ -116,10 +116,6 @@
   }
 }
 
-.table-of-content::-webkit-scrollbar {
-  display: none;
-}
-
 .table-of-content p {
   width: 100%;
   white-space: nowrap;

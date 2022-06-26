@@ -907,4 +907,501 @@ function hasPrototypeProperty(object, name) {
 
 要获得对象上所有可枚举的实例属性，可以使用`Object.keys()`方法。这个方法接收一个对象作为参数，返回包含该对象的所有可枚举属性名称的字符串数组；如果想要列出所有实例属性，无论是否可以枚举，都可以使用`Object.getOwnPropertyNames()`。`Object.keys()`和`Object.getPropertyNames()`在适当的时候都可以用来代替`for-in`循环。
 
-在 ECMAScript 6
+在 ECMAScript 6 新增符号类型之后，相应地出现了增加一个`Object.getOwnPropertyNames()`的兄弟方法的需求，因为以符号为键的属性没有名称的概念。因此，`Object.getOwnPropertySymbols()`方法就出现了，这个方法与`Object.getOwnPropertyNames()`类似，只是针对符号而已：
+
+```jsx
+const k1 = Symbol('k1')
+const k2 = Symbol('k2')
+
+const o = {
+  [k1]: 'k1',
+  [k2]: 'k2',
+}
+
+console.log(Object.getOwnPropertySymbols(o))
+// [Symbol(k1), Symbol(k2)]
+```
+
+### 属性枚举顺序
+
+`for-in`循环、`Object.keys()`、`Object.getOwnPropertyNames()`、`Object.getOwnPropertySymbols()`以及`Object.assign()`在属性枚举顺序方面有很大区别。`for-in`循环和`Object.keys()`的枚举顺序是不确定的，取决于 JavaScript 引擎，可能因浏览器而异。
+
+`Object.getOwnPropertyNames()`、`Object.getOwnPropertySymbols()`和`Object.assign()`的枚举顺序是确定的。先以升序枚举数值键，然后以插入顺序枚举字符串和符号键。在对象字面量中定义的键以它们逗号分隔的顺序插入。
+
+```jsx
+const k1 = Symbol('k1')
+const k2 = Symbol('k2')
+
+const o = {
+  1: 1,
+  first: 'first',
+  [k1]: 'sym2',
+  second: 'second',
+  0: 0,
+}
+
+o[k2] = 'sym2'
+o[3] = 3
+o.third = 'third'
+o[2] = 2
+
+console.log(Object.getOwnPropertyNames(o))
+// [ '0', '1', '2', '3', 'first', 'second', 'third' ]
+
+console.log(Object.getOwnPropertySymbols(o))
+// [ Symbol(k1), Symbol(k2) ]
+```
+
+## 对象迭代
+
+在 JavaScript 有史以来的大部分时间里，迭代对象属性都是一个难题。ECMAScript 2017 新增了两个静态方法，用于将对象内容转换为序列化的——更重要的是可迭代的格式。这两个静态方法`Object.values()`和`Object.entries()`接收一个对象，返回它们内容的数组。`Object.values()`返回对象值的数组，`Object.entries()`返回键/值对的数组。
+
+下面的示例展示了这两个方法：
+
+```jsx
+const o = {
+  foo: 'bar',
+  baz: 1,
+  qux: {},
+}
+
+console.log(Object.values(o))
+// ["bar", 1, {}]
+
+console.log(Object.entries(o))
+// [["foo", "bar"], ["baz", 1], ["qux", {}]]
+```
+
+注意，非字符串属性会被转换为字符串输出。另外这两个方法执行对象的浅复制。并且，符号属性会被忽略。
+
+```jsx
+const sym = Symbol()
+const o = {
+  [sym]: 'foo',
+}
+
+console.log(Object.values(o))
+console.log(Object.entries(o))
+```
+
+### 其他原型语法
+
+注意到，前面的例子中每次定义一个属性或者方法都会把`Person.prototype`重写一遍。为了减少代码冗余，也为了从视觉上更好地封装原型功能，直接通过一个包含所有属性和方法的对象字面量来重写原型成为了一种常见的做法。
+
+```jsx
+function Person() {}
+
+Person.prototype = {
+  name: 'Nicholas',
+  age: 29,
+  job: 'Software Engineer',
+  sayName() {
+    console.log(this.name)
+  },
+}
+```
+
+在这个例子中，`Person.prototype`被设置为等于一个通过对象字面量创建的新对象。最终结果是一样的，只有一个问题：这样重写之后，`Person.constructor`属性就不指向`Person`了。在创建函数的时候，也会自动创建它的`prototype`对象，同时会自动给这个原型的`constructor`属性赋值。而上面的写法完全重写了默认的`prototype`对象，因此其`constructor`属性也指向了完全不同的新对象（`Object`构造函数），不再指向原来的构造函数。虽然`instanceof`操作符还能可靠地返回值，但我们不再能依靠`constructor`属性来识别类型了，例如下面例子所示：
+
+```jsx
+const friend = new Person()
+
+console.log(friend instanceof Object) // true
+console.log(friend instanceof Person) // true
+console.log(friend.constructor === Person) // false
+console.log(friend.consturctor === Object) // true
+```
+
+所以，如果`constructor`的值很重要，就可以在重写原型对象时专门设置一下它的值：
+
+```jsx
+function Person() {}
+
+Person.prototype = {
+  constructor: Person,
+  name: 'Nicholas',
+  age: 29,
+  job: 'Software Engineer',
+  sayName() {
+    console.log(this.name)
+  },
+}
+```
+
+但是要注意，这种方式回复`constructor`属性会创建一个`[[Enumerable]]`为`true`的属性。而原生`constructor`属性默认是不可枚举的。因此如果你使用的是兼容 ECMAScript 的 JavaScript 引擎，那可以改用`Object.defineProperty()`方法来定义`constructor`属性：
+
+```jsx
+function Person() {}
+
+Person.prototype = {
+  name: 'Nicholas',
+  age: 29,
+  job: 'Software Engineer',
+  sayName() {
+    console.log(this.name)
+  },
+}
+
+Object.defineProperty(Person.prototype, 'constructor', {
+  enumerable: false,
+  value: Person,
+})
+```
+
+### 原型的动态性
+
+因为从原型上搜索值的过程是动态的，所以即使实例在修改原型之前已经存在，任何时候对原型对象所做的修改也会在实例上反映出来。下面是一个例子：
+
+```jsx
+const friend = new Person()
+
+Person.prototype.sayHi = function () {
+  console.log('hi')
+}
+
+friend.sayHi()
+```
+
+虽然随时能给原型添加属性和方法，并能够立即反映在所有对象实例上，但这跟重写整个原型是两回事。实例的`[[Prototype]]`指针是在调用构造函数时自动赋值的，这个指针即使把原型修改为不同的对象也不会变。重写整个原型会切断最初原型与构造函数的联系，但实例引用的仍然是最初的原型。记住，实例只有指向原型的指针，没有指向构造函数的指针。
+
+```jsx
+function Person() {}
+
+const me = new Person()
+
+Person.prototype = {
+  name: 'Nicholas',
+  age: 29,
+  job: 'Software Engineer',
+  sayName() {
+    console.log(this.name)
+  },
+}
+
+const friend = new Person()
+
+console.log(Object.getPrototypeOf(me) === Person.prototype) // false
+console.log(Object.getPrototypeOf(friend) === Person.prototype) // true
+console.log(me instanceof Person) // false
+console.log(friend instanceof Person) // true
+
+me.sayName() // TypeError
+friend.sayName() // Nicholas
+```
+
+在这个例子中, `Person`的第一个实例`me`是在原型对象重写之前创建的。因为`me`指向的原型还是最初的原型，因此无法通过`instanceof`运算符来判定`me`是`Person`的实例，并且无法通过原型找到`sayName()`方法。
+
+重写构造函数上的原型之后再创建的实例才会引用新的原型。而在此之前创建的实例仍然会引用最初的原型。
+
+### 原生对象原型
+
+原型模式之所以重要，不仅体现在自定义类型上，而且还因为它也是实现所有原生引用类型的模式。所有原生引用类型的构造函数（包括`Array`、`Object`、`String`等）都在原型上定义了实例方法。例如，数组实例的`sort()`方法就是`Array.prototype`上定义的，而字符串包装对象的`substring()`方法也是在`String.prototype`上定义的。
+
+通过原生对象的原型可以取得所有默认方法的引用，也可以给原生类型的实例定义新的方法。可以像修改自定义对象原型一样修改原生对象原型，因此随时可以添加方法。例如，下面的代码就给`String`原始值包装类型的实例添加了一个`startsWith()`方法：
+
+```jsx
+String.prototype.startsWith = function (text) {
+  return this.indexOf(text) === 0
+}
+
+const msg = 'Hello World'
+console.log(msg.startsWith('Hello')) // true
+```
+
+> 尽管可以这么做，但是不推荐在产品环境中修改原生对象原型。这样做很可能造成误会，而且可能引发命名冲突（例如一个名称在某个浏览器实现中不存在，在另一实现中却存在）。另外还有可能意外重写原生的方法。**推荐的做法是创建一个自定义的类**，**继承原生类型**。
+
+### 原型的问题
+
+原型模式也并非没有问题。首先，它弱化了向构造函数传递初始化参数的能力，会导致所有实例默认都取得相同的属性值。虽然这会带来不便，但还不是原型的最大问题。原型最主要问题源于它的共享特性。
+
+我们知道，原型上的所有属性是在实例间共享的，这对函数来说比较合适。另外包含原始值的属性也还好，可以通过在实例上添加同名属性简单遮蔽原型上的属性。真正的问题来自包含引用值的属性。
+
+```jsx
+function Person() {}
+
+Person.prototype = {
+  constructor: Person,
+  name: 'Nicholas',
+  age: 29,
+  job: 'Software engineer',
+  friends: ['Shelly', 'Court'],
+  sayName() {
+    console.log(this.name)
+  },
+}
+
+const person1 = new Person()
+const person2 = new Person()
+
+person1.friends.push('Van')
+
+console.log(person1.friends) // "Shelby,Court,Van"
+console.log(person2.friends) // "Shelby,Court,Van"
+console.log(person1.friends === person2.friends) // true
+```
+
+如果上面的代码是有意在多个实例间共享数组，那么没什么问题。但是一般来说，不同的实例应该有属于自己的属性副本。这就是实际开发中通常不单独使用原型模式的原因。
+
+# 继承
+
+继承是面相对象编程中讨论最多的话题。很多面相对象语言都支持两种继承：接口继承和实现继承。前者只继承方法签名，后者继承实际的方法。接口继承在 ECMAScript 中是不可能的，因为函数没有签名。实现继承是 ECMAScript 中唯一支持的继承方式，而这主要是通过原型链实现的。
+
+## 原型链
+
+ECMA-262 将**原型链**定义为 ECMAScript 的主要继承方式。其基本思想就是通过原型继承多个引用类型的属性和方法。重温一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型有一个属性指向构造函数，而实例有一个内部指针指向原型。如果原型是另一个类型的实例呢？那就意味着这个原型本身有一个内部指针指向另一个原型，相应地另一个原型也有一个指针指向另一个构造函数。这样就在实例和原型之间构造了一条原型链。这就是原型链的基本思想。
+
+实现原型链涉及如下代码模式：
+
+```jsx
+function SuperType() {
+  this.property = true
+}
+
+SuperType.prototype.getSuperValue = function () {
+  return this.property
+}
+
+function SubType() {
+  this.subproperty = false
+}
+
+// 继承SuperType
+
+SubType.prototype = new SuperType()
+
+SubType.prototype.getSubValue = function () {
+  return this.subproperty
+}
+
+const instance = new SubType()
+console.log(instance.getSuperType()) // true
+```
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h3ly3qfe45j20m90brwf7.jpg)
+
+这个例子中实现继承的关键，是`SubType`没有使用默认原型，而是将其替换成了一个新的对象。这个新的对象恰好是`SuperType`的实例。这样一来，`SubType`的实例不仅能从`SuperType`的实例中继承属性和方法，而且还与`SuperType`的原型挂上钩。于是`instance`通过内部的`[[Prototype]]`指向`SubType.prototype`，而`SubType.prototype`作为`SuperType`的实例又通过内部的`[[Prototype]]`指向`SuperType.prototype`。注意，`getSuperValue()`方法还在`SuperType.prototype`对象上，而`property`属性则在`SubType.prototype`上。这是因为`getSuperValue()`是一个原型方法，而`property`是一个实例属性。`SubType.prototype`现在是`SuperType`的一个实例，因此`property`才会存储在它上面。
+
+还要注意，由于`SubType.prototype`的`constructor`属性被重写为指向`SuperType`，所以`instance.constructor`也指向`SuperType`。
+
+原型链扩展了前面描述的原型搜索机制。我们知道，在读取实例上的属性时，首先会在实例上搜索这属性，如果没有，就会搜索实例的原型。在通过原型链实现继承之后，搜索就可以继续向上，搜索原型的原型。对前面的例子而言，调用`instane.getSuperValue()`就经过了 3 步搜索：`instance`、`SubType.prototype`和`SuperType.prototype`，最后一步才找到这个方法。对属性和方法的搜索会一直持续到原型链的末端。
+
+### 默认原型
+
+实际上原型链中还有一环。默认情况下，所有引用类型都继承自`Object`，这也是通过原型链实现的。任何函数的默认原型都是一个`Object`的实例，这意味着这个实例有一个内部指针指向`Object.prototype`。这也是为什么自定义类型能够继承包括`toString()`、`valueOf()`在内的所有默认方法的原因。
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h3lyx4s7rdj20la0kmjsx.jpg)
+
+### 原型与继承的关系
+
+原型与实例的关系可以通过两种方式确定。第一种方式是使用`instanceof`操作符，如果一个实例的原型链中出现过相应的构造函数，则`instanceof`返回`true`。
+
+确定这种关系的第二种方式是使用`isPrototypeOf()`方法，原型链中的每一个原型都可以调用这个方法。
+
+### 关于方法
+
+子类有时候需要覆盖父类的方法，或者增加父类没有的方法。为此，这些方法必须在原型赋值之后再添加到原型上。看下面例子：
+
+```jsx
+function SuperType() {
+  this.property = true
+}
+
+SuperType.prototype.getSuperValue = function () {
+  return this.property
+}
+
+function SubType() {
+  this.subproperty = false
+}
+
+// 继承SuperType
+SubType.prototype = new SuperType()
+
+// 新方法
+SubType.prototype.getSubValue = function () {
+  return this.subproperty
+}
+
+// 覆盖已有方法
+SubType.prototype.getSuperValue = function () {
+  return false
+}
+
+const instance = new SubType()
+console.log(instance.getSuperValue()) // false
+```
+
+注意，以对象字面量方式创建原型方法会破坏之前的原型链，因为这相当于重写了原型链。
+
+### 原型链的问题
+
+原型链虽然是实现继承的强大工具，但它也有问题。主要问题出现在原型中包含引用值的时候。原型中包含的引用值会在所有实例间共享，这也是为什么属性通常会在构造函数中定义而不会定义在原型上的原因。在使用原型实现继承时，原型实际上变成了另一个类型的实例。这意味着原先的实例属性摇身一变成为了原型属性。
+
+原型链的第二个问题是，**子类型在实例化时不能给父类型的构造函数传参**。事实上，我们无法在不影响所有对象实例的情况下把参数传进父类的构造函数。再加上之前提到的原型中包含引用值的问题，就导致原型链基本不会被单独使用。
+
+## 盗用构造函数
+
+为了解决原型包含引用值导致的继承问题，一种叫做“盗用构造函数”（constructor stealing）的技术在开发社区流行起来（这种技术有时也称为“对象伪装”或“经典继承”）。基本思路很简单：在子类构造函数中调用父类构造函数。因为毕竟函数就是在特定上下文中执行代码的简单对象，所以可以使用`apply()`和`call()`方法以创建新的对象为上下文执行构造函数。
+
+```jsx
+function SuperType() {
+  this.colors = ['red', 'blue', 'green']
+}
+
+function SubType() {
+  // 继承SuperType
+  SuperType.call(this)
+}
+
+const instance1 = new SubType()
+instance1.colors.push('black')
+console.log(instance1.colors) // 'red, blue, green, black'
+
+const instance2 = new SubType()
+console.log(instance2.colors) // 'red, blue, green'
+```
+
+通过使用`call()`或者`apply()`方法，`SuperTyp`构造函数在为`SubType`的实例创建的新对象的上下文中执行了。这相当于新的`SubType`对象上运行了`SuperType()`函数中的所有初始化代码。结果就是每个实例都会有自己的`colors`属性。
+
+### 传递参数
+
+相比于使用原型链，盗用构造函数的一个优点就是可以在子类构造函数中向父类构造函数传参。
+
+```jsx
+function SuperType(name) {
+  this.name = name
+}
+
+function SubType() {
+  // 继承SuperType并传参
+  SuperType.call(this, 'Nicholas')
+
+  // 实例属性
+  this.age = 29
+}
+
+const instance = new SubType()
+console.log(instance.name) // 'Nicholas'
+console.log(instance.age) // 29
+```
+
+在这个例子中，`SuperType`构造函数接收一个参数`name`，然后将它赋值给一个属性。在`SubType`构造函数中调用`SuperType`构造函数时，传入这个参数，实际上会在`SubType`的实例上定义`name`属性。为了确保`SuperType`构造函数不会覆盖`SubType`定义的属性，可以在调用父类构造函数之后再给子类实例添加额外的属性。
+
+### 盗用构造函数的问题
+
+盗用构造函数的主要缺点，也是使用构造函数模式自定义类型的问题：必须在构造函数中定义方法，因此函数不能重用。另外，子类也不能访问父类原型上的方法，因此所有类型智能使用构造函数模式。由于存在这些问题，盗用构造函数基本上也不能单独使用。
+
+## 组合继承
+
+**组合继承**（有时候也叫伪经典继承）综合了原型链和盗用构造函数，将两者的优点集中了起来。基本的思路是使用原型链继承原型上的属性和方法，而通过盗用构造函数来继承实例属性。这样既可以把方法定义在原型上以实现重用，又可以让每个实例都有自己的属性。
+
+```jsx
+function SuperType(name) {
+  this.name = name
+  this.colors = ['red', 'blue', 'green']
+}
+
+SuperType.prototype.sayName = function () {
+  console.log(this.name)
+}
+
+function SubType(name, age) {
+  // 继承属性
+  SuperType.call(this, name)
+  this.age = age
+}
+
+// 继承方法
+SubType.prototype = new SuperType()
+
+SubType.prototype.sayAge = function () {
+  console.log(this.age)
+}
+
+const instance1 = new SubType('Nicholas', 29)
+instance1.colors.push('black')
+console.log(instance1.colors) // "red,blue,green,black"
+instance1.sayName() // "Nicholas";
+instance1.sayAge() // 29
+
+const instance2 = new SubType('Greg', 27)
+console.log(instance2.colors) // "red,blue,green"
+instance2.sayName() // "Greg";
+instance2.sayAge() // 27
+```
+
+组合继承弥补了原型链和盗用构造函数的不足，是 JavaScript 中使用最多的继承模式。而且组合式继承也保留了`instanceof`操作符和`isPrototypeOf()`方法识别合成对象的能力。
+
+# 类
+
+前面讲述了如何只使用 ECMAScript 5 的特性来模拟类似于类（class-like）的行为。不难看出，各种策略都有自己的问题，也有相应的妥协。正因为如此，实现继承的代码也显得非常冗长和混乱。
+
+为解决这些问题，ECMAScript 6 新引入的`class`关键字具有正式定义类的能力。类是 ECMAScript 中新的基础性语法糖结构，因此刚开始接触时可能会不太习惯。虽然 ECMAScript 6 类表面上看起来可以支持正式的面向对象编程，但实际上它背后使用的仍然是原型和构造函数的概念。
+
+## 类定义
+
+与函数类型相似，定义类页游两种主要方式：类声明和类表达式。这两种方式都用`class`关键字加大括号。
+
+```jsx
+class Person {}
+
+const Animal = class {}
+```
+
+和函数表达式类似，类表达式在它们被求值前也不能引用。不过和函数定义不同的是，虽然函数声明可以提升，但是类定义不能。
+
+```jsx
+console.log(testFunc)
+
+function testFunc() {}
+
+console.log(TestType) // ReferenceError
+
+class TestType {}
+```
+
+另一个跟函数声明不同的地方是，函数声明受函数作用域限制，而类声明受块作用域限制：
+
+```jsx
+{
+  function FunctionDeclaration() {}
+
+  class ClassDeclaration {}
+}
+
+console.log(FunctionDeclaration)
+console.log(ClassDeclaration) // ReferenceError
+```
+
+### 类的构成
+
+类可以包含构造函数、实例方法、获取函数、设置函数和静态类方法，但这些都不是必须的。空的类构造器同样有效。
+
+> 默认情况下，类定义中的代码都在严格模式下执行。
+
+和构造函数一样，多数编程风格都建议类名的首字母要大写，以区别于通过它创建的实例（例如，通过`class Foo {}`创建实例`foo`）：
+
+类表达式的名称是可选的。在把类表达式赋值给变量后，可以通过`name`属性取得类表达式的名称字符串。但不能在类表达式作用域外部访问这个标识符。
+
+```jsx
+const Person = class PersonName {
+  identify() {
+    console.log(Person.name, PersonName.name)
+  }
+}
+
+const p = new Person()
+
+p.identify()
+
+console.log(Person.name)
+console.log(PersonName) // ReferenceError
+```
+
+## 类构造函数
+
+`constructor`关键字用于在类定义块内部创建类的构造函数。方法名`constructor`会告诉解释器在使用`new`操作符创建类的新实例时应该调用这个函数。构造函数的定义不是必须的，不定义构造函数相当于将构造函数定义为空函数。
+
+### 实例化
+
+使用`new`操作符实例化`Person`的操作等于使用`new`调用其构造函数。唯一可感知的不同就是，JavaScript 解释器知道使用`new`和类意味着应该使用`constructor`函数进行实例化。

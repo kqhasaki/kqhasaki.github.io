@@ -32,6 +32,7 @@ html[data-theme='dark'] {
   --navigator-border-color: #222;
   --table-border-color: #303030;
   --lamp-head-background: rgba(0, 0, 0, 0);
+  --scrollbar-color: grey;
 }
 
 html[data-theme='light'] {
@@ -54,6 +55,7 @@ html[data-theme='light'] {
   --navigator-hover-color: rgba(0, 0, 0, 0.08);
   --navigator-border-color: #ddd;
   --table-border-color: #ededed;
+  --scrollbar-color: var(--blue);
   --lamp-head-background: linear-gradient(
     rgba(255, 255, 255, 0.8),
     rgba(255, 255, 255, 0.35),
@@ -65,6 +67,15 @@ html {
   background-color: hsl(0deg 0% 13%);
   overflow-y: overlay;
   border: none;
+}
+
+html::-webkit-scrollbar {
+  width: 1px;
+}
+
+html::-webkit-scrollbar-thumb {
+  width: 1px;
+  background-color: var(--scrollbar-color);
 }
 
 html[data-usrfont='non-mac'] body {
