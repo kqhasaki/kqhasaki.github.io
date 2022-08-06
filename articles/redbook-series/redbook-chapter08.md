@@ -1405,3 +1405,669 @@ console.log(PersonName) // ReferenceError
 ### 实例化
 
 使用`new`操作符实例化`Person`的操作等于使用`new`调用其构造函数。唯一可感知的不同就是，JavaScript 解释器知道使用`new`和类意味着应该使用`constructor`函数进行实例化。
+
+使用`new`调用类的构造函数会执行如下操作：
+
+1. 在内存中创建一个新的对象。
+2. 这个新对象内部的`[[prototype]]`指针被赋值为构造函数的`prototype`属性。
+3. 构造函数内部的`this`被赋值为这个新对象。
+4. 执行构造函数内部的代码（给对象添加属性）。
+5. 如果构造函数返回非空对象，则返回该对象；否则，返回刚创建的新对象。
+
+来看下面的例子：
+
+```jsx
+class Animal {}
+
+class Person {
+  constructor() {
+    this.color = 'orange'
+  }
+}
+
+const a = new Animal()
+
+const p = new Person()
+
+const v = new Vegetable()
+
+console.log(v.color) // orange
+```
+
+类实例化时传入的参数会用作构造函数的参数。如果不需要参数，则类名后面的括号也是可选的：
+
+```jsx
+class Person {
+  constructor(name) {
+    console.log(arguments.length)
+    this.name = name || null
+  }
+}
+
+const p1 = new Person()
+console.log(p1.name) // null
+
+const p2 = new Person()
+console.log(p2.name) // null
+
+const p3 = new Person('Jake')
+console.log(p3.name) // Jake
+```
+
+默认情况下，类构造函数会在执行之后返回`this`对象。构造函数返回的对象会被用作实例化的对象，如果没有什么引用新创建的`this`对象，那么这个对象会被销毁。不过，如果返回的不是`this`对象而是其他对象，那么这个对象不会通过`instanceof`操作符检测出跟类有关联，因为这个对象的原型指针并没有被修改。
+
+```jsx
+class Person {
+  constructor(override) {
+    this.foo = 'foo'
+    if (override) {
+      return {
+        bar: 'bar',
+      }
+    }
+  }
+}
+
+const p1 = new Person()
+const p2 = new Person(true)
+
+console.log(p1) // Person { foo: 'foo' }
+console.log(p1 instanceof Person) // true
+
+console.log(p2) // { bar: 'bar' }
+console.log(p2 instanceof Person) // false
+```
+
+类构造函数与构造函数的主要区别就是，调用类构造函数必须使用`new`操作符。而普通构造函数如果不使用`new`调用，那么就会以全局的`this`（通常是`window`）作为内部对象。调用类构造函数时如果忘了使用`new`则会抛出错误。
+
+```jsx
+function Person() {}
+
+class Animal {}
+
+const p = Person()
+
+const a = Animal()
+// TypeError: class constructor Animal cannot be invoked without 'new'
+```
+
+类构造函数没有什么特殊之处，实例化之后，它会成为普通的实例方法（但作为类构造函数，仍然要使用`new`调用）。因此， 实例化之后可以在实例上引用它：
+
+```jsx
+class Person {}
+
+const p1 = new Person()
+
+p1.constructor()
+// TypeError: Class constructor Person cannot be invoked without 'new'
+
+const p2 = new p1.constructor()
+```
+
+### 把类当成特殊函数
+
+ECMAScript 中没有正式的类这个类型。从各个方面来看，ECMAScript 类就是一种特殊函数。声明一个类之后，通过`typeof`操作符检测类标识符，表明它是一个函数：
+
+```jsx
+class Person {}
+
+console.log(Person) // class Person {}
+console.log(typeof Person) // function
+```
+
+类标识符有`prototype`属性，而这个原型也有一个`constructor`属性指向类自身：
+
+```jsx
+class Person {}
+
+console.log(Person.prototype) // { constructor: f() }
+console.log(Person === Person.prototype.constructor) // true
+```
+
+与普通构造函数一样，可以使用`instanceof`操作符检查构造函数原型是否存在于实例的原型链中：
+
+```jsx
+class Person {}
+
+const p = new Person()
+
+console.log(p instanceof Person) // true
+```
+
+由此可知，可以使用`instanceof`操作符检查一个对象与类构造函数，以确定这个对象是不是类的实例。只不过此时类构造函数要使用类标识符，例如，在前面的例子中要检查`p`和`Person`。
+
+如前所述，类本身具有与普通构造函数一样的行为。在类的上下文中，类本身在使用`new`调用时就会被当成构造函数。重点在于，类定义的`constructor`方法不会被当成构造函数，在对它使用`instanceof`操作符时会返回`false`。但是，如果在创建实例时直接将类构造函数当成普通构造函数来使用，那么`instanceof`操作符的返回值会反转。
+
+```jsx
+class Person {}
+
+const p1 = new Person()
+
+console.log(p1.constructor === Person) // true
+console.log(p1 instanceof Person) // true
+console.log(p1 instanceof Person.constructor) // false
+
+const p2 = new Person.constructor()
+
+console.log(p2.constructor === Person) // false
+console.log(p2 instanceof Person) // false
+console.log(p2 instanceof Person.constructor) // true
+```
+
+类是 JavaScript 里的一等公民，因此可以像其他对象或函数引用一样把类作为参数传递：
+
+```jsx
+const classList = [
+  class {
+    constructor(id) {
+      this.id_ = id
+      console.log(`instance ${this.id_}`)
+    }
+  },
+]
+
+function createInstance(classDefinition, id) {
+  return new classDefinition(id)
+}
+
+const foo = createInstance(classList[0], 3141) // instnace 3141
+```
+
+与立即调用函数表达式相似，类也可以立即实例化：
+
+```jsx
+const p = new (class Foo {
+  constructor(x) {
+    console.log(x)
+  }
+})('bar') // bar
+
+console.log(p) // Foo {}
+```
+
+## 实例、原型和类成员
+
+类的语法可以非常方便地定义应该存在于实例上的成员、应该存在于原型上的成员，以及应该存在于类本身的成员。
+
+### 实例成员
+
+每次通过`new`调用类标志符时，都会执行类构造函数。在这个函数内部，可以为创建新的实例（`this`）添加“自有”属性。至于添加什么样的属性，则没有限制。另外，在构造函数执行完毕后，仍然可以给实例继续添加新成员。
+
+每个实例都对应一个唯一的成员对象，这意味着所有成员都不会在原型上共享：
+
+```jsx
+class Person {
+  constructor() {
+    this.name = new String('Jack')
+
+    this.sayName = () => {
+      console.log(this.name)
+    }
+
+    this.nicknames = ['Jake', 'J-Dog']
+  }
+}
+
+const p1 = new Person()
+const p2 = new Person()
+
+console.log(p1.name === p2.name) // false
+console.log(p1.sayName === p2.sayName) // false
+console.log((p1.nicknames = p2.nicknames)) // false
+```
+
+### 原型方法与访问器
+
+为了在实例间共享方法，类定义语法把在类块中定义的方法作为原型方法。
+
+```jsx
+class Person {
+  constructor() {
+    this.locate = () => console.log('instance')
+  }
+
+  locate() {
+    console.log('prototype')
+  }
+}
+
+const p = new Person()
+
+p.locate() // instance
+Person.prototype.locate() // prototype
+```
+
+可以把方法定义在类构造函数或者类块中，但不能在类块中给原型添加原始值或对象作为成员数据。
+
+类方法等同于对象属性，因此可以使用字符串、符号或计算的值作为键：
+
+```jsx
+const symbolKey = Symbol('SymbolKey')
+
+class Person {
+  stringKey() {
+    console.log('invoked stringKey')
+  }
+
+  [symbolKey]() {
+    console.log('invoked symbolKey')
+  }
+
+  ['computed' + 'Key']() {
+    console.log('invoked computedKey')
+  }
+}
+
+const p = new Person()
+
+p.stringKey() // invoked stringKey
+p[symbolKey]() // invoked symbolKey
+p.computedKey() // invoked computedKey
+```
+
+类定义也支持获取和设置访问器。语法与行为跟普通对象一样：
+
+```jsx
+class Person {
+  set name(newName) {
+    this.name_ = newName
+  }
+
+  get name() {
+    return this.name_
+  }
+}
+
+const p = new Person()
+p.name = 'Jake'
+console.log(p.name) // Jake
+```
+
+### 静态类方法
+
+可以在类上定义静态方法。这些方法通常用于执行不特定于实例的操作，也不要求存在类的实例。与原型成员类似，静态成员每个类上只能有一个。
+
+静态类成员在类定义中使用`static`关键字作为前缀。在静态成员中，`this`引用类自身。其他所有约定跟原型成员一样：
+
+```jsx
+class Person {
+  constructor() {
+    this.locate = () => console.log('instance', this)
+  }
+
+  locate() {
+    console.log('prototype', this)
+  }
+
+  static locate() {
+    console.log('class', this)
+  }
+}
+
+const p = new Person()
+
+p.locate() // instance, Person {}
+Person.prototype.locate() // prototype, { constructor: ... }
+Person.locate() // class, class Person {}
+```
+
+静态方法非常适合作为实例工厂：
+
+```jsx
+class Person {
+  constructor(age) {
+    this.age_ = age
+  }
+
+  sayAge() {
+    console.log(this.age_)
+  }
+
+  static create() {
+    return new Person(Math.floor(Math.random() * 100))
+  }
+}
+
+console.log(Person.create()) // Person { age_: ... }
+```
+
+### 非函数原型和类成员
+
+虽然类定义并不显式支持在原型或类上添加成员数据，但在类定义外部，可以手动添加：
+
+```jsx
+class Person {
+  sayName() {
+    console.log(`${Person.greeting} ${this.name}`)
+  }
+}
+
+// 在类上定义函数成员
+Person.greeting = 'My name is'
+
+// 在原型上定义数据成员
+Person.prototype.name = 'Jake'
+
+const p = new Person()
+
+p.sayName() // My name is Jake
+```
+
+> 注意：类定义中之所以没有显式支持添加数据成员，是因为在共享目标（原型和类）上添加可变（可修改）数据成员是一种反模式。一般来说，对象实例应该独自拥有通过`this`引用的数据。
+
+### 迭代器与生成器方法
+
+类定义语法支持在原型和类本身上定义生成器方法：
+
+```jsx
+class Person {
+  // 在原型上定义生成器方法
+  *createNicknameIterator() {
+    yield 'Jack'
+    yield 'Jake'
+    yield 'J-Dog'
+  }
+
+  // 在类上定义生成器方法
+  static *createJobIterator() {
+    yield 'Butcher'
+    yield 'Baker'
+    yield 'Candlestick maker'
+  }
+}
+
+const jobIter = Person.createJobIterator()
+console.log(jobIter.next().value) // Butcher
+console.log(jobIter.next().value) // Baker
+console.log(jobIter.next().value) // Candlestick maker
+
+const p = new Person()
+const nicknameIter = p.createNicknameIterator()
+console.log(nicknameIter.next().value) // Jack
+console.log(nicknameIter.next().value) // Jake
+console.log(nicknameIter.next().value) // J-Dog
+```
+
+因为支持生成器方法，所以可以通过添加一个默认的迭代器，把类实例转变为可迭代对象。
+
+```jsx
+class Person {
+  constructor() {
+    this.nicknames = ['Jack', 'Jake', 'J-Dog']
+  }
+
+  *[Symbol.iterator]() {
+    yield* this.nicknames.entries()
+  }
+}
+
+const p = new Person()
+
+for (const [idx, nickname] of p) {
+  console.log(nickname)
+}
+
+// Jack
+// Jake
+// J-Dog
+```
+
+也可以只返回迭代器实例：
+
+```jsx
+class Person {
+  constructor() {
+    this.nicknames = ['Jack', 'Jake', 'J-Dog']
+  }
+
+  *[Symbol.iterator]() {
+    return this.nicknames.entries()
+  }
+}
+
+const p = new Person()
+
+for (const [idx, nickname] of p) {
+  console.log(nickname)
+}
+
+// Jack
+// Jake
+// J-Dog
+```
+
+## 继承
+
+本章前面花了大量篇幅讨论如何使用 ES5 的机制实现继承。ECMAScript6 新增特性中最出色的一个就是原生支持了类继承机制。虽然类继承使用的是新语法，但背后依旧使用的是原型链。
+
+### 继承基础
+
+ES6 类支持单继承。使用`extends`关键字，就可以继承任何拥有`[[Construct]]`和原型的对象。很大程度上，这意味着不仅可以继承一个类，也可以继承普通的构造函数（保持向后兼容）：
+
+```jsx
+class Vehicle {}
+
+// 继承类
+class Bus extends Vehicle {}
+
+const b = new Bus()
+console.log(b instanceof Bus) // true
+console.log(b instanceof Vehicle) // true
+
+function Person() {}
+
+// 继承普通构造函数
+class Engineer extends Person {}
+
+const e = new Engineer()
+console.log(e instanceof Engineer) // true
+console.log(e instanceof Person) // true
+```
+
+派生类都会通过原型链访问到类和原型上定义的方法。`this`的值会反映调用相应方法的实例或者类：
+
+```jsx
+class Vehicle {
+  identifyPrototype(id) {
+    console.log(id, this)
+  }
+
+  static identifyClass(id) {
+    console.log(id, this)
+  }
+}
+
+class Bus extends Vehicle {}
+
+const v = new Vehicle()
+const b = new Bus()
+
+b.identifyPrototype('bus') // bus, Bus {}
+v.identifyPrototype('vehicle') // vehicle, Vehicle {}
+
+Bus.idenfityClass('bus') // bus, class Bus {}
+Vehicle.identifyClass('vehicle') // vehicle, class Vehicle {}
+```
+
+> 注意，`extends`关键字也可以在类表达式中使用，因此`let Bar = class extends Foo {}` 是有效的语法。
+
+### 构造函数、`HomeObject`和`super()`
+
+派生类的方法可以通过`super`关键字引用它们的原型。这个关键字只能在派生类中使用，而且仅限于构造函数、实例方法和静态方法内部。在类构造函数中使用`super`可以调用父类构造函数。
+
+```jsx
+class Vehicle {
+  constructor() {
+    this.hasEngine = true
+  }
+}
+
+class Bus extends Vehicle {
+  constructor() {
+    // 不要在调用`super()`之前引用`this`，否则会抛出ReferenceError
+    super() // 相当于super.constructor()
+
+    console.log(this instanceof Vehicle) // true
+    console.log(this) // Bus { hasEngine: true }
+  }
+}
+
+new Bus()
+```
+
+在静态方法中可以通过`super`调用继承的类上定义的静态方法：
+
+```jsx
+class Vehicle {
+  static identify() {
+    console.log('vehicle')
+  }
+}
+
+class Bus extends Vehicle {
+  static identify() {
+    super.identify()
+  }
+}
+
+Bus.identify() // vehicle
+```
+
+> 注意：ES6 给类构造函数和静态方法添加了内部特性`[[HomeObject]]`，这个特性是一个指针，指向定义该方法的对象。这个指针是自动赋值的，而且只能在 JavaScript 引擎内部访问。`super`始终会定义为`[[HomeObject]]`的原型。
+
+在使用`super`时要注意几个问题：
+
+- `super`只能在派生类构造函数和静态方法中使用。
+
+```jsx
+class Vehicle {
+  constructor() {
+    super()
+    // SyntaxError: 'super' keyword unexpected
+  }
+}
+```
+
+- 不能单独引用`super`关键字，要么用它调用构造函数，要么用它引用静态方法。
+
+```jsx
+class Vehicle {}
+
+class Bus extends Vehicle {
+  constructor() {
+    console.log(super)
+    // SyntaxError: 'super' keyword unexpected here
+  }
+}
+```
+
+- 调用`super()`会调用父类构造函数，并将返回的实例赋值给`this`。
+
+```jsx
+class Vehicle {}
+
+class Bus extends Vehicle {
+  constructor() {
+    super()
+
+    console.log(this instanceof Vehicle)
+  }
+}
+
+new Bus() // true
+```
+
+- `super()`的行为如同调用构造函数，如果需要给父类构造函数穿参，则需要手动传入。
+
+```jsx
+class Vehicle {
+  constructor(licensePlate) {
+    this.licensePlate = licensePlate
+  }
+}
+
+class Bus extends Vehicle {
+  constructor(licensePlate) {
+    super(licensePlate)
+  }
+}
+
+console.log(new Bus('1337H4X')) // Bus { licensePlate: '1337H4X' }
+```
+
+- 如果没有定义类构造函数，在实例化派生类时会调用`super()`，而且会传入所有传给派生类的参数。
+
+```jsx
+class Vehicle {
+  constructor(licensePlate) {
+    this.licensePlate = licensePlate
+  }
+}
+
+class Bus extends Vehicle {}
+
+console.log(new Bus('1337H4X')) // Bus { licensePlate: '1337H4X' }
+```
+
+- 在类构造函数中，不能在调用`super()`之前引用`this`。
+
+```jsx
+class Vehicle {}
+
+class Bus extends Vehicle {
+  constructor() {
+    console.log(this)
+  }
+}
+
+new Bus()
+
+// ReferenceError: Must call super constructor in derived class
+// before accessing 'this' or returning from derived constructor
+```
+
+- 如果在派生类中显式定义了构造函数，则要么必须在其中调用`super()`，要么必须在其中返回一个对象。
+
+```jsx
+class Vehicle {}
+
+class Car extends Vehicle {}
+
+class Bus extends Vehicle {
+  constructor() {
+    super()
+  }
+}
+
+class Van extends Vehicle {
+  constructor() {
+    return {}
+  }
+}
+
+console.log(new Car()) // Car {}
+console.log(new Bus()) // Bus {}
+console.log(new Van()) // {}
+```
+
+### 抽象基类
+
+有时候可能需要定义这样一个类，它可供其他类继承，但本身不会被实例化。虽然 ECMAScript 没有专门支持这种类的语法，但是通过`new.target`也很容易实现。`new.target`保存通过`new`关键字调用的类或函数。通过在实例化时检测`new.target`是不是抽象基类，可以阻止对抽象基类的实例化：
+
+```jsx
+// 抽象基类
+class Vehicle {
+  constructor() {
+    console.log(new.target)
+    if (new.target === Vehicle) {
+      throw new Error('Vehicle cannot be directly instantiated')
+    }
+  }
+}
+
+class Bus extends Vehicle {}
+
+new Bus() // class Bus {}
+new Vehicle() // class Vehicle {}
+// Error: Vehicle cannot be directly instantiated
+```

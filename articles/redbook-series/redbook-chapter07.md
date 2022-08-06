@@ -162,20 +162,18 @@ class Counter {
         if (count <= limit) {
           return {
             done: false,
-            value: count++
+            value: count++,
           }
         } else {
           return {
-            done: true
-          }
-        },
-        return () {
-          console.log('exiting prematurely')
-          return {
-            done: true
+            done: true,
           }
         }
-      }
+      },
+      return() {
+        console.log('Exiting early')
+        return { done: true }
+      },
     }
   }
 }
