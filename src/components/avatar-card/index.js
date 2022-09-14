@@ -53,11 +53,20 @@ const CAREER = {
       ),
     },
     {
-      label: '2021.10 至今',
+      label: '2021.10 ~ 2022.7',
       content: (
         <div>
           小鹏汽车 - 自动驾驶中心 - 前端开发工程师 - base 扬州 （
           <strike>第一份正经写代码的工作</strike>）
+        </div>
+      ),
+    },
+    {
+      label: '2022.8 ~ now',
+      content: (
+        <div>
+          BOSCH - XC-DX/PJ-W3-PMT - Simulation Visulization Engineer （
+          <strike>自动驾驶一去不复返</strike>）
         </div>
       ),
     },

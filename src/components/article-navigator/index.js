@@ -11,7 +11,7 @@ export const GROUP_TITLES = {
   'javascript-algorithm-and-data-structure': 'JavaScript数据结构和算法',
   'redbook-series': 'JavaScript高级程序设计',
   'non-tech': '日常杂谈',
-  'electron-docs': 'electron',
+  'automated-driving': '自动驾驶',
 }
 
 export default function ArticleNavigator({ currArticle }) {
